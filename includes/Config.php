@@ -22,7 +22,7 @@ class Config {
 	const dbHost = '127.0.0.1';								// Hostname/IP of the Database-Server
 	const dbPort = 3306;									// Port of the Database-Server
 	const dbUser = 'root';									// Database User
-	const dbPassword = 'root';									// Password of the Database User
+	const dbPassword = 'root';								// Password of the Database User
 	const dbWebsiteDb = 'website';							// Name of the Database
 	const dbTablePref = '';									// Prefix of the tables and don't forget the _!! (if there is no prefix, let this empty)
 	const dbCharset = 'utf8';								// Database Charset

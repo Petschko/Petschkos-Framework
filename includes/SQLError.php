@@ -58,7 +58,7 @@ class SQLError {
 	/**
 	 * Prints all Error-Messages
 	 */
-	public function printError() {
+	public static function printError() {
 		foreach(self::getError() as $errMsg) {
 			echo $errMsg . '<br />' . PHP_EOL;
 		}

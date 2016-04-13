@@ -26,7 +26,7 @@ class Email {
 	private $charset;
 
 	/**
-	 * Holds the internal value for sending the mail view http://php.net/mb_language
+	 * Holds the internal value for sending the mail views http://php.net/mb_language
 	 * By default its unicode
 	 *
 	 * @var string - current Language

@@ -12,7 +12,6 @@
 
 // Define main Constance's
 define('BASE_DIR', dirname(__FILE__));
-define('OUT_BASE_DIR', '.');
 define('DS', DIRECTORY_SEPARATOR);
 
 // Setup error_error reporting
