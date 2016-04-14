@@ -133,7 +133,7 @@ class DB extends PDO {
 	 * @param mixed $value - Value to assign a type
 	 * @return int - PDO-Type
 	 */
-	private static function getDataType($value) {
+	public static function getDataType($value) {
 		switch(true) {
 			case is_null($value):
 				return parent::PARAM_NULL;
@@ -153,7 +153,7 @@ class DB extends PDO {
 	 * @param string $whiteListPattern - White-List-Characters (Regex format)
 	 * @return string - Escaped string
 	 */
-	private static function secureSQLRegEx($string, $whiteListPattern = '/[^0-9a-zA-Z_]/') {
+	public static function secureSQLRegEx($string, $whiteListPattern = '/[^0-9a-zA-Z_]/') {
 		return preg_replace($whiteListPattern, '', $string);
 	}
 
