@@ -81,15 +81,21 @@ abstract class BaseDBTableModel implements tableInterface {
 	 */
 	protected $memoryIndex = 0;
 
+	/**
+	 * Contains the number of results of the last Query
+	 *
+	 * @var int - Number of results (last Query)
+	 */
+	protected $memoryCount = 0;
 
 	/**
 	 * BaseModel constructor.
 	 *
-	 * @param string $dbConName - Database PDO-Object Name
+	 * @param string $dbConName - Database PDO-Object Name | null if connection is assigned
 	 * @throws Exception - Can't find connection to DB
 	 * @throws Exception - Table Info not set correct
 	 */
-	final protected function __construct($dbConName) {
+	final protected function __construct($dbConName = null) {
 		// Check if Table-Data is already set
 		if(! self::isTableSetupDone()) {
 			// Set all info (Table-Name, fields etc)
@@ -117,7 +123,9 @@ abstract class BaseDBTableModel implements tableInterface {
 	 * Clears memory
 	 */
 	final protected function __destruct() {
-		unset($this->memoryObjects);
+		$this->clearMemory();
+		unset($this->memoryIndex);
+		unset($this->memoryCount);
 	}
 
 	/**
@@ -270,6 +278,24 @@ abstract class BaseDBTableModel implements tableInterface {
 	}
 
 	/**
+	 * Get the Memory Count (Number of results of the last Query)
+	 *
+	 * @return int - Memory Count
+	 */
+	final public function getMemoryCount() {
+		return $this->memoryCount;
+	}
+
+	/**
+	 * Set the Memory Count (Number of results of the last Query)
+	 *
+	 * @param int $memoryCount - Memory Count
+	 */
+	final protected function setMemoryCount($memoryCount) {
+		$this->memoryCount = $memoryCount;
+	}
+
+	/**
 	 * Check if Field Name exists
 	 *
 	 * @param string $field - Field Name
@@ -280,6 +306,20 @@ abstract class BaseDBTableModel implements tableInterface {
 			return true;
 
 		return false;
+	}
+
+	final protected static function checkFieldInput($field) {
+		// Get the default Field
+		if($field === null)
+			$field = self::getPrimaryKeyField();
+
+		// Add error if field doesn't exists
+		if(! self::existField($field)) {
+			SQLError::addError('Field ' . $field . ' doesn\'t exists in Table ' . self::getTableName());
+			return null;
+		}
+
+		return $field;
 	}
 
 	/**
@@ -313,8 +353,18 @@ abstract class BaseDBTableModel implements tableInterface {
 	 * Clears the Memory about the unused rows
 	 */
 	final protected function clearMemory() {
-		$this->setMemoryObjects(null);
+		// Remove the old memory objects
+		$memoryObjects = $this->getMemoryObjects();
+		if($memoryObjects !== null) {
+			foreach($memoryObjects as $memObject)
+				unset($memObject);
+
+			$this->setMemoryObjects(null);
+		}
+
+		// Reset Counter
 		$this->setMemoryIndex(0);
+		$this->setMemoryCount(0);
 	}
 
 	/**
@@ -338,10 +388,39 @@ abstract class BaseDBTableModel implements tableInterface {
 			$this->{$field} = $obj->get{ucfirst($field)}();
 
 		// Remove the old object and increase counter
-		$obj = null;
+		unset($obj);
 		$this->setMemoryIndex($this->getMemoryIndex() + 1);
 
 		return true;
+	}
+
+	/**
+	 * Save the result to the Model (1st Row) and the rest to the memory
+	 *
+	 * @param array $results - Query Results
+	 */
+	final protected function saveToMemory($results) {
+		// Don't do anything if result is empty
+		if($this->getMemoryCount() > 0) {
+
+			// Set the first row to the model
+			foreach(self::getTableFields() as $field)
+				$this->{$field} = $results[0][$field];
+
+			// Save all other row into the memory
+			if($this->getMemoryCount() > 1) {
+				$obj = array();
+				$class = get_called_class();
+
+				// Proceed every row
+				for($i = 1; $i < $this->getMemoryCount(); $i++) {
+					foreach(self::getTableFields() as $field) {
+						$obj[$i - 1] = new $class();
+						$obj[$i - 1]->set{ucfirst($field)}($results[$i][$field]);
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -357,25 +436,30 @@ abstract class BaseDBTableModel implements tableInterface {
 		// Clear the old query
 		$this->clearMemory();
 
-		// Get the default Field
+		// Get Field
+		$byField = self::checkFieldInput($byField);
 		if($byField === null)
-			$byField = self::getPrimaryKeyField();
-
-		// Exit if field doesn't exists
-		if(! self::existField($byField)) {
-			SQLError::addError('Field ' . $byField . ' doesn\'t exists in Table ' . self::getTableName());
 			return;
-		}
 
-		$sql = 'SELECT * FROM ' . self::getTableName() . ' WHERE ' . $byField . $operator . "':value';";
-
+		// Prepare SQL-Statement
+		$sql = 'SELECT * FROM ' . self::getTableName() . ' WHERE ' . $byField . $operator . ':value;';
 		$sth = self::getSqlStatement($sql);
 		$sth->bindValue('value', $value, DB::getDataType($value));
 
+		// Execute
+		try {
+			$sth->execute();
+		} catch (PDOException $e) {
+			SQLError::addError($e->getMessage());
+			return;
+		}
+
+		// Get the Result(s)
 		$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+		$this->setMemoryCount(count($result));
 
-		//todo
-
+		// Save query and close
+		$this->saveToMemory($result);
 		$sth->closeCursor();
 	}
 
@@ -386,22 +470,112 @@ abstract class BaseDBTableModel implements tableInterface {
 	 * @param mixed $value - Value of the Field
 	 * @param string|null $byField - Target Field | null uses Primary-Key
 	 * @param string $operator - Compare Operator
+	 * @return bool - true on success else false
 	 */
-	abstract function deleteBy($value, $byField = null, $operator = DB::OPERATOR_EQUALS);
+	public function deleteBy($value, $byField = null, $operator = DB::OPERATOR_EQUALS) {
+		// Clear the old query
+		$this->clearMemory();
+
+		// Get Field
+		$byField = self::checkFieldInput($byField);
+		if($byField === null)
+			return false;
+
+		// Prepare SQL-Statement
+		$sql = 'DELETE FROM ' . self::getTableName() . ' WHERE ' . $byField . $operator . ':value;';
+		$sth = self::getSqlStatement($sql);
+		$sth->bindValue('value', $value, DB::getDataType($value));
+
+		// Execute
+		try {
+			$success = $sth->execute();
+		} catch(PDOException $e) {
+			SQLError::addError($e->getMessage());
+			return false;
+		}
+
+		$sth->closeCursor();
+		if($success)
+			return true;
+
+		return false;
+	}
 
 	/**
 	 * Update the current row at the Database with the Model-Data
 	 *
 	 * @param mixed $value - Value of the Field
 	 * @param string|null $byField - Target Field | null uses Primary-Key
-	 * @param string $operator - Compare Operator
+	 * @return bool - true on success else false
 	 */
-	abstract function updateBy($value, $byField = null, $operator = DB::OPERATOR_EQUALS);
+	public function updateBy($value, $byField = null) {
+		// Clear the old query
+		$this->clearMemory();
+
+		// Get Field
+		$byField = self::checkFieldInput($byField);
+		if($byField === null)
+			return false;
+
+		// Prepare SQL-Statement
+		$sqlFields = array();
+		$setSQL = array();
+		foreach($this->getTableFields() as $field) {
+			if($byField != $field) {
+				$setSQL[] = $field . '=:' . $field;
+				$sqlFields[$field] = $this->{$field};
+			}
+		}
+		$sql = 'UPDATE ' . self::getTableName() . ' SET ' . implode(', ', $setSQL) . ' WHERE ' . $byField . '=:value;';
+		$sth = self::getSqlStatement($sql);
+
+		// Bind Values
+		$sth->bindValue('value', $value, DB::getDataType($value));
+		foreach($sqlFields as $key => &$value)
+			$sth->bindValue($key, $value, DB::getDataType($value));
+
+		// Execute
+		try {
+			$success = $sth->execute();
+		} catch(PDOException $e) {
+			SQLError::addError($e->getMessage());
+			return false;
+		}
+
+		$sth->closeCursor();
+		if($success)
+			return true;
+
+		return false;
+	}
 
 	/**
 	 * Get all Data rows
 	 */
-	abstract function getAll();
+	public function getAll() {
+		// Clear the old query
+		$this->clearMemory();
+
+		// Prepare SQL-Statement
+		$sql = 'SELECT * FROM ' . self::getTableName() . ';';
+		$sth = self::getSqlStatement($sql);
+
+		// Execute
+		try {
+			$sth->execute();
+		} catch (PDOException $e) {
+			SQLError::addError($e->getMessage());
+			return;
+		}
+
+		// Get the Result(s)
+		$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+		$this->setMemoryCount(count($result));
+
+		// Save query and close
+		$this->saveToMemory($result);
+		$sth->closeCursor();
+	}
 
 	/**
 	 * Get one or more Data-Rows
@@ -409,12 +583,47 @@ abstract class BaseDBTableModel implements tableInterface {
 	 * @param int $limit - Max Rows
 	 * @param int|null $start - Start Row | null use the default start value
 	 */
-	abstract function get($limit = 1, $start = null);
+	public function get($limit = 1, $start = null) {
+
+	}
 
 	/**
-	 * Saves the current values of the Model to the Database
+	 * Saves the current values of the Model to the Database (New Row)
+	 *
+	 * @param bool $ignorePK - Ignore the Primary Key-Value (Example needed for auto-increment)
+	 * @return bool - true on success else false
 	 */
-	abstract function save();
+	public function save($ignorePK = true) {
+		if(self::getPrimaryKeyField() === null)
+			$ignorePK = false;
+
+		$fields = self::getTableFields();
+
+		if($ignorePK)
+			$fields = array_slice($fields, array_search(self::getPrimaryKeyField(), $fields));
+
+		// Prepare SQL-Statement
+		$sql = 'INSERT INTO ' . self::getTableName() . '(' . implode(', ', $fields) . ') VALUES (:' . implode(', :', $fields) . ');';
+		$sth = self::getSqlStatement($sql);
+
+		// Bind Values
+		foreach($fields as $field)
+			$sth->bindValue($field, $this->{$field}, DB::getDataType($this->{$field}));
+
+		// Execute
+		try {
+			$success = $sth->execute();
+		} catch (PDOException $e) {
+			SQLError::addError($e->getMessage());
+			return false;
+		}
+
+		$sth->closeCursor();
+		if($success)
+			return true;
+
+		return false;
+	}
 
 	/**
 	 * Deletes the current Data-Row
