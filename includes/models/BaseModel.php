@@ -308,6 +308,12 @@ abstract class BaseDBTableModel implements tableInterface {
 		return false;
 	}
 
+	/**
+	 * Checks and may assign the input Field if its set to PK-Field and if the assigned Field exists at the Table
+	 *
+	 * @param string|null $field - Field Name or null if use PK
+	 * @return null|string - Field Name if all is ok or null if Field doesn't exists at the Table
+	 */
 	final protected static function checkFieldInput($field) {
 		// Get the default Field
 		if($field === null)
@@ -385,7 +391,7 @@ abstract class BaseDBTableModel implements tableInterface {
 
 		// Set the next row to this object
 		foreach(self::getTableFields() as $field)
-			$this->{$field} = $obj->get{ucfirst($field)}();
+			$this->{$field} = $obj->{$field};
 
 		// Remove the old object and increase counter
 		unset($obj);
@@ -416,7 +422,7 @@ abstract class BaseDBTableModel implements tableInterface {
 				for($i = 1; $i < $this->getMemoryCount(); $i++) {
 					foreach(self::getTableFields() as $field) {
 						$obj[$i - 1] = new $class();
-						$obj[$i - 1]->set{ucfirst($field)}($results[$i][$field]);
+						$obj[$i - 1]->{$field} = $results[$i][$field];
 					}
 				}
 			}
@@ -584,7 +590,39 @@ abstract class BaseDBTableModel implements tableInterface {
 	 * @param int|null $start - Start Row | null use the default start value
 	 */
 	public function get($limit = 1, $start = null) {
+		// Clear the old query
+		$this->clearMemory();
 
+		if(! is_int($limit))
+			SQLError::addError('LIMIT must be an Integer Value!');
+
+		if($start !== null)
+			if(! is_int($start))
+				SQLError::addError('START must be null or an Integer Value!');
+
+		if(SQLError::isError())
+			return;
+
+		// Prepare SQL-Statement
+		$startEndSQL = (($start !== null) ? $start . ', ' : '') . $limit;
+		$sql = 'SELECT * FROM ' . self::getTableName() . ' LIMIT ' . $startEndSQL . ';';
+		$sth = self::getSqlStatement($sql);
+
+		// Execute
+		try {
+			$sth->execute();
+		} catch (PDOException $e) {
+			SQLError::addError($e->getMessage());
+			return;
+		}
+
+		// Get the Result(s)
+		$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+		$this->setMemoryCount(count($result));
+
+		// Save query and close
+		$this->saveToMemory($result);
+		$sth->closeCursor();
 	}
 
 	/**
@@ -594,6 +632,9 @@ abstract class BaseDBTableModel implements tableInterface {
 	 * @return bool - true on success else false
 	 */
 	public function save($ignorePK = true) {
+		// Clear the old query
+		$this->clearMemory();
+
 		if(self::getPrimaryKeyField() === null)
 			$ignorePK = false;
 
@@ -626,12 +667,96 @@ abstract class BaseDBTableModel implements tableInterface {
 	}
 
 	/**
-	 * Deletes the current Data-Row
+	 * Deletes the current Data-Row depending on the current Model values
+	 * null uses the Primary-Key as Target
+	 *
+	 * @param null|string $byField - Target Field Name or null if use PK-Field as target
+	 * @return bool - true on success else false
 	 */
-	abstract function delete();
+	public function delete($byField = null) {
+		// Clear the old query
+		$this->clearMemory();
+
+		// Get Field
+		$byField = self::checkFieldInput($byField);
+		if($byField === null)
+			return false;
+
+		// Prepare SQL-Statement
+		$sql = 'DELETE FROM ' . self::getTableName() . ' WHERE ' . $byField . '=:value;';
+		$sth = self::getSqlStatement($sql);
+		$sth->bindValue('value', $this->{$byField}, DB::getDataType($this->{$byField}));
+
+		// Execute
+		try {
+			$success = $sth->execute();
+		} catch (PDOException $e) {
+			SQLError::addError($e->getMessage());
+			return false;
+		}
+
+		$sth->closeCursor();
+		if($success)
+			return true;
+
+		return false;
+	}
 
 	/**
-	 * Update the current Data-Row
+	 * Update the current Data-Row with the Model values
+	 * null uses the the Primary-Key as Target
+	 *
+	 * @param null|string $byField - Target Field Name or null if use PK-Field as target
+	 * @return bool - true on success else false
 	 */
-	abstract function update();
+	public function update($byField = null) {
+		$fieldValues = array();
+
+		// Clear the old query
+		$this->clearMemory();
+
+		// Get Field & prepare SQL-Statement
+		$byField = self::checkFieldInput($byField);
+		if($byField === null) {
+			$whereSQL = array();
+			//If PK doesn't exists and field is not set check ALL values if ALL are the same then update
+			foreach(self::getTableFields() as $field) {
+				$whereSQL[] = $field . '=:where' . $field;
+				$fieldValues['where' . $field] = $this->{$field};
+			}
+
+			// Make String
+			$whereSQL = implode(' AND ', $whereSQL);
+		} else {
+			$whereSQL = $byField . '=:where' . $byField;
+			$fieldValues['where' . $byField] = $this->{$byField};
+		}
+
+		$setSQL = array();
+		foreach(self::getTableFields() as $field) {
+			$setSQL[] = $field . '=:set' . $field;
+			$fieldValues['set' . $field] = $this->{$field};
+		}
+
+		$sql = 'UPDATE ' . self::getTableName() . ' SET ' . implode(', ', $setSQL) . ' WHERE ' . $whereSQL . ' LIMIT 1;';
+		$sth = self::getSqlStatement($sql);
+
+		// Bind Values
+		foreach($fieldValues as $key => &$value)
+			$sth->bindValue($key, $value, DB::getDataType($value));
+
+		// Execute
+		try {
+			$success = $sth->execute();
+		} catch (PDOException $e) {
+			SQLError::addError($e->getMessage());
+			return false;
+		}
+
+		$sth->closeCursor();
+		if($success)
+			return true;
+
+		return false;
+	}
 }
