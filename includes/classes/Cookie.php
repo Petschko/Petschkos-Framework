@@ -13,7 +13,7 @@
  * Come to us we have cookies *.* Or Play Cookie-Clicker!^^
  *
  * How to use:
- * Set cookie only if its allowed -- cookie::setcookie(@vanilla_params) -> See http://php.net/setcookie for parameter use
+ * Set cookie only if its allowed -- cookie::setCookie(@vanilla_params) -> See http://php.net/setcookie for parameter use
  * Read cookie if its allowed -- cookie::getCookie((string)cookieName[, (mixed)fallback_value = false[, (bool)force_read = false]])
  * Check if cookies are allowed (for displaying msg or something like that) -- cookie::getIsAllowed()
  * Enable Cookies, if user clicked on accept button -- cookie::enableCookies()
@@ -33,7 +33,7 @@ class Cookie { // Don't touch this line, until you are the the richest man on th
 	// CONFIG AREA -------------------------------------------------------------------------------
 	private static $ignoreCookiePolice = Config::cookiePoliceSet;
 	private static $countryList = array();
-	private static $countryModeWhiteList = Config::cookiePoliceCountryModeWhitelist;
+	private static $countryModeWhiteList = Config::cookiePoliceCountryModeWhiteList;
 	private static $masterCookieName = 'allow_cookies';
 	private static $masterCookieExpireTime = 31536000; // Default 1 Year from creation (counted in secs)
 	// END OF CONFIG-AREA ------------------------------------------------------------------------
@@ -47,7 +47,7 @@ class Cookie { // Don't touch this line, until you are the the richest man on th
 	private function __construct() {}
 
 	/**
-	 * Sets a Cookie like the normal setcookie function ---- See documentation: http://php.net/setcookie
+	 * Sets a Cookie like the normal setCookie function ---- See documentation: http://php.net/setcookie
 	 *
 	 * @param string $name - Cookie Name
 	 * @param string $value - Value of the cookie
@@ -108,7 +108,7 @@ class Cookie { // Don't touch this line, until you are the the richest man on th
 				if($country == self::getCountry())
 					return true;
 			}
-			// Default return value of whitelist
+			// Default return value of whiteList
 			return false;
 		} else {
 			foreach(self::getCountryList() as $country) {
@@ -194,7 +194,7 @@ class Cookie { // Don't touch this line, until you are the the richest man on th
 	/**
 	 * Set the CountryList type (white/blacklist)
 	 *
-	 * @return boolean - true is whitelist mode and false is blacklist mode for countries
+	 * @return boolean - true is whiteList mode and false is blacklist mode for countries
 	 */
 	private static function isCountryModeWhiteList() {
 		return self::$countryModeWhiteList;

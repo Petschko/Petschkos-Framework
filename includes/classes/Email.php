@@ -197,7 +197,7 @@ class Email {
 	 * @return string - E-Mail list of all "CC" Receiver
 	 */
 	public function getCcList() {
-		return $this->createEMailList($this->getCC());
+		return $this->createEMailList($this->getCc());
 	}
 
 	/**

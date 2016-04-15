@@ -188,7 +188,7 @@ class Link {
 	}
 
 	/**
-	 * Check if the current List-Mode is whitelist or blacklist
+	 * Check if the current List-Mode is whiteList or blackList
 	 *
 	 * @return boolean - True = White-List-Mode | False = Black-List-Mode
 	 */

@@ -27,14 +27,14 @@ $_SERVER = escapeData($_SERVER);
 $_REQUEST = escapeData($_REQUEST);
 $_FILES = escapeData($_FILES);
 
-if(class_exists('cookie')) {
-	if(cookie::getIsAllowed())
+if(class_exists('Cookie')) {
+	if(Cookie::getIsAllowed())
 		$_COOKIE = escapeData($_COOKIE);
 	else {
 		// Check Master-Cookie every time
-		if(! isset($_COOKIE[cookie::getMasterCookieName()]))
-			$_COOKIE[cookie::getMasterCookieName()] = '';
-		$_COOKIE[cookie::getMasterCookieName()] = escapeData($_COOKIE[cookie::getMasterCookieName()]);
+		if(! isset($_COOKIE[Cookie::getMasterCookieName()]))
+			$_COOKIE[Cookie::getMasterCookieName()] = '';
+		$_COOKIE[Cookie::getMasterCookieName()] = escapeData($_COOKIE[Cookie::getMasterCookieName()]);
 	}
 } else
 	$_COOKIE = escapeData($_COOKIE);

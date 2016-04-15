@@ -30,7 +30,7 @@ class Config {
 
 	// Cookie Settings
 	const cookiePoliceSet = false;							// Set cookie law, false means cookies will only set if the user accept it, after clicking on "allow set cookies", true set normal cookies without asking. in Europe better set this to false
-	const cookiePoliceCountryModeWhitelist = true;			// true = Never ask for cookies in the selected countries | false = Only ask on the selected countries for cookies
+	const cookiePoliceCountryModeWhiteList = true;			// true = Never ask for cookies in the selected countries | false = Only ask on the selected countries for cookies
 
 	// Locale settings
 	const defaultLang = 'en';								// Default language
