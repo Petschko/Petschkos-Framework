@@ -148,7 +148,7 @@ function mb_basename($path, $suffix = null) {
  * @param string $string - String to convert, see also: http://php.net/lcfirst
  * @return string - String with first char lower
  */
-function lcfirst($string) {
+function mb_lcfirst($string) {
 	return mb_strtolower(mb_substr($string, 0, 1)) . mb_substr($string, 1);
 }
 
@@ -158,7 +158,7 @@ function lcfirst($string) {
  * @param string $string - String to convert, see also: http://php.net/ucfirst
  * @return string - String with first char upper
  */
-function ucfirst($string) {
+function mb_ucfirst($string) {
 	return mb_strtoupper(mb_substr($string, 0, 1)) . mb_substr($string, 1);
 }
 
