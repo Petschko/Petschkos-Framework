@@ -6,6 +6,7 @@
  * Time: 14:56
  * Update: -
  * Version: 0.0.1
+ * @package Petschkos Framework
  *
  * Notes: Create(s a) connection(s) to (a) Database(s)
  */

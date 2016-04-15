@@ -7,6 +7,7 @@
  * Update: 09.04.2016 (RAW FILE)
  * Version: 1.0.5 (Changed Class-Name & Website) @ (RAW FILE)
  * 1.0.4 (Reformat Code) @ (RAW FILE)
+ * @package Petschkos Framework
  *
  * Notes: Contains Config stuff
  */

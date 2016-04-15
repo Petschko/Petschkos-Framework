@@ -7,8 +7,9 @@
  * Time: 08:32
  * Update: -
  * Version: 0.0.1
+ * @package Petschkos Framework
  *
- * Notes: -
+ * Notes: Base abstract Model for SQL-Tables
  */
 
 /**

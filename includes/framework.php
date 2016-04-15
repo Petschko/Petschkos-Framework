@@ -6,14 +6,17 @@
  * Time: 11:55
  * Update: -
  * Version: 0.0.1
+ * @package Petschkos Framework
  *
- * Notes: -
+ * Notes: Define Constances and include the main files
  */
 
-// Define Constance
+// Define Constances
 define('INCLUDE_DIR', BASE_DIR . DS . 'includes');
 define('CLASS_DIR', INCLUDE_DIR . DS . 'classes');
 define('CONTROLLER_DIR', INCLUDE_DIR . DS . 'controller');
+define('MODEL_DIR', INCLUDE_DIR . DS . 'models');
+define('VIEW_DIR', INCLUDE_DIR . DS . 'views');
 
 // Include Base-Files
 require_once(INCLUDE_DIR . DS . 'Config.php');
@@ -21,8 +24,8 @@ require_once(INCLUDE_DIR . DS . 'mbFunctions.php');
 require_once(INCLUDE_DIR . DS . 'utf8.php');
 
 // Include Classes
-require_once(INCLUDE_DIR . DS . 'DB.php');
-require_once(INCLUDE_DIR . DS . 'SQLError.php');
+require_once(CLASS_DIR . DS . 'DB.php');
+require_once(CLASS_DIR . DS . 'SQLError.php');
 
 require_once(CLASS_DIR . DS . 'Cookie.php');
 require_once(CLASS_DIR . DS . 'Email.php');

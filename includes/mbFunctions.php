@@ -6,6 +6,7 @@
  * Time: 11:41
  * Update: -
  * Version: 0.0.1
+ * @package Petschkos Framework
  *
  * Notes: Contains (edited) function to have an easier management with multi byte stuff
  */

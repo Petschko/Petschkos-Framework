@@ -6,6 +6,7 @@
  * Time: 11:37
  * Update: -
  * Version: 0.0.1
+ * @package Petschkos Framework
  *
  * Notes: Procedural Code that managed all of the UTF-8 Stuff and data escape
  */
