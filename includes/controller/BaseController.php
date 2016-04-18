@@ -18,34 +18,34 @@ abstract class BaseController {
 	/**
 	 * Contains the Model of the Controller
 	 *
-	 * @var BaseDBTableModel|Object
+	 * @var BaseDBTableModel|Object|null - Model or null if there is no model
 	 */
-	private $model;
+	protected $model;
 
 	/**
 	 * BaseController constructor.
 	 *
-	 * @param Object|BaseDBTableModel $model
+	 * @param Object|BaseDBTableModel|null $model - Controller Model or null if the controller has no model
 	 */
-	public function __construct($model) {
-		$this->model =& $model;
+	public function __construct(&$model = null) {
+		$this->setModel($model);
 	}
 
 	/**
 	 * Gets the Model
 	 *
-	 * @return mixed
+	 * @return BaseDBTableModel|Object|null - Model or null if there is no model
 	 */
-	private function &getModel() {
+	protected function &getModel() {
 		return $this->model;
 	}
 
 	/**
 	 * Sets the Model
 	 *
-	 * @param mixed $model
+	 * @param BaseDBTableModel|Object|null $model - Model or null if there is no model
 	 */
-	private function setModel($model) {
+	protected function setModel(&$model) {
 		$this->model =& $model;
 	}
 }
