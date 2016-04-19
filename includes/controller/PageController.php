@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Author: Peter Dragicevic [peter-91@hotmail.de]
  * Authors-Website: http://petschko.org/
@@ -7,6 +6,7 @@
  * Time: 14:43
  * Update: -
  * Version: 0.0.1
+ * @package Petschkos Framework
  *
  * Notes: -
  */

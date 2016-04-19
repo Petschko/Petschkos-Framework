@@ -32,6 +32,7 @@ function route($controller, $action) {
 	$calledController->{$action}();
 }
 
+// Get default
 if(! isset($_GET['mode']))
 	$_GET['mode'] = $defaultController;
 if(! isset($_GET['action']))

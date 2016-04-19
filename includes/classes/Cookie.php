@@ -7,6 +7,7 @@
  * Update: 09.04.2016
  * Version 1.0.3 (Changed Class-Name & Website)
  * 1.0.2 (Reformat Code - Fixed head doc)
+ * @package Petschkos Framework
  *
  * Licence: http://creativecommons.org/licenses/by-sa/4.0/
  * You are free to use this!
