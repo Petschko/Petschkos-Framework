@@ -27,7 +27,7 @@ abstract class BaseController {
 	 *
 	 * @param Object|BaseDBTableModel|null $model - Controller Model or null if the controller has no model
 	 */
-	public function __construct(&$model = null) {
+	public function __construct($model = null) {
 		$this->setModel($model);
 	}
 
@@ -36,7 +36,7 @@ abstract class BaseController {
 	 *
 	 * @return BaseDBTableModel|Object|null - Model or null if there is no model
 	 */
-	protected function &getModel() {
+	protected function getModel() {
 		return $this->model;
 	}
 
@@ -45,7 +45,7 @@ abstract class BaseController {
 	 *
 	 * @param BaseDBTableModel|Object|null $model - Model or null if there is no model
 	 */
-	protected function setModel(&$model) {
-		$this->model =& $model;
+	protected function setModel($model) {
+		$this->model = $model;
 	}
 }

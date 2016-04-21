@@ -135,7 +135,7 @@ abstract class BaseDBTableModel implements tableInterface {
 	 *
 	 * @return DB - Database PDO-Object
 	 */
-	final protected static function &getDb() {
+	final protected static function getDb() {
 		return self::$db;
 	}
 
@@ -144,17 +144,17 @@ abstract class BaseDBTableModel implements tableInterface {
 	 *
 	 * @param DB $db - Database PDO-Object
 	 */
-	final protected static function setDb(&$db) {
-		self::$db =& $db;
+	final protected static function setDb($db) {
+		self::$db = $db;
 	}
 
 	/**
-	 * Returns a Pointer to a Statement
+	 * Returns a PDO Statement Object
 	 *
 	 * @param string $statement - SQL-Statement
 	 * @return PDOStatement - PDOStatement object
 	 */
-	final protected static function &getSqlStatement($statement) {
+	final protected static function getSqlStatement($statement) {
 		// Add to cache if not exists
 		if(! isset(self::$sqlCache[$statement]))
 			self::addSqlStatement($statement);
@@ -244,11 +244,11 @@ abstract class BaseDBTableModel implements tableInterface {
 	}
 
 	/**
-	 * Get a pointer to the Memory-Objects
+	 * Get the Memory-Objects
 	 *
 	 * @return array|null - Get the Memory Objects or null if none is set
 	 */
-	final protected function &getMemoryObjects() {
+	final protected function getMemoryObjects() {
 		return $this->memoryObjects;
 	}
 
@@ -364,7 +364,7 @@ abstract class BaseDBTableModel implements tableInterface {
 		// Remove the old memory objects
 		$memoryObjects = $this->getMemoryObjects();
 		if($memoryObjects !== null) {
-			foreach($memoryObjects as &$memObject)
+			foreach($memoryObjects as $memObject)
 				unset($memObject);
 
 			$this->setMemoryObjects(null);

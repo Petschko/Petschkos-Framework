@@ -85,7 +85,7 @@ class Form {
 		unset($this->action);
 		unset($this->method);
 
-		foreach($this->fields as &$field)
+		foreach($this->fields as $field)
 			unset($field);
 		unset($this->fields);
 	}
@@ -158,7 +158,7 @@ class Form {
 	 *
 	 * @param array $fields - Form Fields
 	 */
-	private function setFields(&$fields) {
+	private function setFields($fields) {
 		$this->fields = $fields;
 	}
 

@@ -98,7 +98,7 @@ class DB extends PDO {
 	 * @param string|int $name - Name of the Database Object
 	 * @return DB - Database Object
 	 */
-	public static function &getConnection($name) {
+	public static function getConnection($name) {
 		return self::$connection[$name];
 	}
 
