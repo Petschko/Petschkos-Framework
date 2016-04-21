@@ -165,11 +165,15 @@ class Form {
 	/**
 	 * Sets a Field at the Fields array (useful for add fields)
 	 *
-	 * @param string $field -
-	 * @param object $value
+	 * @param string $field - Name of the Field
+	 * @param object|FormField $value - Field Object
 	 */
 	private function setField($field, $value) {
 		$this->fields[$field] = $value;
+	}
+
+	public function addInput($name, $inputType = self::F_INPUT, $type = 'text', $required = true, $allowedType = FormField::TYPE_STRING, $disabled = false, $otherHTMLAttr = null) {
+		$this->setField($name, null);
 	}
 
 	/**
@@ -180,7 +184,7 @@ class Form {
 	public function formOpenHTML() {
 		$code = '<form action="' . $this->getAction();
 
-		if($this->getMethod() == (self::METHOD_FILE || self::METHOD_POST))
+		if($this->getMethod() == self::METHOD_FILE || $this->getMethod() == self::METHOD_POST)
 			$code .= ' method="POST"';
 
 		if($this->getMethod() == self::METHOD_FILE)

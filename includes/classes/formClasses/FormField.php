@@ -34,6 +34,7 @@ abstract class FormField {
 	const TYPE_COLOR = 'color';
 	const TYPE_TEXT = 'text';
 	const TYPE_ZIP = 'zip';
+	const TYPE_AUTODETECT = 'auto';
 
 	/**
 	 * Contains if XHTML is enabled
@@ -115,7 +116,7 @@ abstract class FormField {
 	/**
 	 * Contains all other HTML-Attributes
 	 *
-	 * @var string - Other HTML-Attributes
+	 * @var string|null - Other HTML-Attributes
 	 */
 	protected $otherHTMLAttr;
 
@@ -139,6 +140,34 @@ abstract class FormField {
 	 * @var null|int - Size of the Object
 	 */
 	protected $size = null;
+
+	/**
+	 * FormField constructor.
+	 *
+	 * @param string $name - Name of the Field
+	 * @param string $type - Input type of the Field
+	 * @param bool $required - Is the Field required
+	 * @param string $dataType - Allowed Data-Type of the Field
+	 * @param bool $disabled - Is the field disabled
+	 * @param string|null $otherHTMLAttr - Other HTML-Attributes
+	 * @param mixed $value - Value of the Field
+	 */
+	public function __construct($name, $type, $required = true, $dataType = self::TYPE_STRING, $disabled = false, $otherHTMLAttr = null, $value = null) {
+		$this->setName($name);
+		if(self::isHtml5())
+			$this->setType($type);
+		else
+			$this->setType(self::removeHtml5Type($type));
+		$this->setRequired($required);
+		$this->setDataType($dataType);
+		$this->setDisabled($disabled);
+		$this->setOtherHTMLAttr($otherHTMLAttr);
+		$this->setValue($value);
+
+		// Auto assign data-type on special fields
+		$this->autoSetDataType($type);
+	}
+
 
 	/**
 	 * Clears Memory
@@ -173,7 +202,7 @@ abstract class FormField {
 	 *
 	 * @param boolean $xhtml - enable/disable XHTML (true = enable | false = disable)
 	 */
-	final protected static function setXhtml($xhtml) {
+	final public static function setXhtml($xhtml) {
 		self::$xhtml = $xhtml;
 	}
 
@@ -191,7 +220,7 @@ abstract class FormField {
 	 *
 	 * @param boolean $html5 - enable/disable HTML5 (true = enable | false = disable)
 	 */
-	final protected static function setHtml5($html5) {
+	final public static function setHtml5($html5) {
 		self::$html5 = $html5;
 	}
 
@@ -200,7 +229,7 @@ abstract class FormField {
 	 *
 	 * @return string - Allowed DataType
 	 */
-	public function getDataType() {
+	final public function getDataType() {
 		return $this->dataType;
 	}
 
@@ -209,7 +238,7 @@ abstract class FormField {
 	 *
 	 * @param string $dataType - Allowed DataType
 	 */
-	public function setDataType($dataType) {
+	final public function setDataType($dataType) {
 		$this->dataType = $dataType;
 	}
 
@@ -218,7 +247,7 @@ abstract class FormField {
 	 *
 	 * @return boolean - is this field required
 	 */
-	public function isRequired() {
+	final public function isRequired() {
 		return $this->required;
 	}
 
@@ -227,7 +256,7 @@ abstract class FormField {
 	 *
 	 * @param boolean $required - is this field required (true = yes | false = no)
 	 */
-	public function setRequired($required) {
+	final public function setRequired($required) {
 		$this->required = $required;
 	}
 
@@ -236,7 +265,7 @@ abstract class FormField {
 	 *
 	 * @return string - the name of this object
 	 */
-	public function getName() {
+	final public function getName() {
 		return $this->name;
 	}
 
@@ -245,7 +274,7 @@ abstract class FormField {
 	 *
 	 * @param string $name - the name of this object
 	 */
-	protected function setName($name) {
+	final protected function setName($name) {
 		$this->name = $name;
 	}
 
@@ -254,7 +283,7 @@ abstract class FormField {
 	 *
 	 * @return string|array - the current value of this object
 	 */
-	public function getValue() {
+	final public function getValue() {
 		return $this->value;
 	}
 
@@ -263,7 +292,7 @@ abstract class FormField {
 	 *
 	 * @param string|array $value - the current value of this object
 	 */
-	public function setValue($value) {
+	final public function setValue($value) {
 		$this->value = trim($value);
 	}
 
@@ -272,7 +301,7 @@ abstract class FormField {
 	 *
 	 * @return string - the current type of this object
 	 */
-	public function getType() {
+	final public function getType() {
 		return $this->type;
 	}
 
@@ -281,7 +310,7 @@ abstract class FormField {
 	 *
 	 * @param string $type - the current type of this object
 	 */
-	protected function setType($type) {
+	final protected function setType($type) {
 		$this->type = mb_strtolower($type);
 	}
 
@@ -290,7 +319,7 @@ abstract class FormField {
 	 *
 	 * @return boolean - is this object disabled
 	 */
-	public function isDisabled() {
+	final public function isDisabled() {
 		return $this->disabled;
 	}
 
@@ -299,7 +328,7 @@ abstract class FormField {
 	 *
 	 * @param boolean $disabled - enable/disable this object (false = enabled | true = disabled)
 	 */
-	public function setDisabled($disabled) {
+	final public function setDisabled($disabled) {
 		$this->disabled = $disabled;
 	}
 
@@ -308,7 +337,7 @@ abstract class FormField {
 	 *
 	 * @return boolean - Can field only read? true = readOnly | false = write/read
 	 */
-	public function isReadOnly() {
+	final public function isReadOnly() {
 		return $this->readOnly;
 	}
 
@@ -317,7 +346,7 @@ abstract class FormField {
 	 *
 	 * @param boolean $readOnly - Can field only read? true = readOnly | false = write/read
 	 */
-	public function setReadOnly($readOnly) {
+	final public function setReadOnly($readOnly) {
 		$this->readOnly = $readOnly;
 	}
 
@@ -326,7 +355,7 @@ abstract class FormField {
 	 *
 	 * @return array|null - CSS-ID(s) as array or null if there are none
 	 */
-	protected function getCssIds() {
+	final protected function getCssIds() {
 		return $this->cssIds;
 	}
 
@@ -335,7 +364,7 @@ abstract class FormField {
 	 *
 	 * @param array|null $cssIds - CSS-ID(s) as array or null if there are none
 	 */
-	protected function setCssIds($cssIds) {
+	final protected function setCssIds($cssIds) {
 		$this->cssIds = $cssIds;
 	}
 
@@ -344,7 +373,7 @@ abstract class FormField {
 	 *
 	 * @param string $cssIdName - the name of a css ID, no "," needed!!!
 	 */
-	public function addCssId($cssIdName) {
+	final public function addCssId($cssIdName) {
 		$this->cssIds[] = $cssIdName;
 	}
 
@@ -353,7 +382,7 @@ abstract class FormField {
 	 *
 	 * @param string $cssIdName - the name of a css ID
 	 */
-	public function removeCssId($cssIdName) {
+	final public function removeCssId($cssIdName) {
 		// Create a new array and include all values to it except the remove css class
 		$tmpNew = array();
 		$i = 0;
@@ -372,7 +401,7 @@ abstract class FormField {
 	 *
 	 * @return array|null - CSS-Class(es) as array or null if there are none
 	 */
-	protected function getCssClasses() {
+	final protected function getCssClasses() {
 		return $this->cssClasses;
 	}
 
@@ -381,7 +410,7 @@ abstract class FormField {
 	 *
 	 * @param array|null $cssClasses - CSS-Class(es) as array or null if there are none
 	 */
-	protected function setCssClasses($cssClasses) {
+	final protected function setCssClasses($cssClasses) {
 		$this->cssClasses = $cssClasses;
 	}
 
@@ -390,7 +419,7 @@ abstract class FormField {
 	 *
 	 * @param string $cssClassName - the name of a css class, no "," needed!!!
 	 */
-	public function addCssClass($cssClassName) {
+	final public function addCssClass($cssClassName) {
 		$this->cssClasses[] = $cssClassName;
 	}
 
@@ -399,7 +428,7 @@ abstract class FormField {
 	 *
 	 * @param string $cssClassName - the name of a css class
 	 */
-	public function removeCssClass($cssClassName) {
+	final public function removeCssClass($cssClassName) {
 		// Create a new array and include all values to it except the remove css class
 		$tmpNew = array();
 		$i = 0;
@@ -418,7 +447,7 @@ abstract class FormField {
 	 *
 	 * @return string|null - all other html attributes - null if there are none
 	 */
-	public function getOtherHTMLAttr() {
+	final public function getOtherHTMLAttr() {
 		return $this->otherHTMLAttr;
 	}
 
@@ -427,7 +456,7 @@ abstract class FormField {
 	 *
 	 * @param string|null $otherHTMLAttr - all other html attributes - null if there are none
 	 */
-	public function setOtherHTMLAttr($otherHTMLAttr) {
+	final public function setOtherHTMLAttr($otherHTMLAttr) {
 		$this->otherHTMLAttr = $otherHTMLAttr;
 	}
 
@@ -436,7 +465,7 @@ abstract class FormField {
 	 *
 	 * @return int - min length of the field
 	 */
-	public function getMinLen() {
+	final public function getMinLen() {
 		return $this->minLen;
 	}
 
@@ -445,7 +474,7 @@ abstract class FormField {
 	 *
 	 * @param int $minLen - min length of the field.
 	 */
-	public function setMinLen($minLen) {
+	final public function setMinLen($minLen) {
 		$this->minLen = $minLen;
 	}
 
@@ -454,7 +483,7 @@ abstract class FormField {
 	 *
 	 * @return int - max length 0 means no limit
 	 */
-	public function getMaxLen() {
+	final public function getMaxLen() {
 		return $this->maxLen;
 	}
 
@@ -463,7 +492,7 @@ abstract class FormField {
 	 *
 	 * @param int $maxLen - max length 0 means no limit
 	 */
-	public function setMaxLen($maxLen) {
+	final public function setMaxLen($maxLen) {
 		$this->maxLen = $maxLen;
 	}
 
@@ -472,7 +501,7 @@ abstract class FormField {
 	 *
 	 * @return null|int - size of the object - null means no limit
 	 */
-	public function getSize() {
+	final public function getSize() {
 		return $this->size;
 	}
 
@@ -481,7 +510,7 @@ abstract class FormField {
 	 *
 	 * @param null|int $size - size of the object - null means no limit
 	 */
-	public function setSize($size) {
+	final public function setSize($size) {
 		if(is_numeric($size) || $size === null)
 			$this->size = $size;
 	}
@@ -492,7 +521,7 @@ abstract class FormField {
 	 * @param string $type - Type to check
 	 * @return string - New type (text) or the other non HTML5 Type
 	 */
-	protected static function removeHtml5Type($type) {
+	final protected static function removeHtml5Type($type) {
 		switch(mb_strtolower($type)) {
 			case 'color':
 			case 'date':
@@ -520,7 +549,7 @@ abstract class FormField {
 	 * @param bool $updateValue - Update value if it was touched
 	 * @return bool - true if its a number and false if not
 	 */
-	protected function checkIsNumber($value, $updateValue = true) {
+	final protected function checkIsNumber($value, $updateValue = true) {
 		if(is_numeric($value))
 			return true;
 
@@ -552,7 +581,7 @@ abstract class FormField {
 	 *
 	 * @return string - HTML-string
 	 */
-	protected function cssIdsHTML() {
+	final protected function cssIdsHTML() {
 		if($this->getCssIds() === null)
 			return '';
 
@@ -569,7 +598,7 @@ abstract class FormField {
 	 *
 	 * @return string - HTML-String
 	 */
-	protected function cssClassesHTML() {
+	final protected function cssClassesHTML() {
 		if($this->getCssClasses() === null)
 			return '';
 
@@ -586,7 +615,7 @@ abstract class FormField {
 	 *
 	 * @return bool - true on success else false
 	 */
-	public function checkDataType() {
+	final public function checkDataType() {
 		$value = $this->getValue();
 
 		// Go to the right dataType to check
@@ -712,7 +741,7 @@ abstract class FormField {
 	 *
 	 * @param string|null $type - Current Field-Type
 	 */
-	protected function autoSetDataType($type = null) {
+	final protected function autoSetDataType($type = null) {
 		// Is a Type set? If not use object field type
 		if($type === null)
 			$type = $this->getType();
