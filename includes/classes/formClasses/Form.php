@@ -14,7 +14,6 @@
  */
 
 require_once('FormField.php');
-require_once('InputField.php');
 
 /**
  * Class Form

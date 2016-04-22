@@ -13,6 +13,11 @@
  * Notes: Base Class for every FormField
  */
 
+// Include sub-classes
+require_once('InputField.php');
+require_once('SelectList.php');
+require_once('TextArea.php');
+
 /**
  * Class FormField
  */
@@ -172,7 +177,7 @@ abstract class FormField {
 	/**
 	 * Clears Memory
 	 */
-	final public function __destruct() {
+	public function __destruct() {
 		unset($this->name);
 		unset($this->value);
 		unset($this->type);
@@ -543,6 +548,26 @@ abstract class FormField {
 	}
 
 	/**
+	 * Returns the current user value of the Field
+	 *
+	 * @param string $postMethod - Method of submit eg POST GET
+	 * @return mixed|null - User Value of the field or null if empty
+	 */
+	final public function getCurrentValue($postMethod) {
+		if($postMethod == Form::METHOD_GET) {
+			if(!isset($_GET[$this->getName()]))
+				$_GET[$this->getName()] = null;
+
+			return $_GET[$this->getName()];
+		} else {
+			if(!isset($_POST[$this->getName()]))
+				$_POST[$this->getName()] = null;
+
+			return $_POST[$this->getName()];
+		}
+	}
+
+	/**
 	 * Detect if a value is a number
 	 *
 	 * @param mixed $value - Value to check
@@ -807,7 +832,7 @@ abstract class FormField {
 	 * @return string - HTML Code with CSS/Ids etc (Base stuff)
 	 */
 	protected function baseHTMLAttr() {
-		$code = 'name="' . $this->getName();
+		$code = 'name="' . $this->getName() . '"';
 		$code .= $this->cssIdsHTML() . $this->cssClassesHTML();
 
 		// Add min length if is set
