@@ -15,6 +15,7 @@
  * Class TextArea
  */
 class TextArea extends FormField {
+
 	/**
 	 * Contains the number of cols for the TextArea
 	 *
@@ -28,6 +29,30 @@ class TextArea extends FormField {
 	 * @var null|int - number of rows or null for default
 	 */
 	private $rows = null;
+
+	/**
+	 * TextArea constructor.
+	 *
+	 * @param string $name - Name of the Field
+	 * @param string $type - Input type of the Field
+	 * @param bool $methodType - Submit method of the Form
+	 * @param bool $required - Is the Field required
+	 * @param bool|string $dataType - Allowed Data-Type of the Field
+	 * @param bool $disabled - Is the field disabled
+	 * @param string|null $otherHTMLAttr - Other HTML-Attributes
+	 * @param string|null $value - Value of the Field
+	 */
+	// @Overwrite
+	public function __construct($name, $type, $methodType, $required = true, $dataType = self::TYPE_STRING, $disabled = false, $otherHTMLAttr = null, $value = null) {
+		parent::__construct($name, $type, $required, $dataType, $disabled, $otherHTMLAttr, $value);
+
+		// Get the user value
+		if($methodType !== null) {
+			$userValue = $this->getCurrentValue($methodType);
+			if($userValue !== null)
+				$this->setValue($userValue);
+		}
+	}
 
 	/**
 	 * Returns the value of the Rows for a TextArea
@@ -82,7 +107,7 @@ class TextArea extends FormField {
 			$code .= ' rows="' . $this->getRows() . '"';
 
 		// Close open TextArea-Tag and insert value
-		$code .= '>' . $this->getValue() . '</textarea>';
+		$code .= '>' . $this->getEscapedValue() . '</textarea>';
 
 		// Display HTML on show direct
 		if($show)

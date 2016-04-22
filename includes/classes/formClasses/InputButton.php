@@ -42,7 +42,7 @@ class InputButton extends InputField {
 	 */
 	// @Overwrite | @Implement
 	public function output($show = true) {
-		$code = '<input type="' . $this->getType() . '" ' . $this->baseHTMLAttr() . ' value="' . $this->getValue() . '"';
+		$code = '<input type="' . $this->getType() . '" ' . $this->baseHTMLAttr() . ' value="' . $this->getEscapedValue() . '"';
 
 		if($this->getSize() !== null)
 			$code .= ' size="' . $this->getSize() . '"';

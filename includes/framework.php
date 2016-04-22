@@ -32,6 +32,10 @@ require_once(INCLUDE_DIR . DS . 'dao' . DS . 'SQLError.php');
 
 require_once(CLASS_DIR . DS . 'Cookie.php');
 require_once(CLASS_DIR . DS . 'Email.php');
+require_once(CLASS_DIR . DS . 'formClasses' . DS . 'Form.php');
+
+// Don't replace anything at a FormField because we already have replaced all user vars
+FormField::setXssReplace(FormField::XSS_NOT_REPLACE);
 
 // Define Database Connection(s)
 define('MAIN_DB', 'dbConnection');

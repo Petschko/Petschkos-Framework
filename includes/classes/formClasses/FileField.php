@@ -35,12 +35,11 @@ class FileField extends InputField {
 	 * @param bool|string $dataType - Allowed Data-Type of the Field
 	 * @param bool $disabled - Is the field disabled
 	 * @param string|null $otherHTMLAttr - Other HTML-Attributes
-	 * @param mixed $value - Value of the Field
 	 * @param null|string $fileAccept - Accept HTML-Type of the FileField
 	 */
 	// @Overwrite
-	public function __construct($name, $type, $methodType, $required = true, $dataType = self::TYPE_STRING, $disabled = false, $otherHTMLAttr = null, $value = null, $fileAccept = null) {
-		parent::__construct($name, $type, $methodType, $required, $dataType, $disabled, $otherHTMLAttr, $value);
+	public function __construct($name, $type, $methodType, $required = true, $dataType = self::TYPE_STRING, $disabled = false, $otherHTMLAttr = null, $fileAccept = null) {
+		parent::__construct($name, $type, $methodType, $required, $dataType, $disabled, $otherHTMLAttr, null);
 		$this->setAcceptType($fileAccept);
 	}
 

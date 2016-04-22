@@ -42,6 +42,13 @@ abstract class FormField {
 	const TYPE_AUTODETECT = 'auto';
 
 	/**
+	 * @const int - XSS-Replace Methods
+	 */
+	const XSS_NOT_REPLACE = 0;
+	const XSS_HTMLSPECIALCHARS = 1;
+	const XSS_HTMLENTITIES = 2;
+
+	/**
 	 * Contains if XHTML is enabled
 	 *
 	 * @var bool - Is xHTML enabled
@@ -56,6 +63,13 @@ abstract class FormField {
 	protected static $html5 = true;
 
 	/**
+	 * Contains the XSS-Replace Method
+	 *
+	 * @var int - XSS-Replace Method
+	 */
+	protected static $xssReplace = self::XSS_HTMLSPECIALCHARS;
+
+	/**
 	 * Contains the Name of the Field
 	 *
 	 * @var string - Name of the Field
@@ -65,7 +79,7 @@ abstract class FormField {
 	/**
 	 * Contains the current Value of the Field
 	 *
-	 * @var mixed - Value of the current Field
+	 * @var string|null - Value of the current Field
 	 */
 	protected $value;
 
@@ -155,7 +169,7 @@ abstract class FormField {
 	 * @param string $dataType - Allowed Data-Type of the Field
 	 * @param bool $disabled - Is the field disabled
 	 * @param string|null $otherHTMLAttr - Other HTML-Attributes
-	 * @param mixed $value - Value of the Field
+	 * @param string|null $value - Value of the Field
 	 */
 	public function __construct($name, $type, $required = true, $dataType = self::TYPE_STRING, $disabled = false, $otherHTMLAttr = null, $value = null) {
 		$this->setName($name);
@@ -230,6 +244,24 @@ abstract class FormField {
 	}
 
 	/**
+	 * Get the XSS-Replace method
+	 *
+	 * @return int - XSS-Replace method
+	 */
+	final protected static function getXssReplace() {
+		return self::$xssReplace;
+	}
+
+	/**
+	 * Set the XSS-Replace method
+	 *
+	 * @param int $xssReplace - XSS-Replace method
+	 */
+	final public static function setXssReplace($xssReplace) {
+		self::$xssReplace = $xssReplace;
+	}
+
+	/**
 	 * Returns the allowed DataType of the value
 	 *
 	 * @return string - Allowed DataType
@@ -286,19 +318,40 @@ abstract class FormField {
 	/**
 	 * Returns the current value of this object
 	 *
-	 * @return string|array - the current value of this object
+	 * @return string|null - the current value of this object
 	 */
-	final public function getValue() {
+	final protected function getValue() {
 		return $this->value;
 	}
 
 	/**
 	 * Set the current value of this object
 	 *
-	 * @param string|array $value - the current value of this object
+	 * @param string|null $value - the current value of this object
 	 */
 	final public function setValue($value) {
 		$this->value = trim($value);
+	}
+
+	/**
+	 * Get the Value escaped (if not turned off)
+	 *
+	 * @return string - Escaped Value
+	 */
+	final public function getEscapedValue() {
+		// Return empty string if is empty
+		if($this->getValue() === null)
+			return '';
+
+		switch(self::getXssReplace()) {
+			case self::XSS_NOT_REPLACE:
+				return $this->getValue();
+			case self::XSS_HTMLENTITIES:
+				return htmlentities($this->getValue(), ENT_QUOTES, 'UTF-8', true);
+			case self::XSS_HTMLSPECIALCHARS:
+			default:
+				return htmlspecialchars($this->getValue(), ENT_QUOTES, 'UTF-8', true);
+		}
 	}
 
 	/**

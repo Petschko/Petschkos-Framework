@@ -39,7 +39,7 @@ class RadioCheckButton extends InputField {
 	 * @param string $groupName - Name of the FieldGroup
 	 * @param string $type - Input type of the Field
 	 * @param string $methodType - Submit method of the Form
-	 * @param bool $value - Value of the Field
+	 * @param string $value - Value of the Field
 	 * @param bool $required - Is the Field required
 	 * @param bool|string $dataType - Allowed Data-Type of the Field
 	 * @param bool $disabled - Is the field disabled
@@ -161,7 +161,7 @@ class RadioCheckButton extends InputField {
 	 */
 	// @Overwrite | @Implement
 	public function output($show = true) {
-		$code = '<input type="' . $this->getType() . '" ' . $this->baseHTMLAttr() . ' value="' . $this->getValue() . '"';
+		$code = '<input type="' . $this->getType() . '" ' . $this->baseHTMLAttr() . ' value="' . $this->getEscapedValue() . '"';
 
 		// Is checked
 		if($this->isChecked()) {
