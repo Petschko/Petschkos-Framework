@@ -36,6 +36,11 @@ class Form {
 	const METHOD_FILE = 'FILE';
 
 	/**
+	 * @const string - Hidden-Field name
+	 */
+	const HIDDEN_FIELD = '_form_name';
+
+	/**
 	 * Contains the Name of the Form
 	 *
 	 * @var string|null - Name of the Form
@@ -64,6 +69,13 @@ class Form {
 	private $fields = array();
 
 	/**
+	 * Contains if the Form was send
+	 *
+	 * @var bool - Was the Form send
+	 */
+	private $send = false;
+
+	/**
 	 * Form constructor.
 	 *
 	 * @param string $action - Form action URL
@@ -74,6 +86,12 @@ class Form {
 		$this->setAction($action);
 		$this->setMethod($method);
 		$this->setName($name);
+
+		$this->setField($name . self::HIDDEN_FIELD, new InputField($name . self::HIDDEN_FIELD, 'hidden', $method));
+		if($this->getField($name . self::HIDDEN_FIELD)->getCurrentValue($method) == $name)
+			$this->setSend(true);
+		else
+			$this->getField($name . self::HIDDEN_FIELD)->setValue($name);
 	}
 
 	/**
@@ -167,20 +185,45 @@ class Form {
 	 * @param string $field - Name of the Field
 	 * @param object|FormField $value - Field Object
 	 */
-	private function setField($field, $value) {
+	public function setField($field, $value) {
 		$this->fields[$field] = $value;
 	}
 
-	public function addInput($name, $inputType = self::F_INPUT, $type = 'text', $required = true, $allowedType = FormField::TYPE_STRING, $disabled = false, $otherHTMLAttr = null) {
-		$this->setField($name, null);
+	/**
+	 * Get the Field with the specified name
+	 *
+	 * @param string $field - Field name
+	 * @return object|FormField - Field Object
+	 */
+	public function getField($field) {
+		return $this->fields[$field];
+	}
+
+	/**
+	 * Show if the Form was send
+	 *
+	 * @return boolean - Was the Form send
+	 */
+	public function isSend() {
+		return $this->send;
+	}
+
+	/**
+	 * Set if the Form was send
+	 *
+	 * @param boolean $send - Was the Form send
+	 */
+	private function setSend($send) {
+		$this->send = $send;
 	}
 
 	/**
 	 * Generates an opening HTML-Tag for the Form with correct Parameters (Recommend to use this)
 	 *
+	 * @param bool $hiddenField - Include Hidden-field
 	 * @return string - HTML-form open Tag
 	 */
-	public function formOpenHTML() {
+	public function formOpenHTML($hiddenField = true) {
 		$code = '<form action="' . $this->getAction();
 
 		if($this->getMethod() == self::METHOD_FILE || $this->getMethod() == self::METHOD_POST)
@@ -188,7 +231,11 @@ class Form {
 
 		if($this->getMethod() == self::METHOD_FILE)
 			$code .= ' enctype="multipart/form-data"';
-		$code .= '>';
+		$code .= '>' . PHP_EOL;
+
+		// Display hidden field
+		if($hiddenField)
+			$code .= $this->getField($this->getName() . '_form_name')->output() . PHP_EOL;
 
 		return $code;
 	}
@@ -202,5 +249,5 @@ class Form {
 		return '</form>';
 	}
 
-	// todo
+	// todo class
 }
