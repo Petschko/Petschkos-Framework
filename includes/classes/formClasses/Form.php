@@ -43,7 +43,7 @@ class Form {
 	/**
 	 * Contains the Name of the Form
 	 *
-	 * @var string|null - Name of the Form
+	 * @var string - Name of the Form
 	 */
 	private $name;
 
@@ -80,9 +80,9 @@ class Form {
 	 *
 	 * @param string $action - Form action URL
 	 * @param string $method - Submit method GET/FORM/FILE
-	 * @param string|null $name
+	 * @param string $name - Form Name
 	 */
-	public function __construct($action, $method = self::METHOD_POST, $name = null) {
+	public function __construct($action, $name, $method = self::METHOD_POST) {
 		$this->setAction($action);
 		$this->setMethod($method);
 		$this->setName($name);
@@ -90,8 +90,6 @@ class Form {
 		$this->setField($name . self::HIDDEN_FIELD, new InputField($name . self::HIDDEN_FIELD, 'hidden', $method));
 		if($this->getField($name . self::HIDDEN_FIELD)->getCurrentValue($method) == $name)
 			$this->setSend(true);
-		else
-			$this->getField($name . self::HIDDEN_FIELD)->setValue($name);
 	}
 
 	/**
@@ -110,7 +108,7 @@ class Form {
 	/**
 	 * Get the Name of the Form or null if none is set
 	 *
-	 * @return string|null - Name of the Form
+	 * @return string - Name of the Form
 	 */
 	public function getName() {
 		return $this->name;
@@ -119,7 +117,7 @@ class Form {
 	/**
 	 * Set the Name of the Form or null for none
 	 *
-	 * @param string|null $name - Name of the Form
+	 * @param string $name - Name of the Form
 	 */
 	private function setName($name) {
 		$this->name = $name;
@@ -159,24 +157,6 @@ class Form {
 	 */
 	private function setMethod($method) {
 		$this->method = $method;
-	}
-
-	/**
-	 * Get the Field of this Form
-	 *
-	 * @return array - Form fields
-	 */
-	private function getFields() {
-		return $this->fields;
-	}
-
-	/**
-	 * Set the Fields of this Form
-	 *
-	 * @param array $fields - Form Fields
-	 */
-	private function setFields($fields) {
-		$this->fields = $fields;
 	}
 
 	/**
