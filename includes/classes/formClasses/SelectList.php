@@ -194,8 +194,16 @@ class SelectList extends FormField {
 		foreach($this->getList() as $listName => $listValue) {
 			$code .= '<option value="' . $listValue . '"';
 
+			// Check if multi select
 			if(is_array($this->getValue()) && $this->getSelectCount() > 1) {
-				//todo search value array of multi select
+				foreach($this->getValue() as $value) {
+					if($value == $listValue) {
+						$code .= ' selected';
+						if(self::isXhtml())
+							$code .= '="selected"';
+						break;
+					}
+				}
 			} else if($listValue == $this->getValue()) {
 				$code .= ' selected';
 
@@ -214,6 +222,5 @@ class SelectList extends FormField {
 			echo $code;
 
 		return $code;
-		// TODO: Implement output() method.
 	}
 }
