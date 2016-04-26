@@ -875,9 +875,10 @@ abstract class FormField {
 	/**
 	 * Output the Element as HTML
 	 *
+	 * @param bool $show - Show HTML instant on call
 	 * @return string - Form Field as HTML Output
 	 */
-	abstract public function output();
+	abstract public function output($show = true);
 
 	/**
 	 * Build base HTML-Code for the input fields

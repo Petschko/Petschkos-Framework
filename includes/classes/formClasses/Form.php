@@ -90,6 +90,8 @@ class Form {
 		$this->setField($name . self::HIDDEN_FIELD, new InputField($name . self::HIDDEN_FIELD, 'hidden', $method));
 		if($this->getField($name . self::HIDDEN_FIELD)->getCurrentValue($method) == $name)
 			$this->setSend(true);
+		else
+			$this->getField($name . self::HIDDEN_FIELD)->setValue($name);
 	}
 
 	/**
@@ -164,9 +166,13 @@ class Form {
 	 *
 	 * @param string $field - Name of the Field
 	 * @param object|FormField $value - Field Object
+	 * @param bool $htmlOutput - Show new field direct as HTML
 	 */
-	public function setField($field, $value) {
+	public function setField($field, $value, $htmlOutput = true) {
 		$this->fields[$field] = $value;
+
+		if($htmlOutput)
+			$this->getField($field)->output(true);
 	}
 
 	/**
