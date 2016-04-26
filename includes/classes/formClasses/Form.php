@@ -76,6 +76,13 @@ class Form {
 	private $send = false;
 
 	/**
+	 * Contains all Form-Errors
+	 *
+	 * @var null|array
+	 */
+	private $error = null;
+
+	/**
 	 * Form constructor.
 	 *
 	 * @param string $action - Form action URL
@@ -101,10 +108,15 @@ class Form {
 		unset($this->name);
 		unset($this->action);
 		unset($this->method);
+		unset($this->send);
 
 		foreach($this->fields as $field)
 			unset($field);
 		unset($this->fields);
+
+		foreach($this->error as $error)
+			unset($error);
+		unset($this->error);
 	}
 
 	/**
@@ -186,6 +198,15 @@ class Form {
 	}
 
 	/**
+	 * Get the Fields Array
+	 *
+	 * @return array - Fields Array
+	 */
+	private function getFields() {
+		return $this->fields;
+	}
+
+	/**
 	 * Show if the Form was send
 	 *
 	 * @return boolean - Was the Form send
@@ -201,6 +222,114 @@ class Form {
 	 */
 	private function setSend($send) {
 		$this->send = $send;
+	}
+
+	/**
+	 * Sets the Error-Object array
+	 *
+	 * @param array|null $error - Error objects or null to reset
+	 */
+	private function setError($error) {
+		$this->error = $error;
+	}
+
+	/**
+	 * Get the Error-Objects or null if no error happens
+	 *
+	 * @return array|null - Error-Objects or null
+	 */
+	private function getError() {
+		return $this->error;
+	}
+
+	/**
+	 * Add a new Error to the Error-Object Array
+	 *
+	 * @param FormError $error - Error-Object
+	 */
+	private function addError($error) {
+		$this->error[] = $error;
+	}
+
+	/**
+	 * Checks all fields of the current form and generate if occur error objects
+	 */
+	public function checkData() {
+		// Reset old Errors (if set)
+		if(is_array($this->getError()))
+			foreach($this->error as $error)
+				unset($error);
+		$this->setError(null);
+
+		// Check all Form-Fields
+		foreach($this->getFields() as $field) {
+			/**
+			 * @var FormField $field - FormField Object
+			 */
+			$value = $field->getEscapedValue();
+
+			// Check if Required and Empty
+			if($field->isRequired() && ! $value)
+				$this->addError(new FormError(FormError::ERROR_EMPTY_REQUIRED, $field));
+			else if($field->getType() == Form::F_SELECT_LIST) {
+				// Do some special if the element is a select list
+				/**
+				 * @var SelectList $field - SelectList Object
+				 * @var array|string $value - Select Value(s)
+				 */
+				$selectedOptions = $field->getCurrentSelectCount();
+
+				// Check if to many options are selected
+				if($selectedOptions > $field->getSelectCount() && $field->getSelectCount() != 0)
+					$this->addError(new FormError(FormError::ERROR_SELECT_TO_MANY, $field));
+					//is not in list
+
+				// Check if multi options are enabled
+				if($field->getSelectCount() != 1) {
+					// Check if to less options are selected
+					if($selectedOptions < $field->getMinSelectCount() && ($field->isRequired() || $selectedOptions > 0))
+						$this->addError(new FormError(FormError::ERROR_SELECT_TO_LESS, $field));
+
+					// Check all Values
+					foreach($value as $item) {
+						if(! $field->isInList($item))
+							$this->addError(new FormError(FormError::ERROR_SELECT_NOT_IN_LIST, $field));
+						$this->baseCheckValue($item, $field);
+					}
+				} else if(is_array($value)) // Value is never an array on 1 select
+					$this->addError(new FormError(FormError::ERROR_ARRAY_IS_INVALID, $field));
+				else {
+					// Perform normal check to the string value
+					if(! $field->isInList($value))
+						$this->addError(new FormError(FormError::ERROR_SELECT_NOT_IN_LIST, $field));
+					$this->baseCheckValue($value, $field);
+				}
+
+			} else
+				$this->baseCheckValue($value, $field);
+		}
+	}
+
+	/**
+	 * Base-check all stuff on a value of a field
+	 *
+	 * @param string $value - Value to check
+	 * @param FormField $field - Origin Field of the value
+	 */
+	private function baseCheckValue($value, $field) {
+		$valLen = mb_strlen($value);
+
+		// Check if value is to long and if limit is set
+		if($valLen > $field->getMaxLen() && $field->getMaxLen() != 0)
+			$this->addError(new FormError(FormError::ERROR_MAX_LEN, $field));
+
+		// Check if its to short (will only returns an error if field is filled out or is req and min len is bigger than 0)
+		if($valLen < $field->getMinLen() && $field->getMinLen() != 0 && ($field->isRequired() || $valLen > 0))
+			$this->addError(new FormError(FormError::ERROR_MIN_LEN, $field));
+
+		// Check DataType
+		if(! $field->checkDataType() && $valLen > 0)
+			$this->addError(new FormError(FormError::ERROR_DATA_TYPE, $field));
 	}
 
 	/**

@@ -23,11 +23,18 @@ class SelectList extends FormField {
 	private $list = array();
 
 	/**
-	 * Contains the select count (Possible selects)
+	 * Contains the select count (Possible selects - Max Selects) or 0 for no limit
 	 *
 	 * @var int - select count
 	 */
 	private $selectCount = 1;
+
+	/**
+	 * Contains how many options have to be min selected (Min selects)
+	 *
+	 * @var int - min select count
+	 */
+	private $minSelectCount = 1;
 
 	/**
 	 * Contains if the list is simple (Value and displayed value are the same)
@@ -74,6 +81,7 @@ class SelectList extends FormField {
 	public function __destruct() {
 		unset($this->list);
 		unset($this->selectCount);
+		unset($this->minSelectCount);
 		unset($this->simpleList);
 		parent::__destruct();
 	}
@@ -115,6 +123,24 @@ class SelectList extends FormField {
 	}
 
 	/**
+	 * Get how many Options have min select if min 1 is selected or field is req
+	 *
+	 * @return int - Min select count
+	 */
+	public function getMinSelectCount() {
+		return $this->minSelectCount;
+	}
+
+	/**
+	 * Set how many options have to be selected min if min 1 is selected or field is req
+	 *
+	 * @param int $minSelectCount - min select count
+	 */
+	public function setMinSelectCount($minSelectCount) {
+		$this->minSelectCount = $minSelectCount;
+	}
+
+	/**
 	 * Get if the List is simple
 	 *
 	 * @return bool - Is the List simple
@@ -133,13 +159,97 @@ class SelectList extends FormField {
 	}
 
 	/**
+	 * Returns the current value of this object
+	 *
+	 * @return array|string|null - the current value of this object
+	 */
+	// @Overwrite
+	protected function getValue() {
+		return $this->value;
+	}
+
+	/**
+	 * Set the current value of this object
+	 *
+	 * @param array|string|null $value - the current value of this object
+	 */
+	// @Overwrite
+	public function setValue($value) {
+		$this->value = trim($value);
+	}
+
+	/**
+	 * Get the Value escaped (if not turned off)
+	 *
+	 * @param null|string|array $value
+	 * @return string|array - Escaped Value
+	 */
+	// @Overwrite
+	public function getEscapedValue($value = null) {
+		// Get the current object value if none is set as param
+		if($value === null)
+			$value = $this->getValue();
+
+		// Return empty string if is empty
+		if($value === null)
+			return '';
+
+		// If value is array do this function for every array part
+		if(is_array($value)) {
+			$tmp = array();
+			foreach($value as $key => $item)
+				$tmp[$key] = $this->getEscapedValue($item);
+
+			return $tmp;
+		}
+
+		switch(self::getXssReplace()) {
+			case self::XSS_NOT_REPLACE:
+				return $value;
+			case self::XSS_HTMLENTITIES:
+				return htmlentities($value, ENT_QUOTES, 'UTF-8', true);
+			case self::XSS_HTMLSPECIALCHARS:
+			default:
+				return htmlspecialchars($value, ENT_QUOTES, 'UTF-8', true);
+		}
+	}
+
+	/**
+	 * Get the count of the current selected options of the user
+	 *
+	 * @return int - Selected options
+	 */
+	public function getCurrentSelectCount() {
+		if(is_array($this->getValue()))
+			return count($this->getValue());
+
+		if($this->getValue())
+			return 1;
+		return 0;
+	}
+
+	/**
+	 * Shows if the value is a possible select from the list (exists in select list)
+	 *
+	 * @param string $value - Value to check
+	 * @return bool - Is value in select list
+	 */
+	public function isInList($value) {
+		// If field is not required and its empty "show" that is in list
+		if($value == '' && ! $this->isRequired())
+			return true;
+
+		return in_array($value, $this->getList());
+	}
+
+	/**
 	 * Build base HTML-Code for the selected list
 	 *
 	 * @return string - HTML Code with CSS/Ids etc (Base stuff)
 	 */
 	// @Overwrite
 	protected function baseHTMLAttr() {
-		$code = 'name="' . $this->getName() . (($this->getSelectCount() > 1) ? '[]' : '') .'"';
+		$code = 'name="' . $this->getName() . (($this->getSelectCount() == 1) ? '' : '[]') .'"';
 		$code .= $this->cssIdsHTML() . $this->cssClassesHTML();
 
 		// Add size if its not the default size
@@ -180,7 +290,7 @@ class SelectList extends FormField {
 				$code .= '="disabled"';
 		} else {
 			// Is multiple select
-			if($this->getSelectCount() > 1) {
+			if($this->getSelectCount() != 1) {
 				$code .= 'multiple';
 				if(self::isXhtml())
 					$code .= '="multiple"';
@@ -190,12 +300,16 @@ class SelectList extends FormField {
 		// Close Start-Tag
 		$code .= '>';
 
+		// If field is not required generate a empty field
+		if(! $this->isRequired() && $this->getSelectCount() == 1)
+			$code .= '<option value="">&lt;None&gt;</option>'; // todo lang
+
 		// Show List
 		foreach($this->getList() as $listName => $listValue) {
 			$code .= '<option value="' . $listValue . '"';
 
 			// Check if multi select
-			if(is_array($this->getValue()) && $this->getSelectCount() > 1) {
+			if(is_array($this->getValue()) && $this->getSelectCount() != 1) {
 				foreach($this->getValue() as $value) {
 					if($value == $listValue) {
 						$code .= ' selected';

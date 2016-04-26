@@ -59,7 +59,7 @@ class InputField extends FormField {
 	 *
 	 * @return boolean - Is auto complete allowed
 	 */
-	public function isAutoComplete() {
+	final public function isAutoComplete() {
 		return $this->autoComplete;
 	}
 
@@ -68,7 +68,7 @@ class InputField extends FormField {
 	 *
 	 * @param boolean $autoComplete - Is auto complete allowed
 	 */
-	public function setAutoComplete($autoComplete) {
+	final public function setAutoComplete($autoComplete) {
 		$this->autoComplete = $autoComplete;
 	}
 

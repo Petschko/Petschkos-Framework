@@ -320,7 +320,7 @@ abstract class FormField {
 	 *
 	 * @return string|null - the current value of this object
 	 */
-	final protected function getValue() {
+	protected function getValue() {
 		return $this->value;
 	}
 
@@ -329,7 +329,7 @@ abstract class FormField {
 	 *
 	 * @param string|null $value - the current value of this object
 	 */
-	final public function setValue($value) {
+	public function setValue($value) {
 		$this->value = trim($value);
 	}
 
@@ -338,7 +338,7 @@ abstract class FormField {
 	 *
 	 * @return string - Escaped Value
 	 */
-	final public function getEscapedValue() {
+	public function getEscapedValue() {
 		// Return empty string if is empty
 		if($this->getValue() === null)
 			return '';
