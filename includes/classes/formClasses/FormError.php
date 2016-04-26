@@ -7,6 +7,9 @@
  * Update: -
  * Version: 0.0.1
  *
+ * Licence: http://creativecommons.org/licenses/by-sa/4.0/
+ * You are free to use this!
+ *
  * Notes: -
  */
 
@@ -72,7 +75,7 @@ class FormError {
 	 *
 	 * @return int - Error-Type
 	 */
-	public function getErrorType() {
+	private function getErrorType() {
 		return $this->errorType;
 	}
 
@@ -81,7 +84,7 @@ class FormError {
 	 *
 	 * @param int $errorType - Error-Type
 	 */
-	public function setErrorType($errorType) {
+	private function setErrorType($errorType) {
 		$this->errorType = $errorType;
 	}
 
@@ -119,5 +122,9 @@ class FormError {
 	 */
 	public function setField(&$field) {
 		$this->field =& $field;
+	}
+
+	private function generateErrorMsg() {
+		// TODO: Implement generateErrorMsg() method
 	}
 }

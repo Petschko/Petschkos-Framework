@@ -364,5 +364,7 @@ class Form {
 		return '</form>';
 	}
 
-	// todo class
+	public function showError() {
+		// TODO: Implement showError() method
+	}
 }
