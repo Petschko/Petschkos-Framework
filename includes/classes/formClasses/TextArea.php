@@ -42,7 +42,6 @@ class TextArea extends FormField {
 	 * @param string|null $otherHTMLAttr - Other HTML-Attributes
 	 * @param string|null $value - Value of the Field
 	 */
-	// @Overwrite
 	public function __construct($name, $type, $methodType, $required = true, $dataType = self::TYPE_STRING, $disabled = false, $otherHTMLAttr = null, $value = null) {
 		parent::__construct($name, $type, $required, $dataType, $disabled, $otherHTMLAttr, $value);
 
@@ -96,7 +95,6 @@ class TextArea extends FormField {
 	 * @param bool $show - Show HTML instant on call
 	 * @return string - TextArea as HTML Output
 	 */
-	// @Overwrite | @Implement
 	public function output($show = true) {
 		$code = '<textarea ' . $this->baseHTMLAttr();
 

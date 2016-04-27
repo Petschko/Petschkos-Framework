@@ -45,7 +45,6 @@ class RadioCheckButton extends InputField {
 	 * @param bool $disabled - Is the field disabled
 	 * @param null|string $otherHTMLAttr - Other HTML-Attributes
 	 */
-	// @Overwrite
 	public function __construct($name, $groupName, $type, $methodType, $value, $required = true, $dataType = self::TYPE_STRING, $disabled = false, $otherHTMLAttr = null) {
 		// Do not autodetect user value because its a checkbox/radio button - compare the value and the user value
 		parent::__construct($name, $type, null, $required, $dataType, $disabled, $otherHTMLAttr, $value);
@@ -60,7 +59,6 @@ class RadioCheckButton extends InputField {
 	/**
 	 * Clears Memory
 	 */
-	// @Overwrite
 	public function __destruct() {
 		unset($this->checked);
 		unset($this->groupName);
@@ -120,7 +118,6 @@ class RadioCheckButton extends InputField {
 	 *
 	 * @return string - HTML Code with CSS/Ids etc (Base stuff)
 	 */
-	// @Overwrite
 	protected function baseHTMLAttr() {
 		$code = 'name="' . $this->getGroupName() . '"';
 		$code .= $this->cssIdsHTML() . $this->cssClassesHTML();
@@ -159,7 +156,6 @@ class RadioCheckButton extends InputField {
 	 * @param bool $show - Show HTML instant on call
 	 * @return string - Button as HTML Output
 	 */
-	// @Overwrite | @Implement
 	public function output($show = true) {
 		$code = '<input type="' . $this->getType() . '" ' . $this->baseHTMLAttr() . ' value="' . $this->getEscapedValue() . '"';
 

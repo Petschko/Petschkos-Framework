@@ -108,14 +108,8 @@ class Form {
 		unset($this->name);
 		unset($this->action);
 		unset($this->method);
-		unset($this->send);
-
-		foreach($this->fields as $field)
-			unset($field);
 		unset($this->fields);
-
-		foreach($this->error as $error)
-			unset($error);
+		unset($this->send);
 		unset($this->error);
 	}
 
@@ -256,9 +250,6 @@ class Form {
 	 */
 	public function checkData() {
 		// Reset old Errors (if set)
-		if(is_array($this->getError()))
-			foreach($this->error as $error)
-				unset($error);
 		$this->setError(null);
 
 		// Check all Form-Fields

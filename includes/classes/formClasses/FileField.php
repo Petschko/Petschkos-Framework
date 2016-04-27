@@ -37,7 +37,6 @@ class FileField extends InputField {
 	 * @param string|null $otherHTMLAttr - Other HTML-Attributes
 	 * @param null|string $fileAccept - Accept HTML-Type of the FileField
 	 */
-	// @Overwrite
 	public function __construct($name, $type, $methodType, $required = true, $dataType = self::TYPE_STRING, $disabled = false, $otherHTMLAttr = null, $fileAccept = null) {
 		parent::__construct($name, $type, $methodType, $required, $dataType, $disabled, $otherHTMLAttr, null);
 		$this->setAcceptType($fileAccept);
@@ -46,7 +45,6 @@ class FileField extends InputField {
 	/**
 	 * Clears Memory
 	 */
-	// @Overwrite
 	public function __destruct() {
 		unset($this->acceptType);
 		parent::__destruct();
@@ -76,7 +74,6 @@ class FileField extends InputField {
 	 * @param bool $show - Show HTML instant on call
 	 * @return string - File Field as HTML Output
 	 */
-	// @Overwrite | @Implement
 	public function output($show = true) {
 		$code = '<input type="file" ' . $this->baseHTMLAttr() . '';
 

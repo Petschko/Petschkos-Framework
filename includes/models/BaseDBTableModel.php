@@ -124,7 +124,6 @@ abstract class BaseDBTableModel implements tableInterface {
 	 * Clears memory
 	 */
 	final protected function __destruct() {
-		$this->clearMemory();
 		unset($this->memoryObjects);
 		unset($this->memoryIndex);
 		unset($this->memoryCount);
@@ -362,13 +361,7 @@ abstract class BaseDBTableModel implements tableInterface {
 	 */
 	final protected function clearMemory() {
 		// Remove the old memory objects
-		$memoryObjects = $this->getMemoryObjects();
-		if($memoryObjects !== null) {
-			foreach($memoryObjects as $memObject)
-				unset($memObject);
-
-			$this->setMemoryObjects(null);
-		}
+		$this->setMemoryObjects(null);
 
 		// Reset Counter
 		$this->setMemoryIndex(0);

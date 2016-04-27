@@ -29,7 +29,6 @@ class InputButton extends InputField {
 	 * @param bool $required - Is the Field required
 	 * @param string $dataType - Allowed Data-Type of the Field
 	 */
-	// @Overwrite
 	public function __construct($name, $type = 'button', $value = 'Submit', $disabled = false, $otherHTMLAttr = null, $required = false, $dataType = self::TYPE_STRING) {
 		parent::__construct($name, $type, null, $required, $dataType, $disabled, $otherHTMLAttr, $value);
 	}
@@ -40,7 +39,6 @@ class InputButton extends InputField {
 	 * @param bool $show - Show HTML instant on call
 	 * @return string - Button as HTML Output
 	 */
-	// @Overwrite | @Implement
 	public function output($show = true) {
 		$code = '<input type="' . $this->getType() . '" ' . $this->baseHTMLAttr() . ' value="' . $this->getEscapedValue() . '"';
 

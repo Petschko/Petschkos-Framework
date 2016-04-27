@@ -57,7 +57,6 @@ class SelectList extends FormField {
 	 * @param string $dataType - Allowed Data-Type of the Field
 	 * @param null|string $otherHTMLAttr - Other HTML-Attributes
 	 */
-	// @Overwrite
 	public function __construct($name, $list, $methodType, $defaultSelectValue = null, $simpleList = true, $required = true,
 								$selectCount = 1, $disabled = false, $dataType = self::TYPE_STRING, $otherHTMLAttr = null) {
 		parent::__construct($name, 'select', $required, $dataType, $disabled, $otherHTMLAttr, null);
@@ -77,7 +76,6 @@ class SelectList extends FormField {
 	/**
 	 * Clears Memory
 	 */
-	// @Overwrite
 	public function __destruct() {
 		unset($this->list);
 		unset($this->selectCount);
@@ -163,7 +161,6 @@ class SelectList extends FormField {
 	 *
 	 * @return array|string|null - the current value of this object
 	 */
-	// @Overwrite
 	protected function getValue() {
 		return $this->value;
 	}
@@ -173,7 +170,6 @@ class SelectList extends FormField {
 	 *
 	 * @param array|string|null $value - the current value of this object
 	 */
-	// @Overwrite
 	public function setValue($value) {
 		$this->value = trim($value);
 	}
@@ -184,7 +180,6 @@ class SelectList extends FormField {
 	 * @param null|string|array $value
 	 * @return string|array - Escaped Value
 	 */
-	// @Overwrite
 	public function getEscapedValue($value = null) {
 		// Get the current object value if none is set as param
 		if($value === null)
@@ -247,7 +242,6 @@ class SelectList extends FormField {
 	 *
 	 * @return string - HTML Code with CSS/Ids etc (Base stuff)
 	 */
-	// @Overwrite
 	protected function baseHTMLAttr() {
 		$code = 'name="' . $this->getName() . (($this->getSelectCount() == 1) ? '' : '[]') .'"';
 		$code .= $this->cssIdsHTML() . $this->cssClassesHTML();
@@ -276,7 +270,6 @@ class SelectList extends FormField {
 	 * @param bool $show - Show HTML instant on call
 	 * @return string - Select-Field as HTML Output
 	 */
-	// @Overwrite | @Implement
 	public function output($show = true) {
 		$code = '<select ' . $this->baseHTMLAttr() . '';
 

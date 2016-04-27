@@ -42,7 +42,6 @@ class InputField extends FormField {
 	 * @param string|null $otherHTMLAttr - Other HTML-Attributes
 	 * @param string|null $value - Value of the Field
 	 */
-	// @Overwrite
 	public function __construct($name, $type, $methodType, $required = true, $dataType = self::TYPE_STRING, $disabled = false, $otherHTMLAttr = null, $value = null) {
 		parent::__construct($name, $type, $required, $dataType, $disabled, $otherHTMLAttr, $value);
 
@@ -52,6 +51,14 @@ class InputField extends FormField {
 			if($userValue !== null)
 				$this->setValue($userValue);
 		}
+	}
+
+	/**
+	 * Clears Memory
+	 */
+	public function __destruct() {
+		unset($this->autoComplete);
+		parent::__destruct();
 	}
 
 	/**
@@ -78,7 +85,6 @@ class InputField extends FormField {
 	 * @param bool $show - Show HTML instant on call
 	 * @return string - Input Field as HTML Output
 	 */
-	// @Overwrite | @Implement
 	public function output($show = true) {
 		$code = '<input type="' . $this->getType() . '" ' . $this->baseHTMLAttr() . ' value="' . $this->getEscapedValue() . '"';
 
