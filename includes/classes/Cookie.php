@@ -3,7 +3,7 @@
  * Author: Peter Dragicevic [peter-91@hotmail.de]
  * Authors-Website: http://petschko.org/
  * Date: 22.07.2015
- * Time: 09:07
+ * Time: 21:07
  * Update: 09.04.2016
  * Version 1.0.3 (Changed Class-Name & Website)
  * 1.0.2 (Reformat Code - Fixed head doc)

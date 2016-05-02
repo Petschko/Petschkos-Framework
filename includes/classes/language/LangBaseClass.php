@@ -2,12 +2,17 @@
 /**
  * Author: Peter Dragicevic [peter-91@hotmail.de]
  * Authors-Website: http://petschko.org/
- * Date: 15.04.2016
- * Time: 21:50
+ * Date: 02.05.2016
+ * Time: 22:10
  * Update: -
  * Version: 0.0.1
  *
  * Notes: -
  */
 
-// VOID - Add Page
+/**
+ * Class LangBaseClass
+ */
+abstract class LangBaseClass implements LanguageStrings {
+	// Void
+}

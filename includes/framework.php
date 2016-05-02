@@ -3,7 +3,7 @@
  * Author: Peter Dragicevic [peter-91@hotmail.de]
  * Authors-Website: http://petschko.org/
  * Date: 15.04.2016
- * Time: 11:55
+ * Time: 20:41
  * Update: -
  * Version: 0.0.1
  * @package Petschkos Framework
@@ -33,6 +33,12 @@ require_once(INCLUDE_DIR . DS . 'dao' . DS . 'SQLError.php');
 require_once(CLASS_DIR . DS . 'Cookie.php');
 require_once(CLASS_DIR . DS . 'Email.php');
 require_once(CLASS_DIR . DS . 'formClasses' . DS . 'Form.php');
+require_once(CLASS_DIR . DS . 'LanguageStrings.php');
+
+// Define-Language
+Language::setAvailableLanguages(array()); // todo
+Language::setDefaultLang('English');
+Language::setLanguageDir(BASE_DIR . DS . 'language');
 
 // Don't replace anything at a FormField because we already have replaced all user vars
 FormField::setXssReplace(FormField::XSS_NOT_REPLACE);

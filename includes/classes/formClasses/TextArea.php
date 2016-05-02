@@ -4,11 +4,14 @@
  * Author: Peter Dragicevic [peter-91@hotmail.de]
  * Authors-Website: http://petschko.org/
  * Date: 21.04.2016
- * Time: 14:39
+ * Time: 21:39
  * Update: -
  * Version: 0.0.1
  *
- * Notes: -
+ * Licence: http://creativecommons.org/licenses/by-sa/4.0/
+ * You are free to use this!
+ *
+ * Notes: Class for easily creating Text-Areas
  */
 
 /**

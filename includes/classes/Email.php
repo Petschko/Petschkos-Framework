@@ -3,7 +3,7 @@
  * Author: Peter Dragicevic [peter-91@hotmail.de]
  * Authors-Website: http://petschko.org/
  * Date: 10.08.2015
- * Time: 12:27
+ * Time: 22:45
  * Update: 19.04.2016
  * Version: 1.3.1 (Added missing documentation)
  * 1.3.0 (Replaced mail() with mb_send_mail() - Added var for language control)

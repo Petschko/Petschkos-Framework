@@ -4,10 +4,13 @@
  * Author: Peter Dragicevic [peter-91@hotmail.de]
  * Authors-Website: http://petschko.org/
  * Date: 13.04.2016
- * Time: 08:32
+ * Time: 20:32
  * Update: -
  * Version: 0.0.1
  * @package Petschkos Framework
+ *
+ * Licence: http://creativecommons.org/licenses/by-sa/4.0/
+ * You are free to use this!
  *
  * Notes: Base abstract Model for SQL-Tables
  */

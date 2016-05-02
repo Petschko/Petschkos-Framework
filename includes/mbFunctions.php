@@ -3,10 +3,13 @@
  * Author: Peter Dragicevic [peter-91@hotmail.de]
  * Authors-Website: http://petschko.org/
  * Date: 12.04.2016
- * Time: 11:41
+ * Time: 21:41
  * Update: -
  * Version: 0.0.1
  * @package Petschkos Framework
+ *
+ * Licence: http://creativecommons.org/licenses/by-sa/4.0/
+ * You are free to use this!
  *
  * Notes: Contains (edited) function to have an easier management with multi byte stuff
  */
@@ -79,22 +82,23 @@ function mb_html_entity_decode($string, $quote = ENT_QUOTES, $charset = 'UTF-8')
  * Improvement: Thanks to bolvaritamas@vipmail.hu on PHP.NET for FULL UTF-8 convert!
  *
  * @param array|string $string - the string/array which should converted
+ * @param null|string $encoding - Encoding for mb_functions or null for default
  * @return array|string - the converted string/array
  */
-function mb_rawurlencode($string) {
+function mb_rawurlencode($string, $encoding = null) {
 	if(is_array($string)) {
 		$tmp = array();
 		foreach($string as $key => $value)
-			$tmp[$key] = mb_rawurlencode($value);
+			$tmp[$key] = mb_rawurlencode($value, $encoding);
 
 		return $tmp;
 	}
 
 	$result = "";
-	$length = mb_strlen($string);
+	$length = mb_strlen($string, $encoding);
 
 	for($i = 0; $i < $length; $i++)
-		$result .= '%' . wordwrap(bin2hex(mb_substr($string, $i, 1)), 2, '%', true);
+		$result .= '%' . wordwrap(bin2hex(mb_substr($string, $i, 1, $encoding)), 2, '%', true);
 
 	return $result;
 }
@@ -124,20 +128,21 @@ function mb_urldecode($string) {
  *
  * @param string $path - Path to convert
  * @param string|null $suffix - Remove this ending if exists
+ * @param null|string $encoding - Encoding for mb_functions or null for default
  * @return string -  Filename without path (and may without suffix)
  */
-function mb_basename($path, $suffix = null) {
+function mb_basename($path, $suffix = null, $encoding = null) {
 	if(mb_stripos($path, DIRECTORY_SEPARATOR) !== false)
-		$basename = mb_substr($path, mb_strripos($path, DIRECTORY_SEPARATOR));
+		$basename = mb_substr($path, mb_strripos($path, DIRECTORY_SEPARATOR), $encoding);
 	else
 		$basename = $path;
 
-	if($suffix && mb_stripos($basename, $suffix)) {
-		$suffix_pos = mb_strlen($suffix) * -1;
-		$base_end = mb_substr($basename, $suffix_pos);
+	if($suffix && mb_stripos($basename, $suffix, null, $encoding)) {
+		$suffix_pos = mb_strlen($suffix, $encoding) * -1;
+		$base_end = mb_substr($basename, $suffix_pos, null, $encoding);
 
 		if($base_end == $suffix)
-			$basename = mb_substr($basename, 0, $suffix_pos);
+			$basename = mb_substr($basename, 0, $suffix_pos, $encoding);
 	}
 
 	return $basename;
@@ -147,20 +152,22 @@ function mb_basename($path, $suffix = null) {
  * Like http://php.net/lcfirst (lcfirst) but compatible with MultiByte Characters
  *
  * @param string $string - String to convert, see also: http://php.net/lcfirst
+ * @param null|string $encoding - Encoding for mb_functions or null for default
  * @return string - String with first char lower
  */
-function mb_lcfirst($string) {
-	return mb_strtolower(mb_substr($string, 0, 1)) . mb_substr($string, 1);
+function mb_lcfirst($string, $encoding = null) {
+	return mb_strtolower(mb_substr($string, 0, 1, $encoding), $encoding) . mb_substr($string, 1, null, $encoding);
 }
 
 /**
  * Like http://php.net/ucfirst (lcfirst) but compatible with MultiByte Characters
  *
  * @param string $string - String to convert, see also: http://php.net/ucfirst
+ * @param null|string $encoding - Encoding for mb_functions or null for default
  * @return string - String with first char upper
  */
-function mb_ucfirst($string) {
-	return mb_strtoupper(mb_substr($string, 0, 1)) . mb_substr($string, 1);
+function mb_ucfirst($string, $encoding = null) {
+	return mb_strtoupper(mb_substr($string, 0, 1, $encoding), $encoding) . mb_substr($string, 1, $encoding);
 }
 
 /**

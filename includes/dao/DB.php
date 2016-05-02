@@ -3,10 +3,13 @@
  * Author: Peter Dragicevic [peter-91@hotmail.de]
  * Authors-Website: http://petschko.org/
  * Date: 11.04.2016
- * Time: 14:56
+ * Time: 19:56
  * Update: -
  * Version: 0.0.1
  * @package Petschkos Framework
+ *
+ * Licence: http://creativecommons.org/licenses/by-sa/4.0/
+ * You are free to use this!
  *
  * Notes: Create(s a) connection(s) to (a) Database(s)
  */

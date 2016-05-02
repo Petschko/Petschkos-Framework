@@ -3,14 +3,14 @@
  * Author: Peter Dragicevic [peter-91@hotmail.de]
  * Authors-Website: http://petschko.org/
  * Date: 26.04.2016
- * Time: 08:26
+ * Time: 20:26
  * Update: -
  * Version: 0.0.1
  *
  * Licence: http://creativecommons.org/licenses/by-sa/4.0/
  * You are free to use this!
  *
- * Notes: -
+ * Notes: Class for Form-Error Messages
  */
 
 /**
@@ -124,7 +124,30 @@ class FormError {
 		$this->field =& $field;
 	}
 
+	/**
+	 * @return null
+	 */
 	private function generateErrorMsg() {
+		switch($this->getErrorType()) {
+			case self::ERROR_EMPTY_REQUIRED:
+				return null;
+			case self::ERROR_MIN_LEN:
+				return null;
+			case self::ERROR_MAX_LEN:
+				return null;
+			case self::ERROR_DATA_TYPE:
+			case self::ERROR_ARRAY_IS_INVALID:
+				return null;
+			case self::ERROR_SELECT_TO_LESS:
+				return null;
+			case self::ERROR_SELECT_TO_MANY:
+				return null;
+			case self::ERROR_SELECT_NOT_IN_LIST:
+				return null;
+			default:
+				return null;
+		}
+
 		// TODO: Implement generateErrorMsg() method
 	}
 }
