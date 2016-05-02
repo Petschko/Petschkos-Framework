@@ -5,7 +5,8 @@
  * Date: 28.12.2015 (RAW FILE)
  * Time: 19:36 (RAW FILE)
  * Update: 09.04.2016 (RAW FILE)
- * Version: 1.0.5 (Changed Class-Name & Website) @ (RAW FILE)
+ * Version: 1.0.6 (Make Private constructor and clone and removed old config stuff)
+ * 1.0.5 (Changed Class-Name & Website) @ (RAW FILE)
  * 1.0.4 (Reformat Code) @ (RAW FILE)
  * @package Petschkos Framework
  *
@@ -50,25 +51,11 @@ class Config {
 	const websiteSince = 2012;								// Set launch year of the website
 	const charset = 'UTF-8';								// HTML-Default Charset (UTF-8 recommend)
 
-	// Captcha Settings
-	const captchaEnabled = false;							// Enable/Disable Captcha
-	const captchaInverted = false;							// On true the user has to type in the input inverted
-	const captchaMinLen = 3;								// Captcha min solve Chars
-	const captchaMaxLen = 5;								// Captcha max solve Chars
-	const captchaFontSize = 16;								// Set the img font size for the Captcha Chars
-	const captchaImgHeight = 51;							// Set the image height in pixels
-	const captchaImgWidth = 185;							// Set the image width in pixels
-	public static $captchaBgColor = array(0, 0, 0);			// Set Captcha Background-Color (Red 0 - 255, Green 0 - 255, Blue 0 - 255, Transparency 0 - 127)
-	const captchaFontType = 'arial.ttf';					// Set the font file for the Captcha image
-	const captchaIgnoreCharsColors = 0;						// Set how many different ignore-char-colors appears. 0 means ignore-chars are disabled todo
-	const captchaEnableRandomFragments = false;				// On true: Generate random lines and other tiny fragments to make automatic detection difficult todo
-	const captchaMath = false;								// On true: Not use characters for detection, use math task todo
-	public static $numMax = 9;								// todo math_settings
-
 	// -----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor disabled
+	 * Config constructor.
 	 */
 	private function __construct() {}
+	private function __clone() {}
 }
