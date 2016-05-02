@@ -94,6 +94,9 @@ class FormError {
 	 * @return string - Error-Message
 	 */
 	public function getMessage() {
+		if($this->message === null)
+			$this->setMessage($this->generateErrorMsg());
+
 		return $this->message;
 	}
 
@@ -125,29 +128,47 @@ class FormError {
 	}
 
 	/**
-	 * @return null
+	 * Generates the Error-Message
+	 *
+	 * @return null|string - Error-Message or null
 	 */
 	private function generateErrorMsg() {
+		$field = $this->getField();
+
 		switch($this->getErrorType()) {
 			case self::ERROR_EMPTY_REQUIRED:
-				return null;
+				return Language::get()->getFormErrorEmptyReq($field->getName());
+
 			case self::ERROR_MIN_LEN:
-				return null;
+				return Language::get()->getFormErrorMin($field->getName(), $field->getMinLen());
+
 			case self::ERROR_MAX_LEN:
-				return null;
+				return Language::get()->getFormErrorMax($field->getName(), $field->getMaxLen());
+
 			case self::ERROR_DATA_TYPE:
 			case self::ERROR_ARRAY_IS_INVALID:
-				return null;
-			case self::ERROR_SELECT_TO_LESS:
-				return null;
-			case self::ERROR_SELECT_TO_MANY:
-				return null;
-			case self::ERROR_SELECT_NOT_IN_LIST:
-				return null;
-			default:
-				return null;
-		}
+				return Language::get()->getFormErrorDataT($field->getName());
 
-		// TODO: Implement generateErrorMsg() method
+			case self::ERROR_SELECT_TO_LESS:
+				/**
+				 * @var SelectList $field - Select-List
+				 */
+				return Language::get()->getFormErrorSelectLess($field->getName(), $field->getMinSelectCount());
+
+			case self::ERROR_SELECT_TO_MANY:
+				/**
+				 * @var SelectList $field - Select-List
+				 */
+				return Language::get()->getFormErrorSelectMuch($field->getName(), $field->getSize());
+
+			case self::ERROR_SELECT_NOT_IN_LIST:
+				/**
+				 * @var SelectList $field - Select-List
+				 */
+				return Language::get()->getFormErrorSelectNotInList($field->getName(), $field->getEscapedValue());
+
+			default:
+				return '';
+		}
 	}
 }

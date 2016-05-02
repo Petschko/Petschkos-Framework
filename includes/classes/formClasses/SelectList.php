@@ -298,7 +298,7 @@ class SelectList extends FormField {
 
 		// If field is not required generate a empty field
 		if(! $this->isRequired() && $this->getSelectCount() == 1)
-			$code .= '<option value="">&lt;None&gt;</option>'; // todo lang
+			$code .= '<option value="">&lt;' . Language::get()->getEmptySelect() . '&gt;</option>'; // todo lang
 
 		// Show List
 		foreach($this->getList() as $listName => $listValue) {

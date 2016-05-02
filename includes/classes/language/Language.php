@@ -103,10 +103,11 @@ class Language {
 		// Check if language is in allowed array
 		if(in_array($lang, self::getAvailableLanguages()))
 			self::setLang($lang);
-
-		// Show error if language doesn't exists
-		trigger_error('Can\'t detect language ' . htmlspecialchars($lang, ENT_QUOTES, 'UTF-8') . '!', E_USER_ERROR);
-		exit;
+		else {
+			// Show error if language doesn't exists
+			trigger_error('Can\'t detect language ' . htmlspecialchars($lang, ENT_QUOTES, 'UTF-8') . '!', E_USER_ERROR);
+			exit;
+		}
 	}
 
 	/**

@@ -57,6 +57,15 @@ class TextArea extends FormField {
 	}
 
 	/**
+	 * Clears Memory
+	 */
+	public function __destruct() {
+		unset($cols);
+		unset($rows);
+		parent::__destruct();
+	}
+
+	/**
 	 * Returns the value of the Rows for a TextArea
 	 *
 	 * @return null|int - Rows of the TextArea or null if none is set

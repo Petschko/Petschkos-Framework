@@ -110,6 +110,7 @@ class Email {
 	 */
 	public function __destruct() {
 		unset($this->charset);
+		unset($this->mailLang);
 		unset($this->to);
 		unset($this->cc);
 		unset($this->bcc);

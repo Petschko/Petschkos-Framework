@@ -4,8 +4,9 @@
  * Authors-Website: http://petschko.org/
  * Date: 22.07.2015
  * Time: 21:07
- * Update: 09.04.2016
- * Version 1.0.3 (Changed Class-Name & Website)
+ * Update: 02.05.2016
+ * Version 1.1.0 (Added Setters and removed non-class content from class)
+ * 1.0.3 (Changed Class-Name & Website)
  * 1.0.2 (Reformat Code - Fixed head doc)
  * @package Petschkos Framework
  *
@@ -30,22 +31,62 @@
  *
  * Static Object
  */
-class Cookie { // Don't touch this line, until you are the the richest man on the world!
-	// CONFIG AREA -------------------------------------------------------------------------------
-	private static $ignoreCookiePolice = Config::cookiePoliceSet;
-	private static $countryList = array();
-	private static $countryModeWhiteList = Config::cookiePoliceCountryModeWhiteList;
-	private static $masterCookieName = 'allow_cookies';
-	private static $masterCookieExpireTime = 31536000; // Default 1 Year from creation (counted in secs)
-	// END OF CONFIG-AREA ------------------------------------------------------------------------
-
-	private static $country = false; // Don't change!
-	private static $isAllowed; // Don't change!
+class Cookie {
+	/**
+	 * Contains the Ignore-Cookie-Police
+	 *
+	 * @var bool - ignore the cookie law - true will shut off the whole disable function
+	 */
+	private static $ignoreCookiePolice = false;
 
 	/**
-	 * Disabled Constructor
+	 * Contains a List with Countries
+	 *
+	 * @var array - Country-List
+	 */
+	private static $countryList = array();
+
+	/**
+	 * Contains if the Country list is handled as white list for the cookie law (mean all this countries will ignore the law)
+	 *
+	 * @var bool - Is whiteList
+	 */
+	private static $countryModeWhiteList = true;
+
+	/**
+	 * Contains the Name of the Master-Cookie
+	 *
+	 * @var string - Master-Cookie-Name
+	 */
+	private static $masterCookieName = 'allow_cookies';
+
+	/**
+	 * Contains the Master-Cookie expire time in secs
+	 * Default 1 Year from creation (counted in secs)
+	 *
+	 * @var int - Master-Cookie expire time
+	 */
+	private static $masterCookieExpireTime = 31536000;
+
+	/**
+	 * Contains the current user Country
+	 *
+	 * @var bool|string - User-Country or false if none is set
+	 */
+	private static $country = false;
+
+	/**
+	 * Contains if Cookies are allowed or not
+	 *
+	 * @var bool - Cookies are allowed
+	 */
+	private static $isAllowed;
+
+	/**
+	 * Cookie constructor.
 	 */
 	private function __construct() {}
+	private function __clone() {}
 
 	/**
 	 * Sets a Cookie like the normal setCookie function ---- See documentation: http://php.net/setcookie
@@ -62,6 +103,7 @@ class Cookie { // Don't touch this line, until you are the the richest man on th
 	public static function setCookie($name, $value, $expire = 0, $path = null, $domain = null, $secure = null, $httpOnly = null) {
 		if(self::cookiesAllowed() || self::isIgnoreCookiePolice())
 			return setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
+
 		return false;
 	}
 
@@ -70,7 +112,7 @@ class Cookie { // Don't touch this line, until you are the the richest man on th
 	 *
 	 * @param string $cookieName - Name of the Cookie
 	 * @param mixed $defaultValue - Return value if deny read cookies
-	 * @param bool $forceRead - Shows the cookie, no matter what, except it is not set
+	 * @param bool $forceRead - Force-Read - Shows the cookie, no matter what, except it is not set
 	 * @return mixed - Cookie-Value or $default_value
 	 */
 	public static function getCookie($cookieName, $defaultValue = false, $forceRead = false) {
@@ -87,7 +129,7 @@ class Cookie { // Don't touch this line, until you are the the richest man on th
 	/**
 	 * Checks the Master-Cookie if cookies are allowed
 	 *
-	 * @return bool - true if cookies are allowed to set/read
+	 * @return bool - Are Cookies allowed - true if cookies are allowed to set/read
 	 */
 	private static function cookiesAllowed() {
 		if(! isset($_COOKIE[self::getMasterCookieName()]))
@@ -95,6 +137,7 @@ class Cookie { // Don't touch this line, until you are the the richest man on th
 
 		if($_COOKIE[self::getMasterCookieName()] == 'allow' || self::isIgnoreCookiePolice() || self::allowCountryCookie())
 			return true;
+
 		return false;
 	}
 
@@ -109,6 +152,7 @@ class Cookie { // Don't touch this line, until you are the the richest man on th
 				if($country == self::getCountry())
 					return true;
 			}
+
 			// Default return value of whiteList
 			return false;
 		} else {
@@ -116,13 +160,14 @@ class Cookie { // Don't touch this line, until you are the the richest man on th
 				if($country == self::getCountry())
 					return false;
 			}
+
 			// Default return value of blacklist
 			return true;
 		}
 	}
 
 	/**
-	 * Enabled/Disabled Cookies
+	 * Enabled/Disabled Cookies and save it to the user by a Master-Cookie
 	 *
 	 * @param bool $enabled - Enable cookies, set this to false to disable them
 	 */
@@ -137,11 +182,14 @@ class Cookie { // Don't touch this line, until you are the the richest man on th
 	}
 
 	/**
+	 * Get the user Country or none if none is set
+	 *
 	 * @return bool|string - User Country
 	 */
 	public static function getCountry() {
 		if(! self::$country)
 			return 'None';
+
 		return self::$country;
 	}
 
@@ -157,30 +205,40 @@ class Cookie { // Don't touch this line, until you are the the richest man on th
 	/**
 	 * Shows if Cookies are allowed
 	 *
-	 * @return boolean - shows true if cookies are allowed
+	 * @return boolean - Shows true if cookies are allowed
 	 */
 	public static function getIsAllowed() {
 		if(! isset(self::$isAllowed))
 			self::setIsAllowed(self::cookiesAllowed());
+
 		return self::$isAllowed;
 	}
 
 	/**
 	 * Set allowed to true/false
 	 *
-	 * @param bool $isAllowed - isAllowed
+	 * @param bool $isAllowed - Is Allowed
 	 */
 	private static function setIsAllowed($isAllowed) {
 		self::$isAllowed = $isAllowed;
 	}
 
 	/**
-	 * Set ignore CookiePolice
+	 * Get the ignore CookiePolice
 	 *
-	 * @return boolean - True if cookies are always allowed
+	 * @return boolean - Ignore-Police - True if Cookies are always allowed
 	 */
 	private static function isIgnoreCookiePolice() {
 		return self::$ignoreCookiePolice;
+	}
+
+	/**
+	 * Set the ignore CookiePolice
+	 *
+	 * @param boolean $ignoreCookiePolice - Ignore-Police - True if Cookies are always allowed
+	 */
+	public static function setIgnoreCookiePolice($ignoreCookiePolice) {
+		self::$ignoreCookiePolice = $ignoreCookiePolice;
 	}
 
 	/**
@@ -193,21 +251,48 @@ class Cookie { // Don't touch this line, until you are the the richest man on th
 	}
 
 	/**
-	 * Set the CountryList type (white/blacklist)
+	 * Set the Country-List
 	 *
-	 * @return boolean - true is whiteList mode and false is blacklist mode for countries
+	 * @param array $countryList - Country-List-Array
 	 */
-	private static function isCountryModeWhiteList() {
+	public static function setCountryList($countryList) {
+		self::$countryList = $countryList;
+	}
+
+	/**
+	 * Get the CountryList type (white/blacklist)
+	 *
+	 * @return boolean - List-Mode - true is whiteList mode and false is blacklist mode for countries
+	 */
+	public static function isCountryModeWhiteList() {
 		return self::$countryModeWhiteList;
 	}
 
 	/**
-	 * Get the name of the MasterCookie
+	 * Set the CountryList type (white/blacklist)
+	 *
+	 * @param boolean $countryModeWhiteList - List-Mode - true is whiteList mode and false is blacklist mode for countries
+	 */
+	public static function setCountryModeWhiteList($countryModeWhiteList) {
+		self::$countryModeWhiteList = $countryModeWhiteList;
+	}
+
+	/**
+	 * Get the Name of the MasterCookie
 	 *
 	 * @return string - MasterCookie Name
 	 */
 	public static function getMasterCookieName() {
 		return self::$masterCookieName;
+	}
+
+	/**
+	 * Set the Name of the Master-Cookie
+	 *
+	 * @param string $masterCookieName - MasterCookie Name
+	 */
+	public static function setMasterCookieName($masterCookieName) {
+		self::$masterCookieName = $masterCookieName;
 	}
 
 	/**

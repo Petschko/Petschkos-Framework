@@ -34,8 +34,12 @@ class Config {
 	const cookiePoliceCountryModeWhiteList = true;			// true = Never ask for cookies in the selected countries | false = Only ask on the selected countries for cookies
 
 	// Locale settings
-	const defaultLang = 'en';								// Default language
-	public static $enabledLanguages = array('de', 'en');	// Enabled languages (names are like the Language php-files (de.php => de, en.php => en and so on)
+	const defaultLang = 'Deutsch';							// Default language
+	public static $enabledLanguages = array(
+		// Enabled languages (names are like the Language php-files (Deutsch.php => Deutsch, English.php => English and so on)
+		'Deutsch',
+		'English'
+	);
 
 	// Misc Settings
 	const adminName = 'Admin';								// Set Admin-Name

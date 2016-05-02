@@ -33,12 +33,18 @@ require_once(INCLUDE_DIR . DS . 'dao' . DS . 'SQLError.php');
 require_once(CLASS_DIR . DS . 'Cookie.php');
 require_once(CLASS_DIR . DS . 'Email.php');
 require_once(CLASS_DIR . DS . 'formClasses' . DS . 'Form.php');
-require_once(CLASS_DIR . DS . 'LanguageStrings.php');
+require_once(CLASS_DIR . DS . 'language' . DS . 'Language.php');
 
-// Define-Language
-Language::setAvailableLanguages(array()); // todo
-Language::setDefaultLang('English');
+// Setup Cookie stuff
+Cookie::setIgnoreCookiePolice(Config::cookiePoliceSet);
+Cookie::setCountryModeWhiteList(Config::cookiePoliceCountryModeWhiteList);
+
+// Define-Language stuff
+Language::setAvailableLanguages(Config::$enabledLanguages);
+Language::setDefaultLang(Config::defaultLang);
 Language::setLanguageDir(BASE_DIR . DS . 'language');
+if(Cookie::getIsAllowed())
+	Language::setCookiesEnabled(true);
 
 // Don't replace anything at a FormField because we already have replaced all user vars
 FormField::setXssReplace(FormField::XSS_NOT_REPLACE);

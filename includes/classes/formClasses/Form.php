@@ -355,7 +355,27 @@ class Form {
 		return '</form>';
 	}
 
-	public function showError() {
-		// TODO: Implement showError() method
+	/**
+	 * Displays all Error-Messages
+	 *
+	 * @param bool $show - Show output direct
+	 * @return string - Error-Message(s)
+	 */
+	public function showError($show = true) {
+		if($this->getError())
+			return '';
+
+		$code = '';
+		foreach($this->getError() as $error) {
+			/**
+			 * @var FormError $error - FormError-Object
+			 */
+			if($show)
+				echo $error->getMessage() . '<br/>' . PHP_EOL;
+
+			$code .= $error->getMessage() . '<br/>' . PHP_EOL;
+		}
+
+		return $code;
 	}
 }

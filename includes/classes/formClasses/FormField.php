@@ -196,7 +196,7 @@ abstract class FormField {
 		unset($this->value);
 		unset($this->type);
 		unset($this->dataType);
-		unset($this->enabled);
+		unset($this->disabled);
 		unset($this->required);
 		unset($this->readOnly);
 		unset($this->cssIds);
