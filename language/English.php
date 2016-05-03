@@ -55,7 +55,7 @@ class English extends LangBaseClass {
 	 * @return mixed
 	 */
 	public function getFormErrorSelectLess($fieldName, $minSelect) {
-		return 'You have to select at least <b>' . $minSelect . '</b> Options on the Field &quot;' . $fieldName . '&quot;';
+		return 'You have to select at least <b>' . $minSelect . '</b> Options on the Field &quot;' . $fieldName . '&quot;.';
 	}
 
 	/**
@@ -64,7 +64,7 @@ class English extends LangBaseClass {
 	 * @return mixed
 	 */
 	public function getFormErrorSelectMuch($fieldName, $maxSelect) {
-		return 'You can only select max <b>' . $maxSelect . '</b> Options on the Field &quot;' . $fieldName . '&quot;';
+		return 'You can only select max <b>' . $maxSelect . '</b> Options on the Field &quot;' . $fieldName . '&quot;.';
 	}
 
 	/**
@@ -73,7 +73,7 @@ class English extends LangBaseClass {
 	 * @return mixed
 	 */
 	public function getFormErrorSelectNotInList($fieldName, $value) {
-		return 'The Value &quot;' . $value . '&quot; does not exists in the Field &quot;' . $fieldName . '&quot;';
+		return 'The Value &quot;' . $value . '&quot; does not exists in the Field &quot;' . $fieldName . '&quot;.';
 	}
 
 	/**
@@ -81,5 +81,19 @@ class English extends LangBaseClass {
 	 */
 	public function getEmptySelect() {
 		return 'Select...';
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getHTMLLang() {
+		return 'en';
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getPageTitle() {
+		return 'Title';
 	}
 }

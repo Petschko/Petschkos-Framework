@@ -247,7 +247,7 @@ class Language {
 	public static function setLanguageDir($languageDir) {
 		// Check if dir ends with DS (/)
 		if(mb_substr($languageDir, -1) != DIRECTORY_SEPARATOR)
-			$languageDir .= $languageDir . DIRECTORY_SEPARATOR;
+			$languageDir = $languageDir . DIRECTORY_SEPARATOR;
 
 		// Set Value
 		self::$languageDir = $languageDir;

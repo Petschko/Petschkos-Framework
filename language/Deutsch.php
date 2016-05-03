@@ -20,7 +20,7 @@ class Deutsch extends LangBaseClass {
 	 * @return mixed
 	 */
 	public function getFormErrorEmptyReq($fieldName) {
-		// TODO: Implement getFormErrorEmptyReq() method.
+		return 'Das Feld &quot;' . $fieldName . '&quot; darf nicht leer sein!';
 	}
 
 	/**
@@ -28,7 +28,7 @@ class Deutsch extends LangBaseClass {
 	 * @return mixed
 	 */
 	public function getFormErrorDataT($fieldName) {
-		// TODO: Implement getFormErrorDataT() method.
+		return 'Das Feld &quot;' . $fieldName . '&quot; enthält ungültige Eingaben!';
 	}
 
 	/**
@@ -37,7 +37,7 @@ class Deutsch extends LangBaseClass {
 	 * @return mixed
 	 */
 	public function getFormErrorMin($fieldName, $minChars) {
-		// TODO: Implement getFormErrorMin() method.
+		return 'Der Inhalt des Feldes &quot;' . $fieldName . '&quot; muss mindestens <b>' . $minChars . '</b> Zeichen lang sein!';
 	}
 
 	/**
@@ -46,7 +46,7 @@ class Deutsch extends LangBaseClass {
 	 * @return mixed
 	 */
 	public function getFormErrorMax($fieldName, $maxChars) {
-		// TODO: Implement getFormErrorMax() method.
+		return 'Der Inhalt des Feldes &quot;' . $fieldName . '&quot; ist zu lang. Er darf nur Maximal <b>' . $maxChars . '</b> Zeichen lang sein!';
 	}
 
 	/**
@@ -55,7 +55,7 @@ class Deutsch extends LangBaseClass {
 	 * @return mixed
 	 */
 	public function getFormErrorSelectLess($fieldName, $minSelect) {
-		// TODO: Implement getFormErrorSelectLess() method.
+		return 'Es müssen mindestens <b>' . $minSelect . '</b> Optionen im Feld &quot;' . $fieldName . '&quot; ausgewählt werden!';
 	}
 
 	/**
@@ -64,7 +64,7 @@ class Deutsch extends LangBaseClass {
 	 * @return mixed
 	 */
 	public function getFormErrorSelectMuch($fieldName, $maxSelect) {
-		// TODO: Implement getFormErrorSelectMuch() method.
+		return 'Im Feld &quot;' . $fieldName . '&quot; können nur maximal <b>' . $maxSelect . '</b> Optionen ausgewählt werden!';
 	}
 
 	/**
@@ -73,13 +73,27 @@ class Deutsch extends LangBaseClass {
 	 * @return mixed
 	 */
 	public function getFormErrorSelectNotInList($fieldName, $value) {
-		// TODO: Implement getFormErrorSelectNotInList() method.
+		return 'Der Wert &quot;' . $value . '&quot; existiert nicht im Feld &quot;' . $fieldName . '&quot;!';
 	}
 
 	/**
 	 * @return mixed
 	 */
 	public function getEmptySelect() {
-		// TODO: Implement getEmptySelect() method.
+		return 'Auswählen...';
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getHTMLLang() {
+		return 'de';
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getPageTitle() {
+		return 'Titel';
 	}
 }
