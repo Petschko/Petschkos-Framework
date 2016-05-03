@@ -146,7 +146,7 @@ function mb_basename($path, $suffix = null, $encoding = null) {
 
 	if($suffix && mb_stripos($basename, $suffix, null, $encoding)) {
 		$suffix_pos = mb_strlen($suffix, $encoding) * -1;
-		$base_end = mb_substr($basename, $suffix_pos, null, $encoding);
+		$base_end = mb_substr($basename, $suffix_pos, mb_strlen($basename, $encoding), $encoding);
 
 		if($base_end == $suffix)
 			$basename = mb_substr($basename, 0, $suffix_pos, $encoding);
@@ -166,7 +166,7 @@ function mb_lcfirst($string, $encoding = null) {
 	if($encoding === null)
 		$encoding = mb_internal_encoding();
 
-	return mb_strtolower(mb_substr($string, 0, 1, $encoding), $encoding) . mb_substr($string, 1, null, $encoding);
+	return mb_strtolower(mb_substr($string, 0, 1, $encoding), $encoding) . mb_substr($string, 1, mb_strlen($string, $encoding), $encoding);
 }
 
 /**
@@ -180,7 +180,7 @@ function mb_ucfirst($string, $encoding = null) {
 	if($encoding === null)
 		$encoding = mb_internal_encoding();
 
-	return mb_strtoupper(mb_substr($string, 0, 1, $encoding), $encoding) . mb_substr($string, 1, null, $encoding);
+	return mb_strtoupper(mb_substr($string, 0, 1, $encoding), $encoding) . mb_substr($string, 1, mb_strlen($string, $encoding), $encoding);
 }
 
 /**
@@ -202,7 +202,7 @@ function removeNonUtf8($string) {
 	if(mb_detect_encoding($string) != 'UTF-8')
 		$string = mb_convert_encoding($string, 'UTF-8', mb_detect_encoding($string)); // Convert non UTF-8 String to UTF-8
 
-	// Exit on UTF7
+	// Exit on UTF7 (To avoid a Bug on IE)
 	if(mb_detect_encoding($string) == 'UTF-7')
 		throw new Exception('UTF-7 is not allowed!');
 
