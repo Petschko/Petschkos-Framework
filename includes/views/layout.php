@@ -30,6 +30,8 @@
 		require_once(CONTROLLER_DIR . DS . 'Router.php');
 
 		// HTML-Head footer
+
+		echo PHP_EOL;
 		?>
 	</body>
 </html>

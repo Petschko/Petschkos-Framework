@@ -122,6 +122,7 @@ function mb_urldecode($string) {
 	}
 
 	$string = preg_replace('/%u([0-9a-f]{3,4})/i', '&#x\\1;', urldecode($string));
+
 	return mb_html_entity_decode($string);
 }
 
@@ -208,6 +209,7 @@ function removeNonUtf8($string) {
 	// Check if string is ascii or utf8 (utf-8 is ascii compatible, that is why this should be also checked)
 	if(mb_detect_encoding($string) != 'UTF-8' && mb_detect_encoding($string) != 'ASCII')
 		return false;
+
 	$string = preg_replace('/[\xF0-\xF7].../s', '', $string); // Remove UTF16 chars
 
 	return $string;

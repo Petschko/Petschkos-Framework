@@ -35,6 +35,7 @@ if(class_exists('Cookie')) {
 		// Check Master-Cookie every time
 		if(! isset($_COOKIE[Cookie::getMasterCookieName()]))
 			$_COOKIE[Cookie::getMasterCookieName()] = '';
+
 		$_COOKIE[Cookie::getMasterCookieName()] = escapeData($_COOKIE[Cookie::getMasterCookieName()]);
 	}
 } else
