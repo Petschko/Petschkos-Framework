@@ -86,6 +86,9 @@ function mb_html_entity_decode($string, $quote = ENT_QUOTES, $charset = 'UTF-8')
  * @return array|string - the converted string/array
  */
 function mb_rawurlencode($string, $encoding = null) {
+	if($encoding === null)
+		$encoding = mb_internal_encoding();
+
 	if(is_array($string)) {
 		$tmp = array();
 		foreach($string as $key => $value)
@@ -132,6 +135,9 @@ function mb_urldecode($string) {
  * @return string -  Filename without path (and may without suffix)
  */
 function mb_basename($path, $suffix = null, $encoding = null) {
+	if($encoding === null)
+		$encoding = mb_internal_encoding();
+
 	if(mb_stripos($path, DIRECTORY_SEPARATOR) !== false)
 		$basename = mb_substr($path, mb_strripos($path, DIRECTORY_SEPARATOR), $encoding);
 	else
@@ -156,6 +162,9 @@ function mb_basename($path, $suffix = null, $encoding = null) {
  * @return string - String with first char lower
  */
 function mb_lcfirst($string, $encoding = null) {
+	if($encoding === null)
+		$encoding = mb_internal_encoding();
+
 	return mb_strtolower(mb_substr($string, 0, 1, $encoding), $encoding) . mb_substr($string, 1, null, $encoding);
 }
 
@@ -167,7 +176,10 @@ function mb_lcfirst($string, $encoding = null) {
  * @return string - String with first char upper
  */
 function mb_ucfirst($string, $encoding = null) {
-	return mb_strtoupper(mb_substr($string, 0, 1, $encoding), $encoding) . mb_substr($string, 1, $encoding);
+	if($encoding === null)
+		$encoding = mb_internal_encoding();
+
+	return mb_strtoupper(mb_substr($string, 0, 1, $encoding), $encoding) . mb_substr($string, 1, null, $encoding);
 }
 
 /**

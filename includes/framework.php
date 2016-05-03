@@ -17,7 +17,6 @@ define('CLASS_DIR', INCLUDE_DIR . DS . 'classes');
 define('CONTROLLER_DIR', INCLUDE_DIR . DS . 'controller');
 define('MODEL_DIR', INCLUDE_DIR . DS . 'models');
 define('VIEW_DIR', INCLUDE_DIR . DS . 'views');
-define('HTML_DIR', BASE_DIR . DS . 'html');
 
 // Include Base-Files
 require_once(INCLUDE_DIR . DS . 'Config.php');
@@ -68,4 +67,4 @@ $controller = array(
 $defaultController = 'page';
 $defaultAction = 'home';
 
-require_once(CONTROLLER_DIR . DS . 'Router.php');
+require_once(VIEW_DIR . DS . 'layout.php');

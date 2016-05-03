@@ -70,5 +70,13 @@ interface LanguageStrings {
 	 */
 	public function getEmptySelect();
 
+	/**
+	 * @return mixed
+	 */
+	public function getHTMLLang();
 
+	/**
+	 * @return mixed
+	 */
+	public function getPageTitle();
 }

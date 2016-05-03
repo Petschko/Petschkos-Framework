@@ -46,9 +46,6 @@ class Config {
 	const adminName = 'Admin';								// Set Admin-Name
 	const adminEmail = 'admin@domain.tld';					// Set Admin-Email
 	const websiteTitle = 'Title';							// Set Website-Title
-	const errorClass = 'form_msg_error';					// Set class for css for error messages
-	const successClass = 'form_msg_success';				// Set class for css for success messages
-	const websiteSince = 2012;								// Set launch year of the website
 	const charset = 'UTF-8';								// HTML-Default Charset (UTF-8 recommend)
 
 	// -----------------------------------------------------------------------------------------------------------------

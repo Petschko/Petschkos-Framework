@@ -16,6 +16,7 @@
  */
 class PageController extends BaseController {
 	public function home() {
+		echo 1;
 		// todo show page
 	}
 

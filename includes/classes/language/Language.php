@@ -145,7 +145,7 @@ class Language {
 	 *
 	 * @param string $language - Language-Class and File-Name
 	 */
-	private function setLang($language) {
+	private static function setLang($language) {
 		// Check if dir is set
 		if(self::getLanguageDir() === null) {
 			trigger_error('Language-dir is not set!', E_USER_ERROR);
@@ -162,7 +162,7 @@ class Language {
 		if(file_exists(self::getLanguageDir() . basename($language) . '.php'))
 			require_once(self::getLanguageDir() . basename($language) . '.php');
 		else {
-			trigger_error('File ' . htmlspecialchars(self::getLanguageDir()) . ' doesn\'t exists...');
+			trigger_error('File ' . htmlspecialchars(self::getLanguageDir()) . basename($language) . '.php doesn\'t exists...');
 			exit;
 		}
 
