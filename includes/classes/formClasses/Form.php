@@ -94,7 +94,7 @@ class Form {
 		$this->setMethod($method);
 		$this->setName($name);
 
-		$this->setField($name . self::HIDDEN_FIELD, new InputField($name . self::HIDDEN_FIELD, 'hidden', $method));
+		$this->setField($name . self::HIDDEN_FIELD, new InputField($name . self::HIDDEN_FIELD, 'hidden', $method), false);
 		if($this->getField($name . self::HIDDEN_FIELD)->getCurrentValue($method) == $name)
 			$this->setSend(true);
 		else
@@ -331,7 +331,7 @@ class Form {
 	 * @return string - HTML-form open Tag
 	 */
 	public function formOpenHTML($hiddenField = true, $show = true) {
-		$code = '<form action="' . $this->getAction();
+		$code = '<form action="' . $this->getAction() . '"';
 
 		if($this->getMethod() == self::METHOD_FILE || $this->getMethod() == self::METHOD_POST)
 			$code .= ' method="POST"';
@@ -342,7 +342,7 @@ class Form {
 
 		// Display hidden field
 		if($hiddenField)
-			$code .= $this->getField($this->getName() . '_form_name')->output() . PHP_EOL;
+			$code .= $this->getField($this->getName() . '_form_name')->output(false) . PHP_EOL;
 
 		// Display HTML
 		if($show)
