@@ -154,7 +154,7 @@ class Form {
 	 *
 	 * @return string - Method
 	 */
-	private function getMethod() {
+	public function getMethod() {
 		return $this->method;
 	}
 
