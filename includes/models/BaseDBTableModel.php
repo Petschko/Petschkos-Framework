@@ -103,7 +103,7 @@ abstract class BaseDBTableModel implements tableInterface {
 		// Check if Table-Data is already set
 		if(! self::isTableSetupDone()) {
 			// Set all info (Table-Name, fields etc)
-			self::setTableInfo();
+			static::setTableInfo();
 
 			// Check if the connection exists and if it is set in table info
 			if(! DB::existsConnection($dbConName) && self::getDb() === null) {

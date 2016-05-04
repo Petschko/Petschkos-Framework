@@ -203,7 +203,8 @@ class DB extends PDO {
 	 */
 	public function tableExists($tableName) {
 		try {
-			$this->exec('SELECT 1 FROM ' . self::secureSQLRegEx($tableName) . ' LIMIT 1;');
+			$sth = $this->query('SELECT 1 FROM ' . self::secureSQLRegEx($tableName) . ' LIMIT 1;');
+			$sth->closeCursor();
 		} catch(PDOException $ex) {
 			return false;
 		}
