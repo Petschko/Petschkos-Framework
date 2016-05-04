@@ -327,9 +327,10 @@ class Form {
 	 * Generates an opening HTML-Tag for the Form with correct Parameters (Recommend to use this)
 	 *
 	 * @param bool $hiddenField - Include Hidden-field
+	 * @param bool $show - Show output direct
 	 * @return string - HTML-form open Tag
 	 */
-	public function formOpenHTML($hiddenField = true) {
+	public function formOpenHTML($hiddenField = true, $show = true) {
 		$code = '<form action="' . $this->getAction();
 
 		if($this->getMethod() == self::METHOD_FILE || $this->getMethod() == self::METHOD_POST)
@@ -343,16 +344,27 @@ class Form {
 		if($hiddenField)
 			$code .= $this->getField($this->getName() . '_form_name')->output() . PHP_EOL;
 
+		// Display HTML
+		if($show)
+			echo $code;
+
 		return $code;
 	}
 
 	/**
 	 * Generates close HTML-Tag for the Form (You can also use plain HTML)
 	 *
+	 * @param bool $show - Show output direct
 	 * @return string - HTML-form close Tag
 	 */
-	public function formCloseHTML() {
-		return '</form>';
+	public function formCloseHTML($show = true) {
+		$code = '</form>';
+
+		// Display HTML
+		if($show)
+			echo $code;
+
+		return $code;
 	}
 
 	/**
@@ -370,11 +382,11 @@ class Form {
 			/**
 			 * @var FormError $error - FormError-Object
 			 */
-			if($show)
-				echo $error->getMessage() . '<br/>' . PHP_EOL;
-
 			$code .= $error->getMessage() . '<br/>' . PHP_EOL;
 		}
+
+		if($show)
+			echo $code;
 
 		return $code;
 	}
