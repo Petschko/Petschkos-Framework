@@ -5,8 +5,8 @@
  * Authors-Website: http://petschko.org/
  * Date: 13.04.2016
  * Time: 20:32
- * Update: -
- * Version: 0.0.1
+ * Update: 04.05.2016
+ * Version: 1.0.1 (Added Check if database is set with table info instead of the constructor)
  * @package Petschkos Framework
  *
  * Licence: http://creativecommons.org/licenses/by-sa/4.0/
@@ -99,14 +99,14 @@ abstract class BaseDBTableModel implements tableInterface {
 	 * @throws Exception - Can't find connection to DB
 	 * @throws Exception - Table Info not set correct
 	 */
-	final protected function __construct($dbConName = null) {
+	final public function __construct($dbConName = null) {
 		// Check if Table-Data is already set
 		if(! self::isTableSetupDone()) {
 			// Set all info (Table-Name, fields etc)
 			self::setTableInfo();
 
-			// Check if the connection exists
-			if(! DB::existsConnection($dbConName)) {
+			// Check if the connection exists and if it is set in table info
+			if(! DB::existsConnection($dbConName) && self::getDb() === null) {
 				$ex = 'Can\'t establish link to the Connection: ' . $dbConName . '! (It doesn\'t exists)';
 				SQLError::addError($ex);
 				throw new Exception($ex);
@@ -126,7 +126,7 @@ abstract class BaseDBTableModel implements tableInterface {
 	/**
 	 * Clears memory
 	 */
-	final protected function __destruct() {
+	final public function __destruct() {
 		unset($this->memoryObjects);
 		unset($this->memoryIndex);
 		unset($this->memoryCount);
