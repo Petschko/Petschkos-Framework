@@ -54,7 +54,8 @@ new DB(
 	MAIN_DB,
 	Config::dbType . ':host=' . Config::dbHost . ';port=' . Config::dbPort . ';dbname=' . Config::dbWebsiteDb . ';Charset=' . Config::dbCharset,
 	Config::dbUser,
-	Config::dbPassword
+	Config::dbPassword,
+	array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . Config::dbCharset)
 );
 
 // Define allowed controller values and action values
