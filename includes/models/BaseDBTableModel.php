@@ -16,60 +16,50 @@
  */
 
 /**
- * Interface tableInterface
- */
-interface tableInterface {
-	/**
-	 * Sets the Table-Info
-	 */
-	public static function setTableInfo();
-}
-
-/**
  * Class BaseDBTableModel
  */
-abstract class BaseDBTableModel implements tableInterface {
+abstract class BaseDBTableModel {
 	/**
 	 * Contains the DB Object of the Model
 	 *
 	 * @var DB - DB (PDO) Object
 	 */
-	protected static $db;
+	protected $db;
 
 	/**
 	 * Contains the Name of the Table
 	 *
 	 * @var string - Table Name
 	 */
-	protected static $tableName;
+	protected $tableName;
 
 	/**
 	 * Contains the names of all Table-fields at the Table
 	 *
 	 * @var array - Table Fields
 	 */
-	protected static $tableFields;
+	protected $tableFields;
 
 	/**
 	 * Contains the FieldName of the Primary Key
 	 *
 	 * @var string|null - Primary Key FieldName | null when no primary key exists
 	 */
-	protected static $primaryKeyField = null;
+	protected $primaryKeyField = null;
 
 	/**
 	 * Internal variable to check if the Table-Vars are already set
 	 *
 	 * @var bool - Is the Table setup done
 	 */
-	protected static $tableSetupDone = false;
+	protected $tableSetupDone = false;
 
 	/**
 	 * Contains SQL-Cached Queries
 	 *
 	 * @var array - SQL-Statements
 	 */
-	protected static $sqlCache = array();
+	protected $sqlCache = array();
 
 	/**
 	 * Contains Query Objects
@@ -100,27 +90,25 @@ abstract class BaseDBTableModel implements tableInterface {
 	 * @throws Exception - Table Info not set correct
 	 */
 	final public function __construct($dbConName = null) {
-		// Check if Table-Data is already set
-		if(! self::isTableSetupDone()) {
-			// Set all info (Table-Name, fields etc)
-			static::setTableInfo();
+		// Set all info (Table-Name, fields etc)
+		$this->setTableInfo();
 
-			// Check if the connection exists and if it is set in table info
-			if(! DB::existsConnection($dbConName) && self::getDb() === null) {
-				$ex = 'Can\'t establish link to the Connection: ' . $dbConName . '! (It doesn\'t exists)';
-				SQLError::addError($ex);
-				throw new Exception($ex);
-			}
-
-			// Sets the connection
-			self::setDb(DB::getConnection($dbConName));
-
-			// Check if all is correct
-			self::checkIssetTableInfo();
-
-			// All done set it
-			self::setTableSetupDone(true);
+		// Check if the connection exists and if it is set in table info
+		if(! DB::existsConnection($dbConName) && $this->getDb() === null) {
+			$ex = 'Can\'t establish link to the Connection: ' . $dbConName . '! (It doesn\'t exists)';
+			SQLError::addError($ex);
+			throw new Exception($ex);
 		}
+
+		// Sets the connection
+		if($this->getDb())
+			$this->setDb(DB::getConnection($dbConName));
+
+		// Check if all is correct
+		$this->checkIssetTableInfo();
+
+		// All done set it
+		$this->setTableSetupDone(true);
 	}
 
 	/**
@@ -133,12 +121,17 @@ abstract class BaseDBTableModel implements tableInterface {
 	}
 
 	/**
+	 * Sets the Table-Info
+	 */
+	protected abstract function setTableInfo();
+
+	/**
 	 * Gets the Database PDO-Object
 	 *
 	 * @return DB - Database PDO-Object
 	 */
-	final protected static function getDb() {
-		return self::$db;
+	final protected function getDb() {
+		return $this->db;
 	}
 
 	/**
@@ -146,8 +139,8 @@ abstract class BaseDBTableModel implements tableInterface {
 	 *
 	 * @param DB $db - Database PDO-Object
 	 */
-	final protected static function setDb($db) {
-		self::$db = $db;
+	final protected function setDb($db) {
+		$this->db = $db;
 	}
 
 	/**
@@ -156,12 +149,12 @@ abstract class BaseDBTableModel implements tableInterface {
 	 * @param string $statement - SQL-Statement
 	 * @return PDOStatement - PDOStatement object
 	 */
-	final protected static function getSqlStatement($statement) {
+	final protected function getSqlStatement($statement) {
 		// Add to cache if not exists
-		if(! isset(self::$sqlCache[$statement]))
-			self::addSqlStatement($statement);
+		if(! isset($this->sqlCache[$statement]))
+			$this->addSqlStatement($statement);
 
-		return self::$sqlCache[$statement];
+		return $this->sqlCache[$statement];
 	}
 
 	/**
@@ -169,8 +162,8 @@ abstract class BaseDBTableModel implements tableInterface {
 	 *
 	 * @param string $statement - Statement
 	 */
-	final protected static function addSqlStatement($statement) {
-		self::$sqlCache[$statement] = self::getDb()->prepare($statement);
+	final protected function addSqlStatement($statement) {
+		$this->sqlCache[$statement] = $this->getDb()->prepare($statement);
 	}
 
 	/**
@@ -178,8 +171,8 @@ abstract class BaseDBTableModel implements tableInterface {
 	 *
 	 * @return string - Table Name
 	 */
-	final protected static function getTableName() {
-		return self::$tableName;
+	final protected function getTableName() {
+		return $this->tableName;
 	}
 
 	/**
@@ -187,8 +180,8 @@ abstract class BaseDBTableModel implements tableInterface {
 	 *
 	 * @param string $tableName - Name of the Table
 	 */
-	final protected static function setTableName($tableName) {
-		self::$tableName = $tableName;
+	final protected function setTableName($tableName) {
+		$this->tableName = $tableName;
 	}
 
 	/**
@@ -196,8 +189,8 @@ abstract class BaseDBTableModel implements tableInterface {
 	 *
 	 * @return array - Table Fields
 	 */
-	final protected static function getTableFields() {
-		return self::$tableFields;
+	final protected function getTableFields() {
+		return $this->tableFields;
 	}
 
 	/**
@@ -205,8 +198,8 @@ abstract class BaseDBTableModel implements tableInterface {
 	 *
 	 * @param array $tableFields - Field Names of the Table
 	 */
-	final protected static function setTableFields($tableFields) {
-		self::$tableFields = $tableFields;
+	final protected function setTableFields($tableFields) {
+		$this->tableFields = $tableFields;
 	}
 
 	/**
@@ -214,8 +207,8 @@ abstract class BaseDBTableModel implements tableInterface {
 	 *
 	 * @return null|string - Field name of the Primary Key | null when no Key is set
 	 */
-	final protected static function getPrimaryKeyField() {
-		return self::$primaryKeyField;
+	final protected function getPrimaryKeyField() {
+		return $this->primaryKeyField;
 	}
 
 	/**
@@ -223,8 +216,8 @@ abstract class BaseDBTableModel implements tableInterface {
 	 *
 	 * @param null|string $primaryKeyField - Field-Name of the Primary Key | null if none is set
 	 */
-	final protected static function setPrimaryKeyField($primaryKeyField) {
-		self::$primaryKeyField = $primaryKeyField;
+	final protected function setPrimaryKeyField($primaryKeyField) {
+		$this->primaryKeyField = $primaryKeyField;
 	}
 
 	/**
@@ -232,8 +225,8 @@ abstract class BaseDBTableModel implements tableInterface {
 	 *
 	 * @return boolean - is the Table-Setup done
 	 */
-	final protected static function isTableSetupDone() {
-		return self::$tableSetupDone;
+	final protected function isTableSetupDone() {
+		return $this->tableSetupDone;
 	}
 
 	/**
@@ -241,8 +234,8 @@ abstract class BaseDBTableModel implements tableInterface {
 	 *
 	 * @param boolean $tableSetupDone - Is Table-Setup done
 	 */
-	final protected static function setTableSetupDone($tableSetupDone) {
-		self::$tableSetupDone = $tableSetupDone;
+	final protected function setTableSetupDone($tableSetupDone) {
+		$this->tableSetupDone = $tableSetupDone;
 	}
 
 	/**
@@ -305,8 +298,8 @@ abstract class BaseDBTableModel implements tableInterface {
 	 * @param string $field - Field Name
 	 * @return bool - Exists field
 	 */
-	final protected static function existField($field) {
-		if(in_array($field, self::getTableFields()))
+	final protected function existField($field) {
+		if(in_array($field, $this->getTableFields()))
 			return true;
 
 		return false;
@@ -318,14 +311,14 @@ abstract class BaseDBTableModel implements tableInterface {
 	 * @param string|null $field - Field Name or null if use PK
 	 * @return null|string - Field Name if all is ok or null if Field doesn't exists at the Table
 	 */
-	final protected static function checkFieldInput($field) {
+	final protected function checkFieldInput($field) {
 		// Get the default Field
 		if($field === null)
-			$field = self::getPrimaryKeyField();
+			$field = $this->getPrimaryKeyField();
 
 		// Add error if field doesn't exists
-		if(! self::existField($field)) {
-			SQLError::addError('Field ' . $field . ' doesn\'t exists in Table ' . self::getTableName());
+		if(! $this->existField($field)) {
+			SQLError::addError('Field ' . $field . ' doesn\'t exists in Table ' . $this->getTableName());
 			return null;
 		}
 
@@ -337,22 +330,22 @@ abstract class BaseDBTableModel implements tableInterface {
 	 *
 	 * @throws Exception - Table Info not set correct
 	 */
-	final protected static function checkIssetTableInfo() {
-		if(! isset(self::$tableName) || ! isset(self::$tableFields))
+	final protected function checkIssetTableInfo() {
+		if(! isset($this->tableName) || ! isset($this->tableFields))
 			SQLError::addError('Table info is not set correctly!');
 
-		if(! is_array(self::$tableFields) || ! is_string(self::$tableName))
+		if(! is_array($this->tableFields) || ! is_string($this->tableName))
 			SQLError::addError('Table info var(s) has wrong data types!');
 
 		// Check if primary key exists
-		if(self::$primaryKeyField !== null) {
-			if(! self::existField(self::$primaryKeyField))
+		if($this->primaryKeyField !== null) {
+			if(! $this->existField($this->primaryKeyField))
 				SQLError::addError('Primary-Key-Field doesn\'t exists');
 		}
 
 		// Check if table exists
-		if(! self::getDb()->tableExists(self::$tableName))
-			SQLError::addError('Table ' . self::$tableName . ' doesn\'t exists!');
+		if(! $this->getDb()->tableExists($this->tableName))
+			SQLError::addError('Table ' . $this->tableName . ' doesn\'t exists!');
 
 		// Throw Exception on error
 		if(SQLError::isError())
@@ -388,7 +381,7 @@ abstract class BaseDBTableModel implements tableInterface {
 		$obj =& $this->getMemoryObjects()[$this->getMemoryIndex()];
 
 		// Set the next row to this object
-		foreach(self::getTableFields() as $field)
+		foreach($this->getTableFields() as $field)
 			$this->{$field} = $obj->{$field};
 
 		// Remove the old object and increase counter
@@ -408,7 +401,7 @@ abstract class BaseDBTableModel implements tableInterface {
 		if($this->getMemoryCount() > 0) {
 
 			// Set the first row to the model
-			foreach(self::getTableFields() as $field)
+			foreach($this->getTableFields() as $field)
 				$this->{$field} = $results[0][$field];
 
 			// Save all other row into the memory
@@ -418,7 +411,7 @@ abstract class BaseDBTableModel implements tableInterface {
 
 				// Proceed every row
 				for($i = 1; $i < $this->getMemoryCount(); $i++) {
-					foreach(self::getTableFields() as $field) {
+					foreach($this->getTableFields() as $field) {
 						$obj[$i - 1] = new $class();
 						$obj[$i - 1]->{$field} = $results[$i][$field];
 					}
@@ -441,13 +434,13 @@ abstract class BaseDBTableModel implements tableInterface {
 		$this->clearMemory();
 
 		// Get Field
-		$byField = self::checkFieldInput($byField);
+		$byField = $this->checkFieldInput($byField);
 		if($byField === null)
 			return;
 
 		// Prepare SQL-Statement
-		$sql = 'SELECT * FROM ' . self::getTableName() . ' WHERE ' . $byField . $operator . ':value;';
-		$sth = self::getSqlStatement($sql);
+		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE ' . $byField . $operator . ':value;';
+		$sth = $this->getSqlStatement($sql);
 		$sth->bindValue('value', $value, DB::getDataType($value));
 
 		// Execute
@@ -481,13 +474,13 @@ abstract class BaseDBTableModel implements tableInterface {
 		$this->clearMemory();
 
 		// Get Field
-		$byField = self::checkFieldInput($byField);
+		$byField = $this->checkFieldInput($byField);
 		if($byField === null)
 			return false;
 
 		// Prepare SQL-Statement
-		$sql = 'DELETE FROM ' . self::getTableName() . ' WHERE ' . $byField . $operator . ':value;';
-		$sth = self::getSqlStatement($sql);
+		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE ' . $byField . $operator . ':value;';
+		$sth = $this->getSqlStatement($sql);
 		$sth->bindValue('value', $value, DB::getDataType($value));
 
 		// Execute
@@ -517,7 +510,7 @@ abstract class BaseDBTableModel implements tableInterface {
 		$this->clearMemory();
 
 		// Get Field
-		$byField = self::checkFieldInput($byField);
+		$byField = $this->checkFieldInput($byField);
 		if($byField === null)
 			return false;
 
@@ -530,8 +523,8 @@ abstract class BaseDBTableModel implements tableInterface {
 				$sqlFields[$field] = $this->{$field};
 			}
 		}
-		$sql = 'UPDATE ' . self::getTableName() . ' SET ' . implode(', ', $setSQL) . ' WHERE ' . $byField . '=:value;';
-		$sth = self::getSqlStatement($sql);
+		$sql = 'UPDATE ' . $this->getTableName() . ' SET ' . implode(', ', $setSQL) . ' WHERE ' . $byField . '=:value;';
+		$sth = $this->getSqlStatement($sql);
 
 		// Bind Values
 		$sth->bindValue('value', $value, DB::getDataType($value));
@@ -561,8 +554,8 @@ abstract class BaseDBTableModel implements tableInterface {
 		$this->clearMemory();
 
 		// Prepare SQL-Statement
-		$sql = 'SELECT * FROM ' . self::getTableName() . ';';
-		$sth = self::getSqlStatement($sql);
+		$sql = 'SELECT * FROM ' . $this->getTableName() . ';';
+		$sth = $this->getSqlStatement($sql);
 
 		// Execute
 		try {
@@ -603,8 +596,8 @@ abstract class BaseDBTableModel implements tableInterface {
 
 		// Prepare SQL-Statement
 		$startEndSQL = (($start !== null) ? $start . ', ' : '') . $limit;
-		$sql = 'SELECT * FROM ' . self::getTableName() . ' LIMIT ' . $startEndSQL . ';';
-		$sth = self::getSqlStatement($sql);
+		$sql = 'SELECT * FROM ' . $this->getTableName() . ' LIMIT ' . $startEndSQL . ';';
+		$sth = $this->getSqlStatement($sql);
 
 		// Execute
 		try {
@@ -633,17 +626,17 @@ abstract class BaseDBTableModel implements tableInterface {
 		// Clear the old query
 		$this->clearMemory();
 
-		if(self::getPrimaryKeyField() === null)
+		if($this->getPrimaryKeyField() === null)
 			$ignorePK = false;
 
-		$fields = self::getTableFields();
+		$fields = $this->getTableFields();
 
 		if($ignorePK)
-			$fields = array_slice($fields, array_search(self::getPrimaryKeyField(), $fields));
+			$fields = array_slice($fields, array_search($this->getPrimaryKeyField(), $fields));
 
 		// Prepare SQL-Statement
-		$sql = 'INSERT INTO ' . self::getTableName() . '(' . implode(', ', $fields) . ') VALUES (:' . implode(', :', $fields) . ');';
-		$sth = self::getSqlStatement($sql);
+		$sql = 'INSERT INTO ' . $this->getTableName() . '(' . implode(', ', $fields) . ') VALUES (:' . implode(', :', $fields) . ');';
+		$sth = $this->getSqlStatement($sql);
 
 		// Bind Values
 		foreach($fields as $field)
@@ -676,13 +669,13 @@ abstract class BaseDBTableModel implements tableInterface {
 		$this->clearMemory();
 
 		// Get Field
-		$byField = self::checkFieldInput($byField);
+		$byField = $this->checkFieldInput($byField);
 		if($byField === null)
 			return false;
 
 		// Prepare SQL-Statement
-		$sql = 'DELETE FROM ' . self::getTableName() . ' WHERE ' . $byField . '=:value;';
-		$sth = self::getSqlStatement($sql);
+		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE ' . $byField . '=:value;';
+		$sth = $this->getSqlStatement($sql);
 		$sth->bindValue('value', $this->{$byField}, DB::getDataType($this->{$byField}));
 
 		// Execute
@@ -714,11 +707,11 @@ abstract class BaseDBTableModel implements tableInterface {
 		$this->clearMemory();
 
 		// Get Field & prepare SQL-Statement
-		$byField = self::checkFieldInput($byField);
+		$byField = $this->checkFieldInput($byField);
 		if($byField === null) {
 			$whereSQL = array();
 			//If PK doesn't exists and field is not set check ALL values if ALL are the same then update
-			foreach(self::getTableFields() as $field) {
+			foreach($this->getTableFields() as $field) {
 				$whereSQL[] = $field . '=:where' . $field;
 				$fieldValues['where' . $field] = $this->{$field};
 			}
@@ -731,13 +724,13 @@ abstract class BaseDBTableModel implements tableInterface {
 		}
 
 		$setSQL = array();
-		foreach(self::getTableFields() as $field) {
+		foreach($this->getTableFields() as $field) {
 			$setSQL[] = $field . '=:set' . $field;
 			$fieldValues['set' . $field] = $this->{$field};
 		}
 
-		$sql = 'UPDATE ' . self::getTableName() . ' SET ' . implode(', ', $setSQL) . ' WHERE ' . $whereSQL . ' LIMIT 1;';
-		$sth = self::getSqlStatement($sql);
+		$sql = 'UPDATE ' . $this->getTableName() . ' SET ' . implode(', ', $setSQL) . ' WHERE ' . $whereSQL . ' LIMIT 1;';
+		$sth = $this->getSqlStatement($sql);
 
 		// Bind Values
 		foreach($fieldValues as $key => &$value)
