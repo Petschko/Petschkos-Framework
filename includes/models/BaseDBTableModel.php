@@ -5,8 +5,9 @@
  * Authors-Website: http://petschko.org/
  * Date: 13.04.2016
  * Time: 20:32
- * Update: 04.05.2016
- * Version: 1.0.1 (Added Check if database is set with table info instead of the constructor)
+ * Update: 09.05.2016
+ * Version: 1.1.0 (Removed statics to that multiple models will work parallel)
+ * 1.0.1 (Added Check if database is set with table info instead of the constructor)
  * @package Petschkos Framework
  *
  * Licence: http://creativecommons.org/licenses/by-sa/4.0/
