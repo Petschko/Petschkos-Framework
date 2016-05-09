@@ -20,7 +20,7 @@ class ExampleTable extends BaseDBTableModel {
 	/**
 	 * Sets the Table-Info
 	 */
-	public function setTableInfo() {
+	protected function setTableInfo() {
 		// Set Table Name (Required)
 		$this->setTableName('exampleTable');
 
