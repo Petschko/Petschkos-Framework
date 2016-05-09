@@ -374,7 +374,7 @@ class Form {
 	 * @return string - Error-Message(s)
 	 */
 	public function showError($show = true) {
-		if($this->getError())
+		if($this->getError() === null)
 			return '';
 
 		$code = '';
