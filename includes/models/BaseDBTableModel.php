@@ -101,7 +101,7 @@ abstract class BaseDBTableModel {
 		}
 
 		// Sets the connection
-		if($this->getDb())
+		if($this->getDb() === null)
 			$this->setDb(DB::getConnection($dbConName));
 
 		// Check if all is correct
@@ -115,6 +115,12 @@ abstract class BaseDBTableModel {
 	 * Clears memory
 	 */
 	final public function __destruct() {
+		unset($this->db);
+		unset($this->tableName);
+		unset($this->tableFields);
+		unset($this->primaryKeyField);
+		unset($this->tableSetupDone);
+		unset($this->sqlCache);
 		unset($this->memoryObjects);
 		unset($this->memoryIndex);
 		unset($this->memoryCount);
@@ -412,7 +418,7 @@ abstract class BaseDBTableModel {
 				// Proceed every row
 				for($i = 1; $i < $this->getMemoryCount(); $i++) {
 					foreach($this->getTableFields() as $field) {
-						$obj[$i - 1] = new $class();
+						$obj[$i - 1] = new $class($this->getDb());
 						$obj[$i - 1]->{$field} = $results[$i][$field];
 					}
 				}
