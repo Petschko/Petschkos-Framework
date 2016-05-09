@@ -20,17 +20,17 @@ class ExampleTable extends BaseDBTableModel {
 	/**
 	 * Sets the Table-Info
 	 */
-	public static function setTableInfo() {
+	public function setTableInfo() {
 		// Set Table Name (Required)
-		self::setTableName('exampleTable');
+		$this->setTableName('exampleTable');
 
 		// Set Fields (Required)
-		self::setTableFields(array('id', 'col2', 'col3'));
+		$this->setTableFields(array('id', 'col2', 'col3'));
 
 		// Set Primary-Key (Optional - If none don't set it)
-		self::setPrimaryKeyField('id');
+		$this->setPrimaryKeyField('id');
 
 		// Set Database-Connection (Very Optional - You can also use the constructor to set it)
-		self::setDb(DB::getConnection('myConnection'));
+		$this->setDb(DB::getConnection('myConnection'));
 	}
 }
