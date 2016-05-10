@@ -182,12 +182,14 @@ class Form {
 	 * @param string $field - Name of the Field
 	 * @param object|FormField $value - Field Object
 	 * @param bool $htmlOutput - Show new field direct as HTML
+	 * @return string - HTML-Code for field
 	 */
-	public function setField($field, $value, $htmlOutput = true) {
+	public function setField($field, $value, $htmlOutput = false) {
 		$this->fields[$field] = $value;
 
 		if($htmlOutput)
 			$this->getField($field)->output(true);
+		return $this->getField($field)->output(false);
 	}
 
 	/**
