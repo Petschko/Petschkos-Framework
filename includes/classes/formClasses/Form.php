@@ -15,6 +15,7 @@
  */
 
 require_once('FormField.php');
+require_once('FormError.php');
 
 /**
  * Class Form
