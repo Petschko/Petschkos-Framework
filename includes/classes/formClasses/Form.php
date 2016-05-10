@@ -363,7 +363,7 @@ class Form {
 	 * @param bool $show - Show output direct
 	 * @return string - HTML-form open Tag
 	 */
-	public function formOpenHTML($hiddenField = true, $show = true) {
+	public function formOpenHTML($hiddenField = true, $show = false) {
 		$code = '<form action="' . $this->getAction() . '"';
 
 		if($this->getMethod() == self::METHOD_FILE || $this->getMethod() == self::METHOD_POST)
@@ -390,7 +390,7 @@ class Form {
 	 * @param bool $show - Show output direct
 	 * @return string - HTML-form close Tag
 	 */
-	public function formCloseHTML($show = true) {
+	public function formCloseHTML($show = false) {
 		$code = '</form>';
 
 		// Display HTML
@@ -406,7 +406,7 @@ class Form {
 	 * @param bool $show - Show output direct
 	 * @return string - Error-Message(s)
 	 */
-	public function showError($show = true) {
+	public function showError($show = false) {
 		if($this->getError() === null)
 			return '';
 
