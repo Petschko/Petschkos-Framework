@@ -4,8 +4,8 @@
  * Authors-Website: http://petschko.org/
  * Date: 19.04.2016
  * Time: 20:23
- * Update: -
- * Version: 0.0.1
+ * Update: 10.05.2016
+ * Version: 1.0.0 (Changed Hidden-Field-Name and added missing name constant to function)
  *
  * Licence: http://creativecommons.org/licenses/by-sa/4.0/
  * You are free to use this!
