@@ -5,7 +5,8 @@
  * Date: 19.04.2016
  * Time: 20:23
  * Update: 10.05.2016
- * Version: 1.0.0 (Changed Hidden-Field-Name and added missing name constant to function)
+ * Version: 1.0.1 (Added HTML-Memory and output for Forms)
+ * 1.0.0 (Changed Hidden-Field-Name and added missing name constant to function)
  *
  * Licence: http://creativecommons.org/licenses/by-sa/4.0/
  * You are free to use this!
@@ -83,6 +84,13 @@ class Form {
 	private $error = null;
 
 	/**
+	 * Contains the Form-HTML-Code for later display
+	 *
+	 * @var string|null - Form-HTML
+	 */
+	private $html = null;
+
+	/**
 	 * Form constructor.
 	 *
 	 * @param string $action - Form action URL
@@ -111,6 +119,7 @@ class Form {
 		unset($this->fields);
 		unset($this->send);
 		unset($this->error);
+		unset($this->html);
 	}
 
 	/**
@@ -243,6 +252,28 @@ class Form {
 	 */
 	private function addError($error) {
 		$this->error[] = $error;
+	}
+
+	/**
+	 * Get the Form-HTML
+	 *
+	 * @param bool $show - Show HTML direct as output
+	 * @return null|string - HTML-Code or null if none is set
+	 */
+	public function getHtml($show = true) {
+		if($show)
+			echo $this->html;
+
+		return $this->html;
+	}
+
+	/**
+	 * Set the Form-HTML
+	 *
+	 * @param null|string $html - HTML-Code of the Form or null to set none
+	 */
+	public function setHtml($html) {
+		$this->html = $html;
 	}
 
 	/**
