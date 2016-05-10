@@ -19,6 +19,13 @@
  */
 class InputButton extends InputField {
 	/**
+	 * Contains if the Name is shown on output
+	 *
+	 * @var bool - Display the name on output
+	 */
+	protected $showName = false;
+
+	/**
 	 * InputButton constructor.
 	 *
 	 * @param string $name - Name of the Field
@@ -34,13 +41,45 @@ class InputButton extends InputField {
 	}
 
 	/**
+	 * Clears Memory
+	 */
+	public function __destruct() {
+		unset($this->showName);
+		parent::__destruct();
+	}
+
+	/**
+	 * Shows if the name is shown on output
+	 *
+	 * @return boolean - Display the Name on output
+	 */
+	protected function isShowName() {
+		return $this->showName;
+	}
+
+	/**
+	 * Set if the Name is shown on output. Useful when using GET to not display the Name
+	 *
+	 * @param boolean $showName - Show the Name
+	 */
+	public function setShowName($showName) {
+		$this->showName = $showName;
+	}
+
+	/**
 	 * Output the Element as HTML
 	 *
 	 * @param bool $show - Show HTML instant on call
 	 * @return string - Button as HTML Output
 	 */
 	public function output($show = true) {
-		$code = '<input type="' . $this->getType() . '" ' . $this->baseHTMLAttr() . ' value="' . $this->getEscapedValue() . '"';
+		$htmlBase = $this->baseHTMLAttr();
+
+		// Remove name if not wanted
+		if(! $this->isShowName())
+			$htmlBase = str_replace('name="' . $this->getName() . '"', '', $htmlBase);
+
+		$code = '<input type="' . $this->getType() . '" ' . $htmlBase . ' value="' . $this->getEscapedValue() . '"';
 
 		if($this->getSize() !== null)
 			$code .= ' size="' . $this->getSize() . '"';
