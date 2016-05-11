@@ -20,6 +20,7 @@ define('VIEW_DIR', INCLUDE_DIR . DS . 'views');
 
 // Include Base-Files
 require_once(INCLUDE_DIR . DS . 'Config.php');
+require_once(INCLUDE_DIR . DS . 'functions.php');
 require_once(INCLUDE_DIR . DS . 'mbFunctions.php');
 require_once(INCLUDE_DIR . DS . 'utf8.php');
 require_once(CONTROLLER_DIR . DS . 'BaseController.php');

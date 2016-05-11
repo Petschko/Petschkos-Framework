@@ -739,7 +739,7 @@ abstract class FormField {
 					$this->setValue((float) $value);
 				}
 
-				if(! (is_int($this->getValue()) || is_float($this->getValue())))
+				if(! is_float($this->getValue()))
 					return false;
 				break;
 
@@ -762,7 +762,7 @@ abstract class FormField {
 				if(! is_string($value))
 					return false;
 
-				//todo regex remove htmlEntities
+				//todo regex remove htmlEntities (or put string to text/default switch)
 				break;
 
 			case self::TYPE_EMAIL:
