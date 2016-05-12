@@ -6,7 +6,8 @@
  * Date: 13.04.2016
  * Time: 20:32
  * Update: 12.05.2016
- * Version: 1.1.1 (Fixed bug where a object is given to new self-class expected string)
+ * Version: 1.1.2 (Save object - on more results - to prob)
+ * 1.1.1 (Fixed bug where a object is given to new self-class expected string)
  * 1.1.0 (Removed statics to that multiple models will work parallel)
  * 1.0.1 (Added Check if database is set with table info instead of the constructor)
  * @package Petschkos Framework
@@ -424,6 +425,9 @@ abstract class BaseDBTableModel {
 						$obj[$i - 1]->{$field} = $results[$i][$field];
 					}
 				}
+
+				// Save to memory
+				$this->setMemoryObjects($obj);
 			}
 		}
 	}

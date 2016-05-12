@@ -5,7 +5,8 @@
  * Date: 11.04.2016
  * Time: 19:56
  * Update: 12.05.2016
- * Version: 1.0.0 (Added Name for Connection)
+ * Version: 1.0.1 (Added name prop to destruct)
+ * 1.0.0 (Added Name for Connection)
  * @package Petschkos Framework
  *
  * Licence: http://creativecommons.org/licenses/by-sa/4.0/
@@ -91,7 +92,7 @@ class DB extends PDO {
 	 * Destruct method
 	 */
 	public function __destruct() {
-		// VOID
+		unset($this->name);
 	}
 
 	/**
