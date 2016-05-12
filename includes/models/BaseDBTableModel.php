@@ -276,6 +276,15 @@ abstract class BaseDBTableModel {
 	}
 
 	/**
+	 * Delete a Memory-Object
+	 *
+	 * @param int $index - Index of the element
+	 */
+	final protected function deleteMemoryObject($index) {
+		unset($this->memoryObjects[$index]);
+	}
+
+	/**
 	 * Get the Memory Index
 	 *
 	 * @return int - Memory Index
@@ -397,14 +406,14 @@ abstract class BaseDBTableModel {
 			return false;
 		}
 
-		$obj =& $this->getMemoryObjects()[$this->getMemoryIndex()];
+		$obj = $this->getMemoryObjects()[$this->getMemoryIndex()];
 
 		// Set the next row to this object
 		foreach($this->getTableFields() as $field)
 			$this->{$field} = $obj->{$field};
 
 		// Remove the old object and increase counter
-		unset($obj);
+		$this->deleteMemoryObject($this->getMemoryIndex());
 		$this->setMemoryIndex($this->getMemoryIndex() + 1);
 
 		return true;
