@@ -71,9 +71,9 @@ function checkDataType(&$value, $type = 'string') {
 				return false;
 
 			// Convert string to correct number
-			if(is_int($value))
+			if(mb_strpos($value, '.') === false && mb_strpos($value, ',') === false)
 				$value = (int) $value;
-			if(is_float($value))
+			else
 				$value = (float) $value;
 
 			break;
