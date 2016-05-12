@@ -6,7 +6,8 @@
  * Date: 13.04.2016
  * Time: 20:32
  * Update: 12.05.2016
- * Version: 1.1.6 (Removed final from constructor to allow overwrite on child classes)
+ * Version: 1.1.7 (Removed final from several function that might be okay to overwrite)
+ * 1.1.6 (Removed final from constructor to allow overwrite on child classes)
  * 1.1.5 (Destructor unset all table fields now)
  * 1.1.4 (Removed final from destructor for overwrite on child classes)
  * 1.1.3 (BugFix - Every new class has now all fields filled out)
@@ -373,7 +374,7 @@ abstract class BaseDBTableModel {
 	/**
 	 * Clears the Memory about the unused rows
 	 */
-	final protected function clearMemory() {
+	protected function clearMemory() {
 		// Remove the old memory objects
 		$this->setMemoryObjects(null);
 
@@ -387,7 +388,7 @@ abstract class BaseDBTableModel {
 	 *
 	 * @return bool - true if next row get | false if there isn't a next row
 	 */
-	final public function nextRow() {
+	public function nextRow() {
 		if($this->getMemoryObjects() === null)
 			return false;
 
@@ -414,7 +415,7 @@ abstract class BaseDBTableModel {
 	 *
 	 * @param array $results - Query Results
 	 */
-	final protected function saveToMemory($results) {
+	protected function saveToMemory($results) {
 		// Don't do anything if result is empty
 		if($this->getMemoryCount() > 0) {
 
