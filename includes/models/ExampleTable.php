@@ -18,6 +18,19 @@ class ExampleTable extends BaseDBTableModel {
 	public $col3;
 
 	/**
+	 * Clears Memory
+	 */
+	public function __destruct() {
+		// Destruct fields
+		unset($this->id);
+		unset($this->col2);
+		unset($this->col3);
+
+		// Call Parent to destruct
+		parent::__destruct();
+	}
+
+	/**
 	 * Sets the Table-Info
 	 */
 	protected function setTableInfo() {

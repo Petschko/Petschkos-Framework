@@ -6,7 +6,8 @@
  * Date: 13.04.2016
  * Time: 20:32
  * Update: 12.05.2016
- * Version: 1.1.3 (BugFix - Every new class has now all fields filled out)
+ * Version: 1.1.4 (Removed final from destructor for overwrite on child classes)
+ * 1.1.3 (BugFix - Every new class has now all fields filled out)
  * 1.1.2 (Save object - on more results - to prob)
  * 1.1.1 (Fixed bug where a object is given to new self-class expected string)
  * 1.1.0 (Removed statics to that multiple models will work parallel)
@@ -118,7 +119,7 @@ abstract class BaseDBTableModel {
 	/**
 	 * Clears memory
 	 */
-	final public function __destruct() {
+	public function __destruct() {
 		unset($this->db);
 		unset($this->tableName);
 		unset($this->tableFields);
