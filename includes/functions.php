@@ -70,6 +70,12 @@ function checkDataType(&$value, $type = 'string') {
 			if(! checkIsNumber($value))
 				return false;
 
+			// Convert string to correct number
+			if(is_int($value))
+				$value = (int) $value;
+			if(is_float($value))
+				$value = (float) $value;
+
 			break;
 
 		case 'text':
