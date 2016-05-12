@@ -4,8 +4,8 @@
  * Authors-Website: http://petschko.org/
  * Date: 11.04.2016
  * Time: 19:56
- * Update: -
- * Version: 0.0.1
+ * Update: 12.05.2016
+ * Version: 1.0.0 (Added Name for Connection)
  * @package Petschkos Framework
  *
  * Licence: http://creativecommons.org/licenses/by-sa/4.0/
@@ -56,6 +56,13 @@ class DB extends PDO {
 	private static $connection = array();
 
 	/**
+	 * Name of the DB-Connection
+	 *
+	 * @var string - Name of the Connection
+	 */
+	private $name;
+
+	/**
 	 * DB constructor.
 	 *
 	 * @param string $name - Name of the Database Object
@@ -76,6 +83,7 @@ class DB extends PDO {
 			parent::setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 			self::setConnection($name, $this);
+			$this->setName($name);
 		}
 	}
 
@@ -159,6 +167,24 @@ class DB extends PDO {
 	 */
 	public static function secureSQLRegEx($string, $whiteListPattern = '/[^0-9a-zA-Z_]/') {
 		return preg_replace($whiteListPattern, '', $string);
+	}
+
+	/**
+	 * Get the Name of the Connection
+	 *
+	 * @return string - Name of the Connection
+	 */
+	public function getName() {
+		return $this->name;
+	}
+
+	/**
+	 * Set the Name of the Connection
+	 *
+	 * @param string $name - Name of the Connection
+	 */
+	private function setName($name) {
+		$this->name = $name;
 	}
 
 	/**

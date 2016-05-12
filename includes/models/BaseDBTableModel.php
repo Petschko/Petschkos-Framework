@@ -5,8 +5,9 @@
  * Authors-Website: http://petschko.org/
  * Date: 13.04.2016
  * Time: 20:32
- * Update: 09.05.2016
- * Version: 1.1.0 (Removed statics to that multiple models will work parallel)
+ * Update: 12.05.2016
+ * Version: 1.1.1 (Fixed bug where a object is given to new self-class expected string)
+ * 1.1.0 (Removed statics to that multiple models will work parallel)
  * 1.0.1 (Added Check if database is set with table info instead of the constructor)
  * @package Petschkos Framework
  *
@@ -419,7 +420,7 @@ abstract class BaseDBTableModel {
 				// Proceed every row
 				for($i = 1; $i < $this->getMemoryCount(); $i++) {
 					foreach($this->getTableFields() as $field) {
-						$obj[$i - 1] = new $class($this->getDb());
+						$obj[$i - 1] = new $class($this->getDb()->getName());
 						$obj[$i - 1]->{$field} = $results[$i][$field];
 					}
 				}
