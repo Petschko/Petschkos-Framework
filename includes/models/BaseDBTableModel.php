@@ -6,7 +6,8 @@
  * Date: 13.04.2016
  * Time: 20:32
  * Update: 12.05.2016
- * Version: 1.1.5 (Destructor unset all table fields now)
+ * Version: 1.1.6 (Removed final from constructor to allow overwrite on child classes)
+ * 1.1.5 (Destructor unset all table fields now)
  * 1.1.4 (Removed final from destructor for overwrite on child classes)
  * 1.1.3 (BugFix - Every new class has now all fields filled out)
  * 1.1.2 (Save object - on more results - to prob)
@@ -95,7 +96,7 @@ abstract class BaseDBTableModel {
 	 * @throws Exception - Can't find connection to DB
 	 * @throws Exception - Table Info not set correct
 	 */
-	final public function __construct($dbConName = null) {
+	public function __construct($dbConName = null) {
 		// Set all info (Table-Name, fields etc)
 		$this->setTableInfo();
 
