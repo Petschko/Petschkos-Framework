@@ -5,8 +5,9 @@
  * Authors-Website: http://petschko.org/
  * Date: 13.04.2016
  * Time: 20:32
- * Update: 12.05.2016
- * Version: 1.1.7 (Removed final from several function that might be okay to overwrite)
+ * Update: 13.05.2016
+ * Version: 1.2.0 (Added CountTotal-Row function)
+ * 1.1.7 (Removed final from several function that might be okay to overwrite)
  * 1.1.6 (Removed final from constructor to allow overwrite on child classes)
  * 1.1.5 (Destructor unset all table fields now)
  * 1.1.4 (Removed final from destructor for overwrite on child classes)
@@ -449,6 +450,42 @@ abstract class BaseDBTableModel {
 				$this->setMemoryObjects($obj);
 			}
 		}
+	}
+
+	/**
+	 * Counts the Total-Rows of this Table
+	 *
+	 * @return int - Number of Total-Records
+	 */
+	final public function countTotalRows() {
+		// Clear the old query
+		$this->clearMemory();
+
+		// Prepare SQL-Statement
+		$sql = 'SELECT count(*) FROM ' . $this->getTableName() . ';';
+		$sth = $this->getSqlStatement($sql);
+
+		// Execute
+		try {
+			$sth->execute();
+		} catch (PDOException $e) {
+			SQLError::addError($e->getMessage());
+			return 0;
+		}
+
+		// Get the Result(s)
+		$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+		// Save query and close
+		$sth->closeCursor();
+
+		if(count($result) < 1)
+			return 0;
+
+		if(isset($result[0]['count(*)']))
+			return (int) $result[0]['count(*)'];
+
+		return 0;
 	}
 
 	/**
