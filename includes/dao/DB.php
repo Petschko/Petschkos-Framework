@@ -4,8 +4,9 @@
  * Authors-Website: http://petschko.org/
  * Date: 11.04.2016
  * Time: 19:56
- * Update: 12.05.2016
- * Version: 1.0.1 (Added name prop to destruct)
+ * Update: 24.05.2016
+ * Version: 1.0.2 (Removed unnecessary finally statement und added missing doc)
+ * 1.0.1 (Added name prop to destruct)
  * 1.0.0 (Added Name for Connection)
  * @package Petschkos Framework
  *
@@ -98,7 +99,7 @@ class DB extends PDO {
 	/**
 	 * Closes a DB Connection
 	 *
-	 * @param $name - Name of the connection to close
+	 * @param string $name - Name of the connection to close
 	 */
 	public static function close($name) {
 		self::setConnection($name, null);
