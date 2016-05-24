@@ -78,14 +78,14 @@ class DB extends PDO {
 		} catch(PDOException $e) {
 			SQLError::addError($e->getMessage());
 			return;
-		} finally {
-			parent::setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-			parent::setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
-			parent::setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-			self::setConnection($name, $this);
-			$this->setName($name);
 		}
+
+		parent::setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		parent::setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
+		parent::setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+		self::setConnection($name, $this);
+		$this->setName($name);
 	}
 
 	/**
