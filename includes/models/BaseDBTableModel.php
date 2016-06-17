@@ -378,7 +378,7 @@ abstract class BaseDBTableModel {
 
 		// Throw Exception on error
 		if(SQLError::isError())
-			throw new Exception('Table-Info is not correctly set! (See SQLError)');
+			throw new Exception('Table-Info is not correctly set! ' . SQLError::printError());
 	}
 
 	/**
