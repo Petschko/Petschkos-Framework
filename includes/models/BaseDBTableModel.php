@@ -818,4 +818,24 @@ abstract class BaseDBTableModel {
 
 		return false;
 	}
+
+	/**
+	 * Clears the Table and resets PK
+	 *
+	 * @return bool - true on success else false
+	 */
+	public function clearTable() {
+		$sql = 'TRUNCATE TABLE ' . $this->getTableName() . ';';
+
+		$sth = $this->getSqlStatement($sql);
+
+		try {
+			$sth->execute();
+		} catch (PDOException $e) {
+			SQLError::addError($e->getMessage());
+			return false;
+		}
+
+		return true;
+	}
 }
