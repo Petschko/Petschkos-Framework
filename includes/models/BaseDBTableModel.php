@@ -5,8 +5,10 @@
  * Authors-Website: http://petschko.org/
  * Date: 13.04.2016
  * Time: 20:32
- * Update: 13.05.2016
- * Version: 1.2.0 (Added CountTotal-Row function)
+ * Update: 06.07.2016
+ * Version: 1.2.2 (Optimized clearTable function)
+ * 1.2.1 (Added clearTable function)
+ * 1.2.0 (Added CountTotal-Row function)
  * 1.1.7 (Removed final from several function that might be okay to overwrite)
  * 1.1.6 (Removed final from constructor to allow overwrite on child classes)
  * 1.1.5 (Destructor unset all table fields now)
@@ -825,17 +827,23 @@ abstract class BaseDBTableModel {
 	 * @return bool - true on success else false
 	 */
 	public function clearTable() {
-		$sql = 'TRUNCATE TABLE ' . $this->getTableName() . ';';
+		// Clear old Memory
+		$this->clearMemory();
 
-		$sth = $this->getSqlStatement($sql);
+		$sth = $this->getSqlStatement('TRUNCATE TABLE ' . $this->getTableName() . ';');
 
+		// Execute
 		try {
-			$sth->execute();
+			$success = $sth->execute();
 		} catch (PDOException $e) {
 			SQLError::addError($e->getMessage());
 			return false;
 		}
-
-		return true;
+		
+		$sth->closeCursor();
+		if($success)
+			return true;
+		
+		return false;
 	}
 }
