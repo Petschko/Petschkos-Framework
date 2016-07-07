@@ -577,7 +577,10 @@ abstract class BaseDBTableModel {
 		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE ' . $byField . $operator .
 			(($operator == DB::OPERATOR_IS_NULL || $operator == DB::OPERATOR_NOT_NULL) ? ';' : ':value;');
 		$sth = $this->getSqlStatement($sql);
-		$sth->bindValue('value', $value, DB::getDataType($value));
+
+		// Bind Value
+		if($operator != DB::OPERATOR_IS_NULL && $operator != DB::OPERATOR_NOT_NULL)
+			$sth->bindValue('value', $value, DB::getDataType($value));
 
 		// Execute
 		try {
@@ -619,7 +622,10 @@ abstract class BaseDBTableModel {
 		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE ' . $byField . $operator .
 			(($operator == DB::OPERATOR_IS_NULL || $operator == DB::OPERATOR_NOT_NULL) ? ';' : ':value;');
 		$sth = $this->getSqlStatement($sql);
-		$sth->bindValue('value', $value, DB::getDataType($value));
+
+		// Bind Value
+		if($operator != DB::OPERATOR_IS_NULL && $operator != DB::OPERATOR_NOT_NULL)
+			$sth->bindValue('value', $value, DB::getDataType($value));
 
 		// Execute
 		try {
