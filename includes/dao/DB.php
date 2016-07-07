@@ -4,8 +4,9 @@
  * Authors-Website: http://petschko.org/
  * Date: 11.04.2016
  * Time: 19:56
- * Update: 24.05.2016
- * Version: 1.0.2 (Removed unnecessary finally statement und added missing doc)
+ * Update: 07.07.2016
+ * Version: 1.0.3 (Added NULL-Operators)
+ * 1.0.2 (Removed unnecessary finally statement und added missing doc)
  * 1.0.1 (Added name prop to destruct)
  * 1.0.0 (Added Name for Connection)
  * @package Petschkos Framework
@@ -49,6 +50,16 @@ class DB extends PDO {
 	 * Used for SQL-Statements (NOT-Operator)
 	 */
 	const OPERATOR_NOT_EQUALS = 'NOT';
+
+	/**
+	 * Used for SQL-Statements (IS NULL-Operator)
+	 */
+	const OPERATOR_IS_NULL = 'IS NULL';
+
+	/**
+	 * Used for SQL-Statements (IS NOT NULL-Operator)
+	 */
+	const OPERATOR_NOT_NULL = 'IS NOT NULL';
 
 	/**
 	 * Var that holds all connection Objects
