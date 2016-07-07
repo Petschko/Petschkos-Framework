@@ -5,8 +5,9 @@
  * Authors-Website: http://petschko.org/
  * Date: 13.04.2016
  * Time: 20:32
- * Update: 06.07.2016
- * Version: 1.2.2 (Optimized clearTable function)
+ * Update: 07.07.2016
+ * Version: 1.2.3 (Added function to get PK if ignore on save and format code)
+ * 1.2.2 (Optimized clearTable function)
  * 1.2.1 (Added clearTable function)
  * 1.2.0 (Added CountTotal-Row function)
  * 1.1.7 (Removed final from several function that might be okay to overwrite)
@@ -123,7 +124,7 @@ abstract class BaseDBTableModel {
 	}
 
 	/**
-	 * Clears memory
+	 * Clears Memory
 	 */
 	public function __destruct() {
 		// Remove all Table-Fields
@@ -350,6 +351,7 @@ abstract class BaseDBTableModel {
 		// Add error if field doesn't exists
 		if(! $this->existField($field)) {
 			SQLError::addError('Field ' . $field . ' doesn\'t exists in Table ' . $this->getTableName());
+
 			return null;
 		}
 
@@ -380,7 +382,7 @@ abstract class BaseDBTableModel {
 
 		// Throw Exception on error
 		if(SQLError::isError())
-			throw new Exception('Table-Info is not correctly set! ' . SQLError::printError());
+			throw new Exception('Table-Info is not correctly set! (See SQLError): ' . SQLError::printError());
 	}
 
 	/**
@@ -406,6 +408,7 @@ abstract class BaseDBTableModel {
 
 		if(! isset($this->getMemoryObjects()[$this->getMemoryIndex()])) {
 			$this->clearMemory();
+
 			return false;
 		}
 
@@ -472,6 +475,7 @@ abstract class BaseDBTableModel {
 			$sth->execute();
 		} catch (PDOException $e) {
 			SQLError::addError($e->getMessage());
+
 			return 0;
 		}
 
@@ -488,6 +492,62 @@ abstract class BaseDBTableModel {
 			return (int) $result[0]['count(*)'];
 
 		return 0;
+	}
+
+	/**
+	 * Detects the PK-field-Value by using ALL other Values currently set in the model set the PK-field to the detected value
+	 *
+	 * On fail null
+	 */
+	final protected function getPkValueByFields() {
+		// Exit if PK is not set
+		if($this->getPrimaryKeyField() === null)
+			return;
+
+		// Create WHERE String
+		$whereSQL = array();
+		$fieldValues = array();
+
+		foreach($this->getTableFields() as $field) {
+			if($field != $this->getPrimaryKeyField()) {
+				$whereSQL[] = $field . '=:where' . $field;
+				$fieldValues['where' . $field] = $this->{$field};
+			}
+		}
+
+		// Make String
+		$whereSQL = implode(' AND ', $whereSQL);
+
+		// Create Prepared Statement
+		$sql = 'SELECT ' . $this->getPrimaryKeyField() . ' FROM ' . $this->getTableName() . ' WHERE ' . $whereSQL . ';';
+		$sth = $this->getSqlStatement($sql);
+
+		// Bind Values
+		foreach($fieldValues as $key => &$value)
+			$sth->bindValue($key, $value, DB::getDataType($value));
+
+		// Execute
+		try {
+			$sth->execute();
+		} catch (PDOException $e) {
+			$this->{$this->getPrimaryKeyField()} = null;
+
+			return;
+		}
+
+		$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+		// Exit on no results
+		if(count($result) < 1) {
+			$this->{$this->getPrimaryKeyField()} = null;
+
+			return;
+		}
+
+		// Use the latest result
+		$this->{$this->getPrimaryKeyField()} = $result[count($result) - 1][$this->getPrimaryKeyField()];
+
+		$sth->closeCursor();
 	}
 
 	/**
@@ -518,6 +578,7 @@ abstract class BaseDBTableModel {
 			$sth->execute();
 		} catch (PDOException $e) {
 			SQLError::addError($e->getMessage());
+
 			return;
 		}
 
@@ -558,6 +619,7 @@ abstract class BaseDBTableModel {
 			$success = $sth->execute();
 		} catch(PDOException $e) {
 			SQLError::addError($e->getMessage());
+
 			return false;
 		}
 
@@ -606,6 +668,7 @@ abstract class BaseDBTableModel {
 			$success = $sth->execute();
 		} catch(PDOException $e) {
 			SQLError::addError($e->getMessage());
+
 			return false;
 		}
 
@@ -632,6 +695,7 @@ abstract class BaseDBTableModel {
 			$sth->execute();
 		} catch (PDOException $e) {
 			SQLError::addError($e->getMessage());
+
 			return;
 		}
 
@@ -674,6 +738,7 @@ abstract class BaseDBTableModel {
 			$sth->execute();
 		} catch (PDOException $e) {
 			SQLError::addError($e->getMessage());
+
 			return;
 		}
 
@@ -717,10 +782,16 @@ abstract class BaseDBTableModel {
 			$success = $sth->execute();
 		} catch (PDOException $e) {
 			SQLError::addError($e->getMessage());
+
 			return false;
 		}
 
 		$sth->closeCursor();
+
+		// Get last insert ID only if ignore PK
+		if($ignorePK)
+			$this->getPkValueByFields();
+
 		if($success)
 			return true;
 
@@ -753,6 +824,7 @@ abstract class BaseDBTableModel {
 			$success = $sth->execute();
 		} catch (PDOException $e) {
 			SQLError::addError($e->getMessage());
+
 			return false;
 		}
 
@@ -811,6 +883,7 @@ abstract class BaseDBTableModel {
 			$success = $sth->execute();
 		} catch (PDOException $e) {
 			SQLError::addError($e->getMessage());
+
 			return false;
 		}
 
@@ -837,13 +910,14 @@ abstract class BaseDBTableModel {
 			$success = $sth->execute();
 		} catch (PDOException $e) {
 			SQLError::addError($e->getMessage());
+
 			return false;
 		}
-		
+
 		$sth->closeCursor();
 		if($success)
 			return true;
-		
+
 		return false;
 	}
 }
