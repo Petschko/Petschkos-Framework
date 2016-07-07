@@ -6,7 +6,8 @@
  * Date: 13.04.2016
  * Time: 20:32
  * Update: 07.07.2016
- * Version: 1.2.3 (Added function to get PK if ignore on save and format code)
+ * Version: 1.2.4 (Added function to remove a row with the model values)
+ * 1.2.3 (Added function to get PK if ignore on save and format code)
  * 1.2.2 (Optimized clearTable function)
  * 1.2.1 (Added clearTable function)
  * 1.2.0 (Added CountTotal-Row function)
@@ -613,6 +614,46 @@ abstract class BaseDBTableModel {
 		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE ' . $byField . $operator . ':value;';
 		$sth = $this->getSqlStatement($sql);
 		$sth->bindValue('value', $value, DB::getDataType($value));
+
+		// Execute
+		try {
+			$success = $sth->execute();
+		} catch(PDOException $e) {
+			SQLError::addError($e->getMessage());
+
+			return false;
+		}
+
+		$sth->closeCursor();
+		if($success)
+			return true;
+
+		return false;
+	}
+
+	/**
+	 * Deletes a row that matches these fields - useful if you don't have a PK
+	 *
+	 * @return bool - true on success else false
+	 */
+	public function deleteByThis() {
+		// Clear old Memory
+		$this->clearMemory();
+
+		// Prepare SQL-Statement
+		$whereSQL = array();
+		$deleteFields = array();
+		foreach($this->getTableFields() as $field) {
+			$whereSQL[] = $field . '=:' . $field;
+			$deleteFields[$field] = $this->{$field};
+		}
+
+		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE ' . implode(' AND ', $whereSQL) . ' LIMIT 1;';
+		$sth = $this->getSqlStatement($sql);
+
+		// Bind Values
+		foreach($deleteFields as $key => &$value)
+			$sth->bindValue($key, $value, DB::getDataType($value));
 
 		// Execute
 		try {
