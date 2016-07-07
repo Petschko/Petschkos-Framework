@@ -1,12 +1,12 @@
 <?php
-
 /**
  * Author: Peter Dragicevic [peter-91@hotmail.de]
  * Authors-Website: http://petschko.org/
  * Date: 13.04.2016
  * Time: 20:32
  * Update: 07.07.2016
- * Version: 1.2.4 (Added function to remove a row with the model values)
+ * Version: 1.2.5 (Fixed bug with compare NULL values used correct OPERATOR now)
+ * 1.2.4 (Added function to remove a row with the model values)
  * 1.2.3 (Added function to get PK if ignore on save and format code)
  * 1.2.2 (Optimized clearTable function)
  * 1.2.1 (Added clearTable function)
@@ -511,8 +511,12 @@ abstract class BaseDBTableModel {
 
 		foreach($this->getTableFields() as $field) {
 			if($field != $this->getPrimaryKeyField()) {
-				$whereSQL[] = $field . '=:where' . $field;
-				$fieldValues['where' . $field] = $this->{$field};
+				if($this->{$field} === null)
+					$whereSQL[] = $field . ' IS NULL';
+				else {
+					$whereSQL[] = $field . '=:where' . $field;
+					$fieldValues['where' . $field] = $this->{$field};
+				}
 			}
 		}
 
@@ -570,7 +574,8 @@ abstract class BaseDBTableModel {
 			return;
 
 		// Prepare SQL-Statement
-		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE ' . $byField . $operator . ':value;';
+		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE ' . $byField . $operator .
+			(($operator == DB::OPERATOR_IS_NULL || $operator == DB::OPERATOR_NOT_NULL) ? ';' : ':value;');
 		$sth = $this->getSqlStatement($sql);
 		$sth->bindValue('value', $value, DB::getDataType($value));
 
@@ -611,7 +616,8 @@ abstract class BaseDBTableModel {
 			return false;
 
 		// Prepare SQL-Statement
-		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE ' . $byField . $operator . ':value;';
+		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE ' . $byField . $operator .
+			(($operator == DB::OPERATOR_IS_NULL || $operator == DB::OPERATOR_NOT_NULL) ? ';' : ':value;');
 		$sth = $this->getSqlStatement($sql);
 		$sth->bindValue('value', $value, DB::getDataType($value));
 
@@ -644,8 +650,12 @@ abstract class BaseDBTableModel {
 		$whereSQL = array();
 		$deleteFields = array();
 		foreach($this->getTableFields() as $field) {
-			$whereSQL[] = $field . '=:' . $field;
-			$deleteFields[$field] = $this->{$field};
+			if($this->{$field} === null)
+				$whereSQL[] = $field . ' IS NULL';
+			else {
+				$whereSQL[] = $field . '=:' . $field;
+				$deleteFields[$field] = $this->{$field};
+			}
 		}
 
 		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE ' . implode(' AND ', $whereSQL) . ' LIMIT 1;';
@@ -690,17 +700,21 @@ abstract class BaseDBTableModel {
 		// Prepare SQL-Statement
 		$sqlFields = array();
 		$setSQL = array();
+
 		foreach($this->getTableFields() as $field) {
 			if($byField != $field) {
 				$setSQL[] = $field . '=:' . $field;
 				$sqlFields[$field] = $this->{$field};
 			}
 		}
-		$sql = 'UPDATE ' . $this->getTableName() . ' SET ' . implode(', ', $setSQL) . ' WHERE ' . $byField . '=:value;';
+
+		$sql = 'UPDATE ' . $this->getTableName() . ' SET ' . implode(', ', $setSQL) . ' WHERE ' . $byField .
+			(($value === null) ? ' IS NULL;' : '=:value;');
 		$sth = $this->getSqlStatement($sql);
 
 		// Bind Values
-		$sth->bindValue('value', $value, DB::getDataType($value));
+		if($value !== null)
+			$sth->bindValue('value', $value, DB::getDataType($value));
 		foreach($sqlFields as $key => &$value)
 			$sth->bindValue($key, $value, DB::getDataType($value));
 
@@ -856,9 +870,13 @@ abstract class BaseDBTableModel {
 			return false;
 
 		// Prepare SQL-Statement
-		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE ' . $byField . '=:value;';
+		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE ' . $byField .
+			(($this->{$byField} === null) ? ' IS NULL;' : '=:value;');
 		$sth = $this->getSqlStatement($sql);
-		$sth->bindValue('value', $this->{$byField}, DB::getDataType($this->{$byField}));
+
+		// Bind Value
+		if($this->{$byField} !== null)
+			$sth->bindValue('value', $this->{$byField}, DB::getDataType($this->{$byField}));
 
 		// Execute
 		try {
@@ -895,8 +913,12 @@ abstract class BaseDBTableModel {
 			$whereSQL = array();
 			//If PK doesn't exists and field is not set check ALL values if ALL are the same then update
 			foreach($this->getTableFields() as $field) {
-				$whereSQL[] = $field . '=:where' . $field;
-				$fieldValues['where' . $field] = $this->{$field};
+				if($this->{$field} === null)
+					$whereSQL[] = $field . ' IS NULL';
+				else {
+					$whereSQL[] = $field . '=:where' . $field;
+					$fieldValues['where' . $field] = $this->{$field};
+				}
 			}
 
 			// Make String
