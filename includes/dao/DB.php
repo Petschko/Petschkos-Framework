@@ -49,17 +49,17 @@ class DB extends PDO {
 	/**
 	 * Used for SQL-Statements (NOT-Operator)
 	 */
-	const OPERATOR_NOT_EQUALS = 'NOT';
+	const OPERATOR_NOT_EQUALS = ' NOT ';
 
 	/**
 	 * Used for SQL-Statements (IS NULL-Operator)
 	 */
-	const OPERATOR_IS_NULL = 'IS NULL';
+	const OPERATOR_IS_NULL = ' IS NULL';
 
 	/**
 	 * Used for SQL-Statements (IS NOT NULL-Operator)
 	 */
-	const OPERATOR_NOT_NULL = 'IS NOT NULL';
+	const OPERATOR_NOT_NULL = ' IS NOT NULL';
 
 	/**
 	 * Var that holds all connection Objects
