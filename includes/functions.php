@@ -5,7 +5,8 @@
  * Date: 10.05.2016
  * Time: 20:09
  * Update: 08.07.2016
- * Version: 0.1.1 (Fixed E-Mail and URL-Validation and fixed local-Bug)
+ * Version: 0.1.2 (More checks for E-Mail validation)
+ * 0.1.1 (Fixed E-Mail and URL-Validation and fixed local-Bug)
  * 0.1.0 (Added E-Mail-Check and URL-Check function)
  *
  * Notes: Useful global functions
@@ -136,10 +137,18 @@ function checkIsNumber(&$value) {
 function checkIsValidEmail($value, $allowLocal = false) {
 	if(! is_string($value))
 		return false;
+	
+	// Don't allow some special chars
+	if(preg_match('/[^a-zA-Z\d\_\-\.\@\:]/', $value))
+		return false;
 
 	// Check E-Mail pattern
 	$atPos = mb_strpos($value, '@');
 	$lastPointPos = mb_strrpos($value, '.');
+
+	// Only allow 1 @
+	if(mb_substr_count($value, '@') > 1)
+		return false;
 
 	if(! $atPos || (! $lastPointPos && ! $allowLocal))
 		return false;
@@ -151,6 +160,10 @@ function checkIsValidEmail($value, $allowLocal = false) {
 
 		return true;
 	}
+
+	// Don't allow double . after the @
+	if(mb_substr_count(mb_substr($value, $atPos), '..'))
+		return false;
 
 	// This is the default rule
 	if(! ($atPos > 0 && $lastPointPos > ($atPos + 1) && mb_strlen($value) > $lastPointPos))
