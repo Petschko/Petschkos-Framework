@@ -5,7 +5,8 @@
  * Date: 10.05.2016
  * Time: 20:09
  * Update: 08.07.2016
- * Version: 0.1.0 (Added E-Mail-Check and URL-Check function)
+ * Version: 0.1.1 (Fixed E-Mail and URL-Validation and fixed local-Bug)
+ * 0.1.0 (Added E-Mail-Check and URL-Check function)
  *
  * Notes: Useful global functions
  */
@@ -140,13 +141,16 @@ function checkIsValidEmail($value, $allowLocal = false) {
 	$atPos = mb_strpos($value, '@');
 	$lastPointPos = mb_strrpos($value, '.');
 
-	if(! $atPos || ! ($lastPointPos && $allowLocal))
+	if(! $atPos || (! $lastPointPos && ! $allowLocal))
 		return false;
 
 	// Use this rule if no dot is found and local is allowed
-	if($allowLocal && ! $lastPointPos)
+	if($allowLocal && ! $lastPointPos) {
 		if(! ($atPos > 0 && $atPos < mb_strlen($value)))
 			return false;
+
+		return true;
+	}
 
 	// This is the default rule
 	if(! ($atPos > 0 && $lastPointPos > ($atPos + 1) && mb_strlen($value) > $lastPointPos))
@@ -180,7 +184,7 @@ function checkIsValidUrl($value, $allowLocal = false) {
 
 	$urlWithoutProtocol = mb_substr($value, $protocolSeparatorPos + 3);
 	$hostSeparatorPos = mb_strpos($urlWithoutProtocol, '/');
-	$hostname = mb_substr($urlWithoutProtocol, 0, $hostSeparatorPos);
+	$hostname = mb_substr($urlWithoutProtocol, 0, ($hostSeparatorPos === false) ? mb_strlen($urlWithoutProtocol) : $hostSeparatorPos);
 
 	// Check if host is correct
 	if(mb_strlen($hostname) < 1)
@@ -216,7 +220,7 @@ function checkIsValidUrl($value, $allowLocal = false) {
 		if(! ($portPos > $lastDotPos + 1 && $portPos < mb_strlen($hostname)))
 			return false;
 
-		$port = mb_substr($hostname, $portPos);
+		$port = mb_substr($hostname, $portPos + 1);
 
 		// Port can only a int number
 		if(! checkDataType($port, 'int'))
