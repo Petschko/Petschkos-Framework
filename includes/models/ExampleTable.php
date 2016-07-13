@@ -18,13 +18,10 @@ class ExampleTable extends BaseDBTableModel {
 	public $col3;
 
 	/**
-	 * Clears Memory
+	 * Clears Memory (Optional parent clears keys)
 	 */
 	public function __destruct() {
-		// Destruct fields
-		unset($this->id);
-		unset($this->col2);
-		unset($this->col3);
+		// Destruct fields automaticly only extra keys need to be removed
 
 		// Call Parent to destruct
 		parent::__destruct();
