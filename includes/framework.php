@@ -32,8 +32,9 @@ require_once(INCLUDE_DIR . DS . 'dao' . DS . 'SQLError.php');
 
 require_once(CLASS_DIR . DS . 'Cookie.php');
 require_once(CLASS_DIR . DS . 'Email.php');
-require_once(CLASS_DIR . DS . 'formClasses' . DS . 'Form.php');
 require_once(CLASS_DIR . DS . 'language' . DS . 'Language.php');
+require_once(CLASS_DIR . DS . 'formClasses' . DS . 'Form.php');
+
 
 // Setup Cookie stuff
 Cookie::setIgnoreCookiePolice(Config::cookiePoliceSet);

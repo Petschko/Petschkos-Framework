@@ -4,8 +4,9 @@
  * Authors-Website: http://petschko.org/
  * Date: 19.04.2016
  * Time: 20:23
- * Update: 10.05.2016
- * Version: 1.0.1 (Added HTML-Memory and output for Forms)
+ * Update: 13.07.2016
+ * Version: 1.0.2 (Loads DummyLanguage Class if Language Class is not present)
+ * 1.0.1 (Added HTML-Memory and output for Forms)
  * 1.0.0 (Changed Hidden-Field-Name and added missing name constant to function)
  *
  * Licence: http://creativecommons.org/licenses/by-sa/4.0/
@@ -16,6 +17,12 @@
 
 require_once('FormField.php');
 require_once('FormError.php');
+
+// Implement dummy language class if language class doesn't exists
+if(! class_exists('Language')) {
+	require_once('DummyLanguage.php');
+	class_alias('DummyLanguage', 'Language');
+}
 
 /**
  * Class Form
