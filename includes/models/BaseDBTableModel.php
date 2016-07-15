@@ -4,8 +4,9 @@
  * Authors-Website: http://petschko.org/
  * Date: 13.04.2016
  * Time: 20:32
- * Update: 07.07.2016
- * Version: 1.2.5 (Fixed bug with compare NULL values used correct OPERATOR now)
+ * Update: 15.07.2016
+ * Version: 1.2.6 (Added Table Optimization)
+ * 1.2.5 (Fixed bug with compare NULL values used correct OPERATOR now)
  * 1.2.4 (Added function to remove a row with the model values)
  * 1.2.3 (Added function to get PK if ignore on save and format code)
  * 1.2.2 (Optimized clearTable function)
@@ -493,6 +494,27 @@ abstract class BaseDBTableModel {
 			return (int) $result[0]['count(*)'];
 
 		return 0;
+	}
+
+	/**
+	 * Optimizes this Table
+	 *
+	 * @return bool - true on success else false
+	 */
+	final public function optimizeTable() {
+		$sth = $this->getSqlStatement('OPTIMIZE TABLE ' . $this->getTableName() . ';');
+
+		try {
+			$status = $sth->execute();
+		} catch(PDOException $e) {
+			SQLError::addError($e->getMessage());
+
+			return false;
+		}
+
+		$sth->closeCursor();
+
+		return ($status) ? true : false;
 	}
 
 	/**
