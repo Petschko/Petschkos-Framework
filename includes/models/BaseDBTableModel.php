@@ -4,8 +4,9 @@
  * Authors-Website: http://petschko.org/
  * Date: 13.04.2016
  * Time: 20:32
- * Update: 15.07.2016
- * Version: 1.2.6 (Added Table Optimization)
+ * Update: 02.10.2016
+ * Version: 1.2.7 (Added get MaxValue-Row by Field function)
+ * 1.2.6 (Added Table Optimization)
  * 1.2.5 (Fixed bug with compare NULL values used correct OPERATOR now)
  * 1.2.4 (Added function to remove a row with the model values)
  * 1.2.3 (Added function to get PK if ignore on save and format code)
@@ -983,6 +984,44 @@ abstract class BaseDBTableModel {
 			return true;
 
 		return false;
+	}
+
+	/**
+	 * Get the Row with the max value by the specified field
+	 * null uses Primary key (the highest value)
+	 *
+	 * @param null|string $byMaxField - FieldName to get the max value row
+	 */
+	public function getMaxFieldValueRow($byMaxField = null) {
+		// Clear the old query
+		$this->clearMemory();
+
+		// Get Field
+		$byField = $this->checkFieldInput($byMaxField);
+
+		$sql = 'SELECT * FROM ' . $this->getTableName() . ' ORDER BY ' . $byField . ' DESC;';
+		$sth = $this->getSqlStatement($sql);
+
+		// Execute
+		try {
+			$sth->execute();
+		} catch(PDOException $e) {
+			SQLError::addError($e->getMessage());
+
+			return;
+		}
+
+		// Get the Result(s) and save only the first row
+		$saveResult = array();
+		$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+		$this->setMemoryCount((count($result) > 0) ? 1 : 0);
+		if(count($result) > 0)
+			$saveResult[0] = $result[0];
+
+		// Save query and close
+		$this->saveToMemory($saveResult);
+		$sth->closeCursor();
 	}
 
 	/**
