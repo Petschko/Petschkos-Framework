@@ -4,8 +4,9 @@
  * Authors-Website: http://petschko.org/
  * Date: 13.04.2016
  * Time: 20:32
- * Update: 02.10.2016
- * Version: 1.2.7 (Added get MaxValue-Row by Field function)
+ * Update: 26.02.2017
+ * Version: 1.2.8 (Added current_timestamp function)
+ * 1.2.7 (Added get MaxValue-Row by Field function)
  * 1.2.6 (Added Table Optimization)
  * 1.2.5 (Fixed bug with compare NULL values used correct OPERATOR now)
  * 1.2.4 (Added function to remove a row with the model values)
@@ -1049,5 +1050,14 @@ abstract class BaseDBTableModel {
 			return true;
 
 		return false;
+	}
+
+	/**
+	 * Returns the Current-Timestamp
+	 *
+	 * @return string - Current-Timestamp
+	 */
+	public static function current_timestamp() {
+		return date('Y-m-d H:i:s', time());
 	}
 }
