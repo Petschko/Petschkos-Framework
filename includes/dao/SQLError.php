@@ -4,8 +4,8 @@
  * Authors-Website: http://petschko.org/
  * Date: 12.04.2016
  * Time: 21:17
- * Update: -
- * Version: 0.0.1
+ * Update: 26.02.2017
+ * Version: 1.0.0 (Print SQL-Errors as string or return them - added param)
  * @package Petschkos Framework
  *
  * Licence: http://creativecommons.org/licenses/by-sa/4.0/
@@ -59,16 +59,28 @@ class SQLError {
 	}
 
 	/**
-	 * Prints all Error-Messages
+	 * Prints all Error-Messages or return them as string
+	 *
+	 * @param bool $returnString - Return value as String (true) or print (false - default)
+	 * @return null|string - null if string is printed or empty else error-string with all errors
 	 */
-	public static function printError() {
-		foreach(self::getError() as $errMsg) {
-			echo $errMsg . '<br />' . PHP_EOL;
-		}
+	public static function printError($returnString = false) {
+		$code = null;
+
+		foreach(self::getError() as $errMsg)
+			$code .= $errMsg . '<br />' . PHP_EOL;
+
+		if($returnString)
+			return $code;
+		else
+			echo $code;
+		return null;
 	}
 
 	/**
 	 * SQLError constructor. Disabled
 	 */
-	private function __construct() {}
+	private function __construct() {
+		// VOID
+	}
 }
