@@ -1,6 +1,6 @@
 <?php
 /**
- * Author: Peter Dragicevic [peter-91@hotmail.de]
+ * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
  *
  * Notes: Example file for DB-Table-Class
