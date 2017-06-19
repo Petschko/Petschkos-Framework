@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+#Sitemap: https://mypage.com/sitemap.xml
+Crawl-delay: 10
