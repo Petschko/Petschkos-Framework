@@ -1,0 +1,9 @@
+#Disable PHP here
+RemoveHandler .php .phtml .php3
+RemoveType .php .phtml .php3
+php_flag engine off
+
+order allow,deny
+<FilesMatch "^(?i)(.+\.css)$">
+	allow from all
+</FilesMatch>

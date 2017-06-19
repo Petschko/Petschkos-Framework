@@ -1,0 +1,15 @@
+# Important settings
+AddDefaultCharset utf-8
+Options -Indexes
+DirectoryIndex index.php index.html index.htm
+
+# Error-Documents
+#ErrorDocument 403 /hp/403/
+#ErrorDocument 404 /hp/404/
+
+# Secure Files
+<FilesMatch "^(?i)(\.hta.*|\.htp.*|\.git.*)$">
+	Order allow,deny
+	Deny from all
+	Satisfy All
+</FilesMatch>
