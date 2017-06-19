@@ -4,15 +4,14 @@
  * Authors-Website: http://petschko.org/
  * Date: 12.04.2016
  * Time: 22:29
- * Update: -
- * Version: 0.0.1
- * @package Petschkos Framework
  *
  * Notes: Procedural Code that managed all of the UTF-8 Stuff and data escape
  */
 
+defined('BASE_DIR') or die('Invalid File-Access');
+
 // Include MultiByte functions
-require_once('mbFunctions.php');
+require_once(INCLUDE_DIR . DS . 'mbFunctions.php');
 
 // Check if multi byte functions are installed
 checkMultiByteFunctions();

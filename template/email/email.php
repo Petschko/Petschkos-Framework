@@ -2,12 +2,10 @@
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
- * Date: 18.04.2016
- * Time: 21:01
- * Update: -
- * Version: 0.0.1
+ * Date: 31.05.2017
+ * Time: 20:11
  *
  * Notes: -
  */
 
-// VOID - Add error Page - 404 for example
+defined('BASE_DIR') or die('Invalid File-Access');

@@ -4,8 +4,6 @@
  * Authors-Website: http://petschko.org/
  * Date: 29.12.2015 (RAW FILE)
  * Time: 19:43 (RAW FILE)
- * Update: 13.01.2016 (RAW FILE)
- * Version: 1.0.0 (RAW FILE)
  *
  * Notes: -
  */

@@ -4,27 +4,16 @@
  * Authors-Website: http://petschko.org/
  * Date: 22.07.2015
  * Time: 21:07
- * Update: 02.05.2016
- * Version 1.1.0 (Added Setters and removed non-class content from class)
- * 1.0.3 (Changed Class-Name & Website)
- * 1.0.2 (Reformat Code - Fixed head doc)
- * @package Petschkos Framework
  *
  * Licence: http://creativecommons.org/licenses/by-sa/4.0/
  * You are free to use this!
+ *
  * Come to us we have cookies *.* Or Play Cookie-Clicker!^^
  *
- * How to use:
- * Set cookie only if its allowed -- cookie::setCookie(@vanilla_params) -> See http://php.net/setcookie for parameter use
- * Read cookie if its allowed -- cookie::getCookie((string)cookieName[, (mixed)fallback_value = false[, (bool)force_read = false]])
- * Check if cookies are allowed (for displaying msg or something like that) -- cookie::getIsAllowed()
- * Enable Cookies, if user clicked on accept button -- cookie::enableCookies()
- * Disable Cookies (for not showing cookie msg anymore or something like that),
- * but inform user that there IS one Cookie (MasterCookie) if he want never show message -- cookie::enableCookies(false)
- * (Very-Optional) Set the country of the User (for allow/deny cookies without asking in countries you have set) -- cookie::setCountry((string)country)
- *
- * You can make more configurations below (Marked with CONFIG AREA)
+ * Notes: Contains the Cookie-Class
  */
+
+defined('BASE_DIR') or die('Invalid File-Access');
 
 /**
  * Class Cookie

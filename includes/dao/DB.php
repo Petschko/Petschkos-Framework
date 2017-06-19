@@ -4,18 +4,14 @@
  * Authors-Website: http://petschko.org/
  * Date: 11.04.2016
  * Time: 19:56
- * Update: 07.07.2016
- * Version: 1.0.3 (Added NULL-Operators)
- * 1.0.2 (Removed unnecessary finally statement und added missing doc)
- * 1.0.1 (Added name prop to destruct)
- * 1.0.0 (Added Name for Connection)
- * @package Petschkos Framework
  *
  * Licence: http://creativecommons.org/licenses/by-sa/4.0/
  * You are free to use this!
  *
  * Notes: Create(s a) connection(s) to (a) Database(s)
  */
+
+defined('BASE_DIR') or die('Invalid File-Access');
 
 /**
  * Class DB

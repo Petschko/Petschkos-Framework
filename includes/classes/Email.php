@@ -4,19 +4,14 @@
  * Authors-Website: http://petschko.org/
  * Date: 10.08.2015
  * Time: 22:45
- * Update: 19.04.2016
- * Version: 1.3.1 (Added missing documentation)
- * 1.3.0 (Replaced mail() with mb_send_mail() - Added var for language control)
- * 1.2.1 (Added class vars Doc)
- * 1.2.0 (Changed Class-Name & Website - Added alias functions for getSender and setSender)
- * 1.1.2 (Reformat Code)
- * 1.1.1 (Add CC, BCC, Max, Line Length & Reply-To Address)
  *
  * Licence: http://creativecommons.org/licenses/by-sa/4.0/
  * You are free to use this!
  *
  * Notes: Class for sending easy Mails via PHP
  */
+
+defined('BASE_DIR') or die('Invalid File-Access');
 
 /**
  * Class Email

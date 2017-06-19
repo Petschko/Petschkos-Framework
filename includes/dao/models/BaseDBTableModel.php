@@ -4,32 +4,14 @@
  * Authors-Website: http://petschko.org/
  * Date: 13.04.2016
  * Time: 20:32
- * Update: 26.02.2017
- * Version: 1.2.8 (Added current_timestamp function)
- * 1.2.7 (Added get MaxValue-Row by Field function)
- * 1.2.6 (Added Table Optimization)
- * 1.2.5 (Fixed bug with compare NULL values used correct OPERATOR now)
- * 1.2.4 (Added function to remove a row with the model values)
- * 1.2.3 (Added function to get PK if ignore on save and format code)
- * 1.2.2 (Optimized clearTable function)
- * 1.2.1 (Added clearTable function)
- * 1.2.0 (Added CountTotal-Row function)
- * 1.1.7 (Removed final from several function that might be okay to overwrite)
- * 1.1.6 (Removed final from constructor to allow overwrite on child classes)
- * 1.1.5 (Destructor unset all table fields now)
- * 1.1.4 (Removed final from destructor for overwrite on child classes)
- * 1.1.3 (BugFix - Every new class has now all fields filled out)
- * 1.1.2 (Save object - on more results - to prob)
- * 1.1.1 (Fixed bug where a object is given to new self-class expected string)
- * 1.1.0 (Removed statics to that multiple models will work parallel)
- * 1.0.1 (Added Check if database is set with table info instead of the constructor)
- * @package Petschkos Framework
  *
  * Licence: http://creativecommons.org/licenses/by-sa/4.0/
  * You are free to use this!
  *
  * Notes: Base abstract Model for SQL-Tables
  */
+
+defined('BASE_DIR') or die('Invalid File-Access');
 
 /**
  * Class BaseDBTableModel

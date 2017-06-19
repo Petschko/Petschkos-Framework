@@ -6,6 +6,8 @@
  * Notes: Example file for DB-Table-Class
  */
 
+defined('BASE_DIR') or die('Invalid File-Access');
+
 /**
  * Class ExampleTable
  */
@@ -21,7 +23,7 @@ class ExampleTable extends BaseDBTableModel {
 	 * Clears Memory (Optional parent clears keys)
 	 */
 	public function __destruct() {
-		// Destruct fields automaticly only extra keys need to be removed
+		// Destruct fields automatically only extra keys need to be removed
 
 		// Call Parent to destruct
 		parent::__destruct();

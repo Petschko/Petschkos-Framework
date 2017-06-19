@@ -4,15 +4,14 @@
  * Authors-Website: http://petschko.org/
  * Date: 12.04.2016
  * Time: 21:17
- * Update: 26.02.2017
- * Version: 1.0.0 (Print SQL-Errors as string or return them - added param)
- * @package Petschkos Framework
  *
  * Licence: http://creativecommons.org/licenses/by-sa/4.0/
  * You are free to use this!
  *
  * Notes: Contains all SQL-Errors (easy add/print errors)
  */
+
+defined('BASE_DIR') or die('Invalid File-Access');
 
 /**
  * Class SQLError
