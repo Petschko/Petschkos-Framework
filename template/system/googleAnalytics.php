@@ -42,7 +42,7 @@ defined('BASE_DIR') or die('Invalid File-Access');
 			}
 
 			// Only load GA if allowed
-			if(gaEnable) {
+			if(gaEnable && navigator.userAgent.indexOf("Speed Insights") === -1) {
 				(function (i, s, o, g, r, a, m) {
 					i['GoogleAnalyticsObject'] = r;
 					i[r] = i[r] || function () {
