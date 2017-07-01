@@ -20,7 +20,7 @@ defined('BASE_DIR') or die('Invalid File-Access');
 		<?php
 		Page::printHtmlCanonicalLink();
 		Page::printHtmlMetaTitle();
-		Page::getMetaDesc();
+		Page::printHtmlMetaDescription();
 		Page::printHtmlMetaKeywords();
 
 		if(Config::favicon)
