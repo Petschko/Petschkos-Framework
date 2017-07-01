@@ -254,7 +254,7 @@ class Page {
 		if(! self::getCanonicalLink())
 			return;
 
-		echo '<link rel="canonical" href="' . self::getCanonicalLink() . '" />' . PHP_EOL;
+		echo '		<link rel="canonical" href="' . self::getCanonicalLink() . '" />' . PHP_EOL;
 	}
 
 	/**
@@ -264,7 +264,7 @@ class Page {
 		if(! self::getMetaTitle())
 			return;
 
-		echo '<meta name="title" content="' . self::getMetaTitle() . '" />' . PHP_EOL;
+		echo '		<meta name="title" content="' . self::getMetaTitle() . '" />' . PHP_EOL;
 	}
 
 	/**
@@ -274,7 +274,7 @@ class Page {
 		if(! self::getMetaDesc())
 			return;
 
-		echo '<meta name="description"  content="' . self::getMetaDesc() . '" />' . PHP_EOL;
+		echo '		<meta name="description"  content="' . self::getMetaDesc() . '" />' . PHP_EOL;
 	}
 
 	/**
@@ -284,7 +284,7 @@ class Page {
 		if(! self::getMetaKeywords())
 			return;
 
-		echo '<meta name="keywords"  content="' . self::getMetaKeywords() . '" />' . PHP_EOL;
+		echo '		<meta name="keywords"  content="' . self::getMetaKeywords() . '" />' . PHP_EOL;
 	}
 
 	/**
@@ -305,11 +305,14 @@ class Page {
 	}
 
 	/**
+	 * Adds a JS-File to the current Page
+	 *
 	 * @param string $file - File to add
 	 * @param bool $addInHead - Add File in Head false add it before </body>
+	 * @param bool $async - Loads the JS-File Async
 	 */
-	public static function addJSFile($file, $addInHead = true) {
-		self::$jsFilesArray[] = array($file, $addInHead);
+	public static function addJSFile($file, $addInHead = true, $async = false) {
+		self::$jsFilesArray[] = array($file, $addInHead, $async);
 	}
 
 	/**
@@ -332,7 +335,7 @@ class Page {
 	public static function printJsFiles($headFiles) {
 		foreach(self::getJsFilesArray() as &$jsFile) {
 			if($jsFile[1] === $headFiles)
-				echo '		<script src="' . $jsFile[0] . '"></script>' . PHP_EOL;
+				echo '		<script ' . (($jsFile[2]) ? 'async ' : '') . 'src="' . $jsFile[0] . '"></script>' . PHP_EOL;
 		}
 	}
 
