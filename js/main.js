@@ -8,9 +8,9 @@
 /**
  * Creates a Spoiler
  *
- * @param that
- * @param id
- * @param originalText
+ * @param {Object} that
+ * @param {String} id
+ * @param {String} originalText
  */
 function spoiler(that, id, originalText) {
 	var element = document.getElementById(id);

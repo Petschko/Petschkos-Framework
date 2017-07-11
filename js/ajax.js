@@ -8,9 +8,9 @@
 /**
  * Posts an AJAX request
  *
- * @param url - URL of the AJAX request
- * @param data - Data of the AJAX request
- * @param success - response
+ * @param {String} url - URL of the AJAX request
+ * @param {Object|String} data - Data of the AJAX request
+ * @param {function} success - response
  * @returns {*}
  */
 function postAjax(url, data, success) {
