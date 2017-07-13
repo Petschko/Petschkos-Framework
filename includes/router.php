@@ -25,6 +25,10 @@ Page::setWebsiteTitle(Config::websiteTitle);
 Page::addCssFile(Config::pageBaseURL . 'styles/styles.css');
 Page::addJSFile(Language::getLangJsFileUri());
 
+// Add Global Page-Stuff
+if(Config::cacheFileLifeTime)
+	Page::setCacheTimeSec(Config::cacheFileLifeTime);
+
 // Get Requested Page
 $page = mb_strtolower($page);
 

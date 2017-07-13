@@ -11,6 +11,7 @@
 defined('BASE_DIR') or die('Invalid File-Access');
 
 // Define Constants
+define('CACHE_DIR', BASE_DIR . DS . 'cache');
 define('INCLUDE_DIR', BASE_DIR . DS . 'includes');
 define('CLASS_DIR', INCLUDE_DIR . DS . 'classes');
 define('SQL_MODEL_DIR', INCLUDE_DIR . DS . 'dao' . DS . 'models');
@@ -67,6 +68,16 @@ if(Config::dbEnabled) {
 }
 
 require_once(INCLUDE_DIR . DS . 'router.php');
-require_once(INCLUDE_DIR . DS . 'layout.php');
+
+if(Config::cacheEnabled && Page::isCacheAble()) {
+	require_once(CLASS_DIR . DS . 'Cache.php');
+	new Cache(
+		Page::getName(),
+		CACHE_DIR . DS,
+		INCLUDE_DIR . DS . 'layout.php',
+		Page::getCacheTimeSec()
+	);
+} else
+	require_once(INCLUDE_DIR . DS . 'layout.php');
 
 closePage();

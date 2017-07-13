@@ -66,6 +66,16 @@ class Page {
 	private static $viewFile;
 
 	/**
+	 * @var bool $cacheAble
+	 */
+	private static $cacheAble = false;
+
+	/**
+	 * @var int $cacheTimeSec
+	 */
+	private static $cacheTimeSec = 86400;
+
+	/**
 	 * @var array $cssFilesArray - CSS-Files of the Page
 	 */
 	private static $cssFilesArray = array();
@@ -231,6 +241,34 @@ class Page {
 	 */
 	public static function setViewFile($viewFile) {
 		self::$viewFile = $viewFile;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public static function isCacheAble() {
+		return self::$cacheAble;
+	}
+
+	/**
+	 * @param bool $cacheAble
+	 */
+	public static function setCacheAble($cacheAble) {
+		self::$cacheAble = $cacheAble;
+	}
+
+	/**
+	 * @return int
+	 */
+	public static function getCacheTimeSec() {
+		return self::$cacheTimeSec;
+	}
+
+	/**
+	 * @param int $cacheTimeSec
+	 */
+	public static function setCacheTimeSec($cacheTimeSec) {
+		self::$cacheTimeSec = $cacheTimeSec;
 	}
 
 	/**

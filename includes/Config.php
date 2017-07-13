@@ -61,6 +61,10 @@ class Config {
 		'lang.en'				=> 'LangEn'
 	);
 
+	// Cache Settings
+	const cacheEnabled = true;								// Enable or disables the Cache
+	const cacheFileLifeTime = null;							// Set how long in Sec a Cache-File can exists (null uses default value of 1 Day)
+
 	// Misc Settings
 	const sendMailEnabled = false;							// Can this site send E-Mails? (false = no | true = yes)
 	const adminName = 'Admin';								// Set Admin-Name
