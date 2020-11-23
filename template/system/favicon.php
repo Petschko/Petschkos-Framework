@@ -5,9 +5,10 @@
  * Date: 24.11.2020
  * Time: 00:07
  *
- * Notes: -
+ * Notes: Contains Favicons stuff
  */
 
+defined('BASE_DIR') or die('Invalid File-Access');
 ?>
 
 		<!-- FavIcons... -->
