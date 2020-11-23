@@ -17,10 +17,10 @@ defined('BASE_DIR') or die('Invalid File-Access');
  */
 class Config {
 	// System-Stuff
-	const version = 'v2.0.0';
+	const version = 'v2.0.1';
 
 	// Mysql settings
-	const dbEnabled = true;									// Is the DB-Support enabled?
+	const dbEnabled = false;								// Is the DB-Support enabled?
 	const dbType = 'mysql';									// Type of the Database-Server (MySQL, SQLite etc)
 	const dbHost = '127.0.0.1';								// Hostname/IP of the Database-Server
 	const dbPort = 3306;									// Port of the Database-Server
@@ -71,10 +71,10 @@ class Config {
 	const adminEmail = 'admin@domain.tld';					// Set Admin-Email
 	const websiteTitle = 'Title';							// Set Website-Title
 	const charset = 'UTF-8';								// HTML-Default Charset (UTF-8 recommend)
-	const pageBaseURL = 'http://localhost/hp/';				// Page Base-URL (Needed for canonical links and many other) end with /
-	const favicon = null;									// Set Favicon or null for none
+	const pageBaseURL = 'http://localhost/';				// Page Base-URL (Needed for canonical links and many other) end with /
+	const favicon = false;									// Set if you have a Favicon
 	const prettyUrls = false;								// Pretty URLs are enabled (Setup the HTACCESS or Webserver-Config by yourself) index.php?page=$page -> /$page/
-	const pageSince = 2017;									// Set the Year where the page was launched
+	const pageSince = 2020;									// Set the Year where the page was launched
 
 	// -----------------------------------------------------------------------------------------------------------------
 

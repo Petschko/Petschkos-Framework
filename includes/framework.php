@@ -10,6 +10,9 @@
 
 defined('BASE_DIR') or die('Invalid File-Access');
 
+// Get config
+require_once(BASE_DIR . DS . 'includes' . DS . 'Config.php');
+
 // Define Constants
 define('CACHE_DIR', BASE_DIR . DS . 'cache');
 define('INCLUDE_DIR', BASE_DIR . DS . 'includes');
@@ -18,12 +21,11 @@ define('SQL_MODEL_DIR', INCLUDE_DIR . DS . 'dao' . DS . 'models');
 define('TEMPLATE_DIR', BASE_DIR . DS . 'template');
 define('EMAIL_DIR', TEMPLATE_DIR . DS . 'email');
 define('LANG_DIR', BASE_DIR . DS . 'language');
-define('LANG_DIR_JS', Config::pageBaseURL . 'js/');
+define('LANG_DIR_JS', Config::pageBaseURL . 'js/language/');
 
 // Include Base-Files
-require_once(INCLUDE_DIR . DS . 'Config.php');
-require_once(INCLUDE_DIR . DS . 'utf8.php');
 require_once(INCLUDE_DIR . DS . 'functions.php');
+require_once(INCLUDE_DIR . DS . 'utf8.php');
 
 // Include DAO
 if(Config::dbEnabled) {

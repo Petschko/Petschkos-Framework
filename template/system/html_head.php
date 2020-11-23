@@ -24,7 +24,7 @@ defined('BASE_DIR') or die('Invalid File-Access');
 		Page::printHtmlMetaKeywords();
 
 		if(Config::favicon)
-			echo '<link rel="icon" href="' . Config::pageBaseURL . Config::favicon . '" type="image/x-icon" />' . PHP_EOL;
+			require_once(TEMPLATE_DIR . DS . 'system' . DS . 'favicon.php');
 
 		echo PHP_EOL;
 

@@ -21,6 +21,13 @@ require_once(LANG_DIR . DS . 'LangBase.php');
  */
 class Language {
 	/**
+	 * Contains if the init function has run
+	 *
+	 * @var bool $init - Init function ran
+	 */
+	private static $init = false;
+
+	/**
 	 * Contains the File-Name of the current Language
 	 *
 	 * @var null|string $currentLanguageFileName - Current Language File-Name
@@ -104,6 +111,10 @@ class Language {
 	 * Initiates the class and set all important values
 	 */
 	private static function init() {
+		// Only run once
+		if(self::$init)
+			return;
+
 		// Detect the current language from the user
 		$detected = false;
 		// Check if lang changed via GET
@@ -131,6 +142,7 @@ class Language {
 		// Setup rest values
 		self::requireLangClassFileOnce();
 		self::setLanguage(new self::$availableLanguages[self::getCurrentLanguageFileName()]());
+		self::$init = true;
 	}
 
 	/**
@@ -151,6 +163,9 @@ class Language {
 	 * @return string - JS-Language File URI
 	 */
 	public static function getLangJsFileUri() {
+		if(self::getLanguage() === null)
+			self::init();
+
 		return self::getLanguageJsDir() . basename(self::getCurrentLanguageFileName()) . '.js';
 	}
 

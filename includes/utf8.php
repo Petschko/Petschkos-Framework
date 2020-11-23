@@ -10,12 +10,6 @@
 
 defined('BASE_DIR') or die('Invalid File-Access');
 
-// Include MultiByte functions
-require_once(INCLUDE_DIR . DS . 'mbFunctions.php');
-
-// Check if multi byte functions are installed
-checkMultiByteFunctions();
-
 // Set Header/Encoding
 header('Content-Type: text/html; charset=utf-8');
 mb_internal_encoding('UTF-8');
@@ -39,4 +33,3 @@ if(class_exists('Cookie')) {
 	}
 } else
 	$_COOKIE = escapeData($_COOKIE);
-

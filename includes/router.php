@@ -22,7 +22,7 @@ Page::setPrettyUrls(Config::prettyUrls);
 Page::setWebsiteTitle(Config::websiteTitle);
 
 // Add Global JS/CSS Files
-Page::addCssFile(Config::pageBaseURL . 'styles/styles.css');
+Page::addCssFile(Config::pageBaseURL . 'styles/style.css');
 Page::addJSFile(Language::getLangJsFileUri());
 
 // Add Global Page-Stuff
