@@ -46,6 +46,8 @@ switch($page) {
 		Page::setViewFile('home.php');
 		break;
 	case '403':
+		header('HTTP/1.0 403 Forbidden');
+
 		$page = '403';
 		Page::setName('403');
 		Page::setTitle('403 - Zugriff verweigert / Access denied');
@@ -54,6 +56,8 @@ switch($page) {
 		break;
 	case '404':
 	default:
+		header("HTTP/1.0 404 Not Found");
+
 		$page = '404';
 		Page::setName('404');
 		Page::setTitle('404 - Nicht gefunden / Not found');
