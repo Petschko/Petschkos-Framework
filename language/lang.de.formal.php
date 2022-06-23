@@ -1,4 +1,5 @@
 <?php
+/** @noinspection AutoloadingIssuesInspection */
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
@@ -17,11 +18,11 @@ require_once(LANG_DIR . DS . 'lang.de.php');
  * Class LangDeFormal
  */
 class LangDeFormal extends LangDe {
-	public function getLanguageName() {
+	public function getLanguageName(): string {
 		return parent::getLanguageName() . ' (Sie)';
 	}
 
-	public function getAntiSpamMsgText() {
+	public function getAntiSpamMsgText(): string {
 		return 'Berechnen Sie %s %s %s: (Anti-Spam)';
 	}
 }

@@ -22,72 +22,72 @@ abstract class BaseDBTableModel {
 	 *
 	 * @var DB - DB (PDO) Object
 	 */
-	protected $db;
+	protected DB $db;
 
 	/**
 	 * Contains the Name of the Table
 	 *
 	 * @var string - Table Name
 	 */
-	protected $tableName;
+	protected string $tableName;
 
 	/**
 	 * Contains the names of all Table-fields at the Table
 	 *
-	 * @var array - Table Fields
+	 * @var string[] - Table Fields
 	 */
-	protected $tableFields;
+	protected array $tableFields;
 
 	/**
 	 * Contains the FieldName of the Primary Key
 	 *
 	 * @var string|null - Primary Key FieldName | null when no primary key exists
 	 */
-	protected $primaryKeyField = null;
+	protected ?string $primaryKeyField = null;
 
 	/**
 	 * Internal variable to check if the Table-Vars are already set
 	 *
 	 * @var bool - Is the Table setup done
 	 */
-	protected $tableSetupDone = false;
+	protected bool $tableSetupDone = false;
 
 	/**
 	 * Contains SQL-Cached Queries
 	 *
 	 * @var array - SQL-Statements
 	 */
-	protected $sqlCache = array();
+	protected array $sqlCache = [];
 
 	/**
 	 * Contains Query Objects
 	 *
 	 * @var null|array - Memory Objects | null if there are no more rows or not set
 	 */
-	protected $memoryObjects = null;
+	protected ?array $memoryObjects = null;
 
 	/**
 	 * Contains the next index of the Memory Objects Array
 	 *
 	 * @var int - Index number
 	 */
-	protected $memoryIndex = 0;
+	protected int $memoryIndex = 0;
 
 	/**
 	 * Contains the number of results of the last Query
 	 *
 	 * @var int - Number of results (last Query)
 	 */
-	protected $memoryCount = 0;
+	protected int $memoryCount = 0;
 
 	/**
 	 * BaseModel constructor.
 	 *
-	 * @param string $dbConName - Database PDO-Object Name | null if connection is assigned
+	 * @param string|null $dbConName - Database PDO-Object Name | null if connection is assigned
 	 * @throws Exception - Can't find connection to DB
 	 * @throws Exception - Table Info not set correct
 	 */
-	public function __construct($dbConName = null) {
+	public function __construct(?string $dbConName = null) {
 		// Set all info (Table-Name, fields etc)
 		$this->setTableInfo();
 
@@ -99,8 +99,9 @@ abstract class BaseDBTableModel {
 		}
 
 		// Sets the connection
-		if($this->getDb() === null)
+		if($this->getDb() === null) {
 			$this->setDb(DB::getConnection($dbConName));
+		}
 
 		// Check if all is correct
 		$this->checkIssetTableInfo();
@@ -110,36 +111,16 @@ abstract class BaseDBTableModel {
 	}
 
 	/**
-	 * Clears Memory
-	 */
-	public function __destruct() {
-		// Remove all Table-Fields
-		foreach($this->tableFields as $field)
-			unset($this->{$field});
-
-		// Unset Members
-		unset($this->db);
-		unset($this->tableName);
-		unset($this->tableFields);
-		unset($this->primaryKeyField);
-		unset($this->tableSetupDone);
-		unset($this->sqlCache);
-		unset($this->memoryObjects);
-		unset($this->memoryIndex);
-		unset($this->memoryCount);
-	}
-
-	/**
 	 * Sets the Table-Info
 	 */
-	protected abstract function setTableInfo();
+	abstract protected function setTableInfo(): void;
 
 	/**
 	 * Gets the Database PDO-Object
 	 *
 	 * @return DB - Database PDO-Object
 	 */
-	final protected function getDb() {
+	final protected function getDb(): DB {
 		return $this->db;
 	}
 
@@ -148,7 +129,7 @@ abstract class BaseDBTableModel {
 	 *
 	 * @param DB $db - Database PDO-Object
 	 */
-	final protected function setDb($db) {
+	final protected function setDb(DB $db): void {
 		$this->db = $db;
 	}
 
@@ -158,10 +139,11 @@ abstract class BaseDBTableModel {
 	 * @param string $statement - SQL-Statement
 	 * @return PDOStatement - PDOStatement object
 	 */
-	final protected function getSqlStatement($statement) {
+	final protected function getSqlStatement(string $statement): PDOStatement {
 		// Add to cache if not exists
-		if(! isset($this->sqlCache[$statement]))
+		if(! isset($this->sqlCache[$statement])) {
 			$this->addSqlStatement($statement);
+		}
 
 		return $this->sqlCache[$statement];
 	}
@@ -171,7 +153,7 @@ abstract class BaseDBTableModel {
 	 *
 	 * @param string $statement - Statement
 	 */
-	final protected function addSqlStatement($statement) {
+	final protected function addSqlStatement(string $statement): void {
 		$this->sqlCache[$statement] = $this->getDb()->prepare($statement);
 	}
 
@@ -180,7 +162,7 @@ abstract class BaseDBTableModel {
 	 *
 	 * @return string - Table Name
 	 */
-	final protected function getTableName() {
+	final protected function getTableName(): string {
 		return $this->tableName;
 	}
 
@@ -189,25 +171,25 @@ abstract class BaseDBTableModel {
 	 *
 	 * @param string $tableName - Name of the Table
 	 */
-	final protected function setTableName($tableName) {
+	final protected function setTableName(string $tableName): void {
 		$this->tableName = $tableName;
 	}
 
 	/**
 	 * Get the Table Fields
 	 *
-	 * @return array - Table Fields
+	 * @return string[] - Table Fields
 	 */
-	final protected function getTableFields() {
+	final protected function getTableFields(): array {
 		return $this->tableFields;
 	}
 
 	/**
 	 * Sets the Table-Field Names
 	 *
-	 * @param array $tableFields - Field Names of the Table
+	 * @param string[] $tableFields - Field Names of the Table
 	 */
-	final protected function setTableFields($tableFields) {
+	final protected function setTableFields(array $tableFields): void {
 		$this->tableFields = $tableFields;
 	}
 
@@ -216,16 +198,16 @@ abstract class BaseDBTableModel {
 	 *
 	 * @return null|string - Field name of the Primary Key | null when no Key is set
 	 */
-	final protected function getPrimaryKeyField() {
+	final protected function getPrimaryKeyField(): ?string {
 		return $this->primaryKeyField;
 	}
 
 	/**
 	 * Sets the Field Name of the Primary-Key
 	 *
-	 * @param null|string $primaryKeyField - Field-Name of the Primary Key | null if none is set
+	 * @param string|null $primaryKeyField - Field-Name of the Primary Key | null if none is set
 	 */
-	final protected function setPrimaryKeyField($primaryKeyField) {
+	final protected function setPrimaryKeyField(?string $primaryKeyField): void {
 		$this->primaryKeyField = $primaryKeyField;
 	}
 
@@ -234,7 +216,7 @@ abstract class BaseDBTableModel {
 	 *
 	 * @return boolean - is the Table-Setup done
 	 */
-	final protected function isTableSetupDone() {
+	final protected function isTableSetupDone(): bool {
 		return $this->tableSetupDone;
 	}
 
@@ -243,7 +225,7 @@ abstract class BaseDBTableModel {
 	 *
 	 * @param boolean $tableSetupDone - Is Table-Setup done
 	 */
-	final protected function setTableSetupDone($tableSetupDone) {
+	final protected function setTableSetupDone(bool $tableSetupDone): void {
 		$this->tableSetupDone = $tableSetupDone;
 	}
 
@@ -252,7 +234,7 @@ abstract class BaseDBTableModel {
 	 *
 	 * @return array|null - Get the Memory Objects or null if none is set
 	 */
-	final protected function getMemoryObjects() {
+	final protected function getMemoryObjects(): ?array {
 		return $this->memoryObjects;
 	}
 
@@ -261,7 +243,7 @@ abstract class BaseDBTableModel {
 	 *
 	 * @param array|null $memoryObjects - Memory Objects or null if none
 	 */
-	final protected function setMemoryObjects($memoryObjects) {
+	final protected function setMemoryObjects(?array $memoryObjects): void {
 		$this->memoryObjects = $memoryObjects;
 	}
 
@@ -270,7 +252,7 @@ abstract class BaseDBTableModel {
 	 *
 	 * @param int $index - Index of the element
 	 */
-	final protected function deleteMemoryObject($index) {
+	final protected function deleteMemoryObject(int $index): void {
 		unset($this->memoryObjects[$index]);
 	}
 
@@ -279,7 +261,7 @@ abstract class BaseDBTableModel {
 	 *
 	 * @return int - Memory Index
 	 */
-	final protected function getMemoryIndex() {
+	final protected function getMemoryIndex(): int {
 		return $this->memoryIndex;
 	}
 
@@ -288,7 +270,7 @@ abstract class BaseDBTableModel {
 	 *
 	 * @param int $memoryIndex - Memory Index
 	 */
-	final protected function setMemoryIndex($memoryIndex) {
+	final protected function setMemoryIndex(int $memoryIndex): void {
 		$this->memoryIndex = $memoryIndex;
 	}
 
@@ -297,7 +279,7 @@ abstract class BaseDBTableModel {
 	 *
 	 * @return int - Memory Count
 	 */
-	final public function getMemoryCount() {
+	final public function getMemoryCount(): int {
 		return $this->memoryCount;
 	}
 
@@ -306,7 +288,7 @@ abstract class BaseDBTableModel {
 	 *
 	 * @param int $memoryCount - Memory Count
 	 */
-	final protected function setMemoryCount($memoryCount) {
+	final protected function setMemoryCount(int $memoryCount): void {
 		$this->memoryCount = $memoryCount;
 	}
 
@@ -316,23 +298,25 @@ abstract class BaseDBTableModel {
 	 * @param string $field - Field Name
 	 * @return bool - Exists field
 	 */
-	final protected function existField($field) {
-		if(in_array($field, $this->getTableFields()))
+	final protected function existField(string $field): bool {
+		if(in_array($field, $this->getTableFields())) {
 			return true;
+		}
 
 		return false;
 	}
 
 	/**
-	 * Checks and may assign the input Field if its set to PK-Field and if the assigned Field exists at the Table
+	 * Checks and may assign the input Field if it's set to PK-Field and if the assigned Field exists at the Table
 	 *
-	 * @param string|null $field - Field Name or null if use PK
+	 * @param string|null $field - Field Name or null to use PK
 	 * @return null|string - Field Name if all is ok or null if Field doesn't exists at the Table
 	 */
-	final protected function checkFieldInput($field) {
+	final protected function checkFieldInput(?string $field): ?string {
 		// Get the default Field
-		if($field === null)
+		if($field === null) {
 			$field = $this->getPrimaryKeyField();
+		}
 
 		// Add error if field doesn't exists
 		if(! $this->existField($field)) {
@@ -349,32 +333,33 @@ abstract class BaseDBTableModel {
 	 *
 	 * @throws Exception - Table Info not set correct
 	 */
-	final protected function checkIssetTableInfo() {
-		if(! isset($this->tableName) || ! isset($this->tableFields))
+	final protected function checkIssetTableInfo(): void {
+		if(! isset($this->tableName, $this->tableFields)) {
 			SQLError::addError('Table info is not set correctly!');
-
-		if(! is_array($this->tableFields) || ! is_string($this->tableName))
-			SQLError::addError('Table info var(s) has wrong data types!');
+		}
 
 		// Check if primary key exists
 		if($this->primaryKeyField !== null) {
-			if(! $this->existField($this->primaryKeyField))
+			if(! $this->existField($this->primaryKeyField)) {
 				SQLError::addError('Primary-Key-Field doesn\'t exists');
+			}
 		}
 
 		// Check if table exists
-		if(! $this->getDb()->tableExists($this->tableName))
+		if(! $this->getDb()->tableExists($this->tableName)) {
 			SQLError::addError('Table ' . $this->tableName . ' doesn\'t exists!');
+		}
 
 		// Throw Exception on error
-		if(SQLError::isError())
+		if(SQLError::isError()) {
 			throw new Exception('Table-Info is not correctly set! (See SQLError): ' . SQLError::printError());
+		}
 	}
 
 	/**
 	 * Clears the Memory about the unused rows
 	 */
-	protected function clearMemory() {
+	protected function clearMemory(): void {
 		// Remove the old memory objects
 		$this->setMemoryObjects(null);
 
@@ -388,9 +373,10 @@ abstract class BaseDBTableModel {
 	 *
 	 * @return bool - true if next row get | false if there isn't a next row
 	 */
-	public function nextRow() {
-		if($this->getMemoryObjects() === null)
+	public function nextRow(): bool {
+		if($this->getMemoryObjects() === null) {
 			return false;
+		}
 
 		if(! isset($this->getMemoryObjects()[$this->getMemoryIndex()])) {
 			$this->clearMemory();
@@ -401,8 +387,9 @@ abstract class BaseDBTableModel {
 		$obj = $this->getMemoryObjects()[$this->getMemoryIndex()];
 
 		// Set the next row to this object
-		foreach($this->getTableFields() as $field)
+		foreach($this->getTableFields() as $field) {
 			$this->{$field} = $obj->{$field};
+		}
 
 		// Remove the old object and increase counter
 		$this->deleteMemoryObject($this->getMemoryIndex());
@@ -416,25 +403,27 @@ abstract class BaseDBTableModel {
 	 *
 	 * @param array $results - Query Results
 	 */
-	protected function saveToMemory($results) {
+	protected function saveToMemory(array $results): void {
 		// Don't do anything if result is empty
 		if($this->getMemoryCount() > 0) {
 
 			// Set the first row to the model
-			foreach($this->getTableFields() as $field)
+			foreach($this->getTableFields() as $field) {
 				$this->{$field} = $results[0][$field];
+			}
 
 			// Save all other row into the memory
 			if($this->getMemoryCount() > 1) {
-				$obj = array();
-				$class = get_called_class();
+				$obj = [];
+				$class = static::class;
 
 				// Proceed every row
 				for($i = 1; $i < $this->getMemoryCount(); $i++) {
 					$obj[$i - 1] = new $class($this->getDb()->getName());
 
-					foreach($this->getTableFields() as $field)
+					foreach($this->getTableFields() as $field) {
 						$obj[$i - 1]->{$field} = $results[$i][$field];
+					}
 				}
 
 				// Save to memory
@@ -448,7 +437,7 @@ abstract class BaseDBTableModel {
 	 *
 	 * @return int - Number of Total-Records
 	 */
-	final public function countTotalRows() {
+	final public function countTotalRows(): int {
 		// Clear the old query
 		$this->clearMemory();
 
@@ -471,11 +460,13 @@ abstract class BaseDBTableModel {
 		// Save query and close
 		$sth->closeCursor();
 
-		if(count($result) < 1)
+		if(count($result) < 1) {
 			return 0;
+		}
 
-		if(isset($result[0]['count(*)']))
+		if(isset($result[0]['count(*)'])) {
 			return (int) $result[0]['count(*)'];
+		}
 
 		return 0;
 	}
@@ -485,7 +476,7 @@ abstract class BaseDBTableModel {
 	 *
 	 * @return bool - true on success else false
 	 */
-	final public function optimizeTable() {
+	final public function optimizeTable(): bool {
 		$sth = $this->getSqlStatement('OPTIMIZE TABLE ' . $this->getTableName() . ';');
 
 		try {
@@ -498,7 +489,7 @@ abstract class BaseDBTableModel {
 
 		$sth->closeCursor();
 
-		return ($status) ? true : false;
+		return (bool) $status;
 	}
 
 	/**
@@ -506,20 +497,21 @@ abstract class BaseDBTableModel {
 	 *
 	 * On fail null
 	 */
-	final protected function getPkValueByFields() {
+	final protected function getPkValueByFields(): void {
 		// Exit if PK is not set
-		if($this->getPrimaryKeyField() === null)
+		if($this->getPrimaryKeyField() === null) {
 			return;
+		}
 
 		// Create WHERE String
-		$whereSQL = array();
-		$fieldValues = array();
+		$whereSQL = [];
+		$fieldValues = [];
 
 		foreach($this->getTableFields() as $field) {
-			if($field != $this->getPrimaryKeyField()) {
-				if($this->{$field} === null)
+			if($field !== $this->getPrimaryKeyField()) {
+				if($this->{$field} === null) {
 					$whereSQL[] = $field . ' IS NULL';
-				else {
+				} else {
 					$whereSQL[] = $field . '=:where' . $field;
 					$fieldValues['where' . $field] = $this->{$field};
 				}
@@ -534,8 +526,9 @@ abstract class BaseDBTableModel {
 		$sth = $this->getSqlStatement($sql);
 
 		// Bind Values
-		foreach($fieldValues as $key => &$value)
+		foreach($fieldValues as $key => $value) {
 			$sth->bindValue($key, $value, DB::getDataType($value));
+		}
 
 		// Execute
 		try {
@@ -564,29 +557,31 @@ abstract class BaseDBTableModel {
 	/**
 	 * Get one or more Data Rows
 	 * You can choose by which term they get selected
-	 * The result will stored into the model
+	 * The result will be stored into the model
 	 *
 	 * @param mixed $value - Value of the Field
 	 * @param string|null $byField - Target Field | null uses Primary-Key
 	 * @param string $operator - Operator which is used to compare the value and the Field
 	 */
-	public function getBy($value, $byField = null, $operator = DB::OPERATOR_EQUALS) {
+	public function getBy($value, ?string $byField = null, string $operator = DB::OPERATOR_EQUALS): void {
 		// Clear the old query
 		$this->clearMemory();
 
 		// Get Field
 		$byField = $this->checkFieldInput($byField);
-		if($byField === null)
+		if($byField === null) {
 			return;
+		}
 
 		// Prepare SQL-Statement
 		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE ' . $byField . $operator .
-			(($operator == DB::OPERATOR_IS_NULL || $operator == DB::OPERATOR_NOT_NULL) ? ';' : ':value;');
+			(($operator === DB::OPERATOR_IS_NULL || $operator === DB::OPERATOR_NOT_NULL) ? ';' : ':value;');
 		$sth = $this->getSqlStatement($sql);
 
 		// Bind Value
-		if($operator != DB::OPERATOR_IS_NULL && $operator != DB::OPERATOR_NOT_NULL)
+		if($operator !== DB::OPERATOR_IS_NULL && $operator !== DB::OPERATOR_NOT_NULL) {
 			$sth->bindValue('value', $value, DB::getDataType($value));
+		}
 
 		// Execute
 		try {
@@ -615,23 +610,25 @@ abstract class BaseDBTableModel {
 	 * @param string $operator - Compare Operator
 	 * @return bool - true on success else false
 	 */
-	public function deleteBy($value, $byField = null, $operator = DB::OPERATOR_EQUALS) {
+	public function deleteBy($value, ?string $byField = null, string $operator = DB::OPERATOR_EQUALS): bool {
 		// Clear the old query
 		$this->clearMemory();
 
 		// Get Field
 		$byField = $this->checkFieldInput($byField);
-		if($byField === null)
+		if($byField === null) {
 			return false;
+		}
 
 		// Prepare SQL-Statement
 		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE ' . $byField . $operator .
-			(($operator == DB::OPERATOR_IS_NULL || $operator == DB::OPERATOR_NOT_NULL) ? ';' : ':value;');
+			(($operator === DB::OPERATOR_IS_NULL || $operator === DB::OPERATOR_NOT_NULL) ? ';' : ':value;');
 		$sth = $this->getSqlStatement($sql);
 
 		// Bind Value
-		if($operator != DB::OPERATOR_IS_NULL && $operator != DB::OPERATOR_NOT_NULL)
+		if($operator !== DB::OPERATOR_IS_NULL && $operator !== DB::OPERATOR_NOT_NULL) {
 			$sth->bindValue('value', $value, DB::getDataType($value));
+		}
 
 		// Execute
 		try {
@@ -643,8 +640,9 @@ abstract class BaseDBTableModel {
 		}
 
 		$sth->closeCursor();
-		if($success)
+		if($success) {
 			return true;
+		}
 
 		return false;
 	}
@@ -654,17 +652,17 @@ abstract class BaseDBTableModel {
 	 *
 	 * @return bool - true on success else false
 	 */
-	public function deleteByThis() {
+	public function deleteByThis(): bool {
 		// Clear old Memory
 		$this->clearMemory();
 
 		// Prepare SQL-Statement
-		$whereSQL = array();
-		$deleteFields = array();
+		$whereSQL = [];
+		$deleteFields = [];
 		foreach($this->getTableFields() as $field) {
-			if($this->{$field} === null)
+			if($this->{$field} === null) {
 				$whereSQL[] = $field . ' IS NULL';
-			else {
+			} else {
 				$whereSQL[] = $field . '=:' . $field;
 				$deleteFields[$field] = $this->{$field};
 			}
@@ -674,8 +672,9 @@ abstract class BaseDBTableModel {
 		$sth = $this->getSqlStatement($sql);
 
 		// Bind Values
-		foreach($deleteFields as $key => &$value)
+		foreach($deleteFields as $key => $value) {
 			$sth->bindValue($key, $value, DB::getDataType($value));
+		}
 
 		// Execute
 		try {
@@ -687,8 +686,9 @@ abstract class BaseDBTableModel {
 		}
 
 		$sth->closeCursor();
-		if($success)
+		if($success) {
 			return true;
+		}
 
 		return false;
 	}
@@ -700,21 +700,22 @@ abstract class BaseDBTableModel {
 	 * @param string|null $byField - Target Field | null uses Primary-Key
 	 * @return bool - true on success else false
 	 */
-	public function updateBy($value, $byField = null) {
+	public function updateBy($value, ?string $byField = null): bool {
 		// Clear the old query
 		$this->clearMemory();
 
 		// Get Field
 		$byField = $this->checkFieldInput($byField);
-		if($byField === null)
+		if($byField === null) {
 			return false;
+		}
 
 		// Prepare SQL-Statement
-		$sqlFields = array();
-		$setSQL = array();
+		$sqlFields = [];
+		$setSQL = [];
 
 		foreach($this->getTableFields() as $field) {
-			if($byField != $field) {
+			if($byField !== $field) {
 				$setSQL[] = $field . '=:' . $field;
 				$sqlFields[$field] = $this->{$field};
 			}
@@ -725,10 +726,12 @@ abstract class BaseDBTableModel {
 		$sth = $this->getSqlStatement($sql);
 
 		// Bind Values
-		if($value !== null)
+		if($value !== null) {
 			$sth->bindValue('value', $value, DB::getDataType($value));
-		foreach($sqlFields as $key => &$value)
-			$sth->bindValue($key, $value, DB::getDataType($value));
+		}
+		foreach($sqlFields as $key => $val) {
+			$sth->bindValue($key, $val, DB::getDataType($val));
+		}
 
 		// Execute
 		try {
@@ -740,8 +743,9 @@ abstract class BaseDBTableModel {
 		}
 
 		$sth->closeCursor();
-		if($success)
+		if($success) {
 			return true;
+		}
 
 		return false;
 	}
@@ -749,7 +753,7 @@ abstract class BaseDBTableModel {
 	/**
 	 * Get all Data rows
 	 */
-	public function getAll() {
+	public function getAll(): void {
 		// Clear the old query
 		$this->clearMemory();
 
@@ -781,16 +785,15 @@ abstract class BaseDBTableModel {
 	 * @param int $limit - Max Rows
 	 * @param int|null $start - Start Row | null use the default start value
 	 */
-	public function get($limit = 1, $start = null) {
+	public function get(int $limit = 1, ?int $start = null): void {
 		// Clear the old query
 		$this->clearMemory();
 
-		if(! is_int($limit))
-			SQLError::addError('LIMIT must be an Integer Value!');
-
-		if($start !== null)
-			if(! is_int($start))
+		if($start !== null) {
+			if(! is_int($start)) {
 				SQLError::addError('START must be null or an Integer Value!');
+			}
+		}
 
 		if(SQLError::isError())
 			return;
@@ -824,25 +827,28 @@ abstract class BaseDBTableModel {
 	 * @param bool $ignorePK - Ignore the Primary Key-Value (Example needed for auto-increment)
 	 * @return bool - true on success else false
 	 */
-	public function save($ignorePK = true) {
+	public function save(bool $ignorePK = true): bool {
 		// Clear the old query
 		$this->clearMemory();
 
-		if($this->getPrimaryKeyField() === null)
+		if($this->getPrimaryKeyField() === null) {
 			$ignorePK = false;
+		}
 
 		$fields = $this->getTableFields();
 
-		if($ignorePK)
+		if($ignorePK) {
 			$fields = array_slice($fields, array_search($this->getPrimaryKeyField(), $fields));
+		}
 
 		// Prepare SQL-Statement
 		$sql = 'INSERT INTO ' . $this->getTableName() . '(' . implode(', ', $fields) . ') VALUES (:' . implode(', :', $fields) . ');';
 		$sth = $this->getSqlStatement($sql);
 
 		// Bind Values
-		foreach($fields as $field)
+		foreach($fields as $field) {
 			$sth->bindValue($field, $this->{$field}, DB::getDataType($this->{$field}));
+		}
 
 		// Execute
 		try {
@@ -856,11 +862,13 @@ abstract class BaseDBTableModel {
 		$sth->closeCursor();
 
 		// Get last insert ID only if ignore PK
-		if($ignorePK)
+		if($ignorePK) {
 			$this->getPkValueByFields();
+		}
 
-		if($success)
+		if($success) {
 			return true;
+		}
 
 		return false;
 	}
@@ -869,17 +877,18 @@ abstract class BaseDBTableModel {
 	 * Deletes the current Data-Row depending on the current Model values
 	 * null uses the Primary-Key as Target
 	 *
-	 * @param null|string $byField - Target Field Name or null if use PK-Field as target
+	 * @param string|null $byField - Target Field Name or null if use PK-Field as target
 	 * @return bool - true on success else false
 	 */
-	public function delete($byField = null) {
+	public function delete(?string $byField = null): bool {
 		// Clear the old query
 		$this->clearMemory();
 
 		// Get Field
 		$byField = $this->checkFieldInput($byField);
-		if($byField === null)
+		if($byField === null) {
 			return false;
+		}
 
 		// Prepare SQL-Statement
 		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE ' . $byField .
@@ -887,8 +896,9 @@ abstract class BaseDBTableModel {
 		$sth = $this->getSqlStatement($sql);
 
 		// Bind Value
-		if($this->{$byField} !== null)
+		if($this->{$byField} !== null) {
 			$sth->bindValue('value', $this->{$byField}, DB::getDataType($this->{$byField}));
+		}
 
 		// Execute
 		try {
@@ -900,21 +910,22 @@ abstract class BaseDBTableModel {
 		}
 
 		$sth->closeCursor();
-		if($success)
+		if($success) {
 			return true;
+		}
 
 		return false;
 	}
 
 	/**
 	 * Update the current Data-Row with the Model values
-	 * null uses the the Primary-Key as Target
+	 * null uses the Primary-Key as Target
 	 *
-	 * @param null|string $byField - Target Field Name or null if use PK-Field as target
+	 * @param string|null $byField - Target Field Name or null if use PK-Field as target
 	 * @return bool - true on success else false
 	 */
-	public function update($byField = null) {
-		$fieldValues = array();
+	public function update(?string $byField = null): bool {
+		$fieldValues = [];
 
 		// Clear the old query
 		$this->clearMemory();
@@ -922,12 +933,13 @@ abstract class BaseDBTableModel {
 		// Get Field & prepare SQL-Statement
 		$byField = $this->checkFieldInput($byField);
 		if($byField === null) {
-			$whereSQL = array();
-			//If PK doesn't exists and field is not set check ALL values if ALL are the same then update
+			$whereSQL = [];
+
+			// If PK doesn't exist and field is not set check ALL values if ALL are the same then update
 			foreach($this->getTableFields() as $field) {
-				if($this->{$field} === null)
+				if($this->{$field} === null) {
 					$whereSQL[] = $field . ' IS NULL';
-				else {
+				} else {
 					$whereSQL[] = $field . '=:where' . $field;
 					$fieldValues['where' . $field] = $this->{$field};
 				}
@@ -940,7 +952,7 @@ abstract class BaseDBTableModel {
 			$fieldValues['where' . $byField] = $this->{$byField};
 		}
 
-		$setSQL = array();
+		$setSQL = [];
 		foreach($this->getTableFields() as $field) {
 			$setSQL[] = $field . '=:set' . $field;
 			$fieldValues['set' . $field] = $this->{$field};
@@ -950,8 +962,9 @@ abstract class BaseDBTableModel {
 		$sth = $this->getSqlStatement($sql);
 
 		// Bind Values
-		foreach($fieldValues as $key => &$value)
+		foreach($fieldValues as $key => $value) {
 			$sth->bindValue($key, $value, DB::getDataType($value));
+		}
 
 		// Execute
 		try {
@@ -963,8 +976,9 @@ abstract class BaseDBTableModel {
 		}
 
 		$sth->closeCursor();
-		if($success)
+		if($success) {
 			return true;
+		}
 
 		return false;
 	}
@@ -973,9 +987,9 @@ abstract class BaseDBTableModel {
 	 * Get the Row with the max value by the specified field
 	 * null uses Primary key (the highest value)
 	 *
-	 * @param null|string $byMaxField - FieldName to get the max value row
+	 * @param string|null $byMaxField - FieldName to get the max value row
 	 */
-	public function getMaxFieldValueRow($byMaxField = null) {
+	public function getMaxFieldValueRow(?string $byMaxField = null): void {
 		// Clear the old query
 		$this->clearMemory();
 
@@ -995,12 +1009,13 @@ abstract class BaseDBTableModel {
 		}
 
 		// Get the Result(s) and save only the first row
-		$saveResult = array();
+		$saveResult = [];
 		$result = $sth->fetchAll(PDO::FETCH_ASSOC);
 
 		$this->setMemoryCount((count($result) > 0) ? 1 : 0);
-		if(count($result) > 0)
+		if(count($result) > 0) {
 			$saveResult[0] = $result[0];
+		}
 
 		// Save query and close
 		$this->saveToMemory($saveResult);
@@ -1012,7 +1027,7 @@ abstract class BaseDBTableModel {
 	 *
 	 * @return bool - true on success else false
 	 */
-	public function clearTable() {
+	public function clearTable(): bool {
 		// Clear old Memory
 		$this->clearMemory();
 
@@ -1028,8 +1043,9 @@ abstract class BaseDBTableModel {
 		}
 
 		$sth->closeCursor();
-		if($success)
+		if($success) {
 			return true;
+		}
 
 		return false;
 	}
@@ -1039,7 +1055,7 @@ abstract class BaseDBTableModel {
 	 *
 	 * @return string - Current-Timestamp
 	 */
-	public static function current_timestamp() {
-		return date('Y-m-d H:i:s', time());
+	public static function current_timestamp(): string {
+		return date('Y-m-d H:i:s');
 	}
 }

@@ -30,12 +30,8 @@ defined('BASE_DIR') or die('Invalid File-Access');
 
 		?>
 		<script>
-			<!--
-
 			// Get Language strings
 			var lang = new Lang();
-
-			// -->
 		</script>
 
 		<?php

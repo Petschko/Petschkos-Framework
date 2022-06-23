@@ -23,16 +23,16 @@ class SQLError {
 	 * The error Messages can be stored here before printing them
 	 * If there is no error this var will is "unset"
 	 *
-	 * @var array - Error Message
+	 * @var string[] - Error Message
 	 */
-	private static $error;
+	private static array $error;
 
 	/**
 	 * Get the Error-Message
 	 *
-	 * @return array - Error-Message
+	 * @return string[] - Error-Message
 	 */
-	public static function getError() {
+	public static function getError(): array {
 		return self::$error;
 	}
 
@@ -41,7 +41,7 @@ class SQLError {
 	 *
 	 * @param string $error - Error-Message
 	 */
-	public static function addError($error) {
+	public static function addError(string $error): void {
 		self::$error[] = $error;
 	}
 
@@ -50,9 +50,10 @@ class SQLError {
 	 *
 	 * @return bool - is there an error
 	 */
-	public static function isError() {
-		if(! isset(self::$error))
+	public static function isError(): bool {
+		if(! isset(self::$error)) {
 			return false;
+		}
 
 		return true;
 	}
@@ -63,16 +64,19 @@ class SQLError {
 	 * @param bool $returnString - Return value as String (true) or print (false - default)
 	 * @return null|string - null if string is printed or empty else error-string with all errors
 	 */
-	public static function printError($returnString = false) {
+	public static function printError(bool $returnString = false): ?string {
 		$code = null;
 
-		foreach(self::getError() as $errMsg)
+		foreach(self::getError() as $errMsg) {
 			$code .= $errMsg . '<br />' . PHP_EOL;
+		}
 
-		if($returnString)
+		if($returnString) {
 			return $code;
-		else
-			echo $code;
+		}
+
+		echo $code;
+
 		return null;
 	}
 

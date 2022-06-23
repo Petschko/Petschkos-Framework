@@ -42,10 +42,11 @@ if($page === 'ajax') {
 
 	require_once(INCLUDE_DIR . DS . 'ajax.php');
 
-	if(Page::getPage() === 'ajax')
+	if(Page::getPage() === 'ajax') {
 		closePage();
-	else
+	} else {
 		$page = Page::getPage();
+	}
 }
 
 // Add CSS/JS-Files Files for every page; Also specify meta stuff title etc

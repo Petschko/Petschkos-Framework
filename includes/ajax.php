@@ -15,8 +15,9 @@ require_once(CLASS_DIR . DS . 'AjaxResponse.php');
 $response = new AjaxResponse();
 $action = '';
 
-if(isset($_GET['action']))
+if(isset($_GET['action'])) {
 	$action = $_GET['action'];
+}
 
 switch(mb_strtolower($action)) {
 	// add stuff here
@@ -27,7 +28,7 @@ switch(mb_strtolower($action)) {
 		$response = getNewMathQuestion();
 		break;
 	default:
-		$response->addMessage('Ungültiger Modus!');
+		$response->addMessage(Language::out()->getInvalidAjaxModusText());
 		$response->setSuccess(false);
 }
 
@@ -38,8 +39,9 @@ if(isset($_POST['origin'])) {
 	Page::setPage($origin);
 	Page::setAjaxResponse($response);
 	unset($_GET['action']);
-} else
+} else {
 	$response->printThisJson();
+}
 
 /**
  * Set the Cookie which saves if the user accept/deny Cookies
@@ -48,8 +50,9 @@ if(isset($_POST['origin'])) {
  */
 function cookieAccepting() {
 	$accept = false;
-	if(isset($_POST['cookie-policy']))
+	if(isset($_POST['cookie-policy'])) {
 		$accept = $_POST['cookie-policy'];
+	}
 
 	$accept = $accept === 'accept';
 
@@ -63,14 +66,15 @@ function cookieAccepting() {
  *
  * @return AjaxResponse
  */
-function getNewMathQuestion() {
+function getNewMathQuestion(): AjaxResponse {
 	$response = new AjaxResponse();
-	if(! isset($_POST['formId']))
+	if(! isset($_POST['formId'])) {
 		$_POST['formId'] = null;
+	}
 
 	if(Config::enableAntiSpam) {
 		if(empty($_POST['formId'])) {
-			$response->setMessage('Es wurde keine Form-ID angegeben!');
+			$response->setMessage(Language::out()->getAntiSpamMissingFormIdText());
 
 			return $response;
 		}
@@ -85,7 +89,7 @@ function getNewMathQuestion() {
 		return $response;
 	}
 
-	$response->setMessage('Anti-Spam ist deaktiviert!');
+	$response->setMessage(Language::out()->getAntiSpamDisabledText());
 
 	return $response;
 }

@@ -23,10 +23,11 @@ defined('BASE_DIR') or die('Invalid File-Access');
 		<!-- Add content -->
 		<div id="content" class="full">
 			<?php
-				if(file_exists(TEMPLATE_DIR . DS . Page::getViewFile()))
+				if(file_exists(TEMPLATE_DIR . DS . Page::getViewFile())) {
 					require_once(TEMPLATE_DIR . DS . Page::getViewFile());
-				else
+				} else {
 					require_once(TEMPLATE_DIR . DS . 'system' . DS . '404.php');
+				}
 				echo PHP_EOL;
 			?>
 		</div>

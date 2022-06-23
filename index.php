@@ -8,15 +8,17 @@
  * Notes: -
  */
 
-// Define main Constance's
-define('BASE_DIR', dirname(__FILE__));
-define('DS', DIRECTORY_SEPARATOR);
+// Define main Constants
+const BASE_DIR = __DIR__;
+const DS = DIRECTORY_SEPARATOR;
 
 // Setup error_error reporting
-if(! file_exists(BASE_DIR . DS . "__DEBUG__"))
-	error_reporting(0); // Turn off ALL error reporting while live
-else
+if(! file_exists(BASE_DIR . DS . '__DEBUG__')) {
+	error_reporting(0);
+} else {
+	// Turn off ALL error reporting while live
 	error_reporting(E_ALL);
+}
 
 // Construct the page
 require_once(BASE_DIR . DS . 'includes' . DS . 'framework.php');

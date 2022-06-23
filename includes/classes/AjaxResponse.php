@@ -17,17 +17,17 @@ class AjaxResponse {
 	/**
 	 * @var bool $success
 	 */
-	public $success;
+	public bool $success;
 
 	/**
 	 * @var string $message
 	 */
-	public $message;
+	public string $message;
 
 	/**
 	 * @var null|string $extraInfo
 	 */
-	public $extraInfo = null;
+	public ?string $extraInfo = null;
 
 	/**
 	 * AjaxResponse constructor.
@@ -35,59 +35,50 @@ class AjaxResponse {
 	 * @param string $message
 	 * @param bool $success
 	 */
-	public function __construct($message = '', $success = false) {
+	public function __construct(string $message = '', bool $success = false) {
 		$this->message = $message;
 		$this->success = $success;
 	}
 
 	/**
-	 * Clears Memory
-	 */
-	public function __destruct() {
-		unset($this->success);
-		unset($this->message);
-		unset($this->extraInfo);
-	}
-
-	/**
 	 * @return bool
 	 */
-	public function isSuccess() {
+	public function isSuccess(): bool {
 		return $this->success;
 	}
 
 	/**
 	 * @param bool $success
 	 */
-	public function setSuccess($success) {
+	public function setSuccess(bool $success): void {
 		$this->success = $success;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getMessage() {
+	public function getMessage(): string {
 		return $this->message;
 	}
 
 	/**
 	 * @param string $message
 	 */
-	public function setMessage($message) {
+	public function setMessage(string $message): void {
 		$this->message = $message;
 	}
 
 	/**
 	 * @return null|string
 	 */
-	public function getExtraInfo() {
+	public function getExtraInfo(): ?string {
 		return $this->extraInfo;
 	}
 
 	/**
-	 * @param null|string $extraInfo
+	 * @param string|null $extraInfo
 	 */
-	public function setExtraInfo($extraInfo) {
+	public function setExtraInfo(?string $extraInfo): void {
 		$this->extraInfo = $extraInfo;
 	}
 
@@ -96,17 +87,18 @@ class AjaxResponse {
 	 *
 	 * @param string $message
 	 */
-	public function addMessage($message) {
-		if(mb_strlen($this->message) < 1)
+	public function addMessage(string $message): void {
+		if($this->message === '') {
 			$this->setMessage($message);
-		else
+		} else {
 			$this->message .= '<br />' . $message;
+		}
 	}
 
 	/**
 	 * Encode this Object to JSON and Print it
 	 */
-	public function printThisJson() {
+	public function printThisJson(): void {
 		echo json_encode($this);
 	}
 }

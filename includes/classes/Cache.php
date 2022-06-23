@@ -17,37 +17,37 @@ class Cache {
 	/**
 	 * @var string $pageName - Name of the Page (Used as identifier)
 	 */
-	private $pageName;
+	private string $pageName;
 
 	/**
 	 * @var string $filename - Filename
 	 */
-	private $fileName;
+	private string $fileName;
 
 	/**
 	 * @var string $cacheDir - Cache Directory
 	 */
-	private $cacheDir;
+	private string $cacheDir;
 
 	/**
 	 * @var string $originScript - Origin Script which creates the File
 	 */
-	private $originScript;
+	private string $originScript;
 
 	/**
 	 * @var null|int $createdTimeStamp - Created on Timestamp | null if not exists
 	 */
-	private $createdTimeStamp = null;
+	private ?int $createdTimeStamp = null;
 
 	/**
 	 * @var int $lifeTimeSec - Seconds before creating a new Cache-File
 	 */
-	private $lifeTimeSec = 86400;
+	private int $lifeTimeSec = 86400;
 
 	/**
 	 * @var string $extension - Extension of the Cache-File
 	 */
-	private $extension = 'php';
+	private string $extension = 'php';
 
 	/**
 	 * Cache constructor.
@@ -59,27 +59,32 @@ class Cache {
 	 * @param string|null $cacheExtension - Specify the Cache-Extension or null for default (PHP) without starting "."
 	 * @throws Exception - Missing Required Values
 	 */
-	public function __construct($pageName, $cacheDir, $originScript, $lifeTimeSec = null, $cacheExtension = null) {
-		if(! $pageName || ! $cacheDir || ! $originScript)
+	public function __construct(string $pageName, string $cacheDir, string $originScript, ?int $lifeTimeSec = null, ?string $cacheExtension = null) {
+		if(! $pageName || ! $cacheDir || ! $originScript) {
 			throw new Exception(__CLASS__ . '->' . __FUNCTION__ . ': Please fill out all Values for the Cache!');
+		}
 
 		// Set Values
-		$this->setPageName((string) urlencode($pageName));
-		$this->setCacheDir((string) $cacheDir);
-		$this->setOriginScript((string) $originScript);
+		$this->setPageName(urlencode($pageName));
+		$this->setCacheDir($cacheDir);
+		$this->setOriginScript($originScript);
 
-		if($lifeTimeSec)
-			$this->setLifeTimeSec((int) $lifeTimeSec);
-		if($cacheExtension)
-			$this->setExtension((string) $cacheExtension);
+		if($lifeTimeSec) {
+			$this->setLifeTimeSec($lifeTimeSec);
+		}
+		if($cacheExtension) {
+			$this->setExtension($cacheExtension);
+		}
 
 		// Check if it's a dir
-		if(! is_dir($this->getCacheDir()))
+		if(! is_dir($this->getCacheDir())) {
 			throw new Exception(__CLASS__ . '->' . __FUNCTION__ . ': ' . $this->getCacheDir() . ' is not a Directory!');
+		}
 
 		// Check if OriginFile exists
-		if(! file_exists($this->getOriginScript()))
+		if(! file_exists($this->getOriginScript())) {
 			throw new Exception(__CLASS__ . '->' . __FUNCTION__ . ': Source-File "' . $this->getOriginScript() . '" doesn\'t exists.');
+		}
 
 		// Check if dir is Writable
 		if(! is_writable($this->getCacheDir())) {
@@ -91,131 +96,120 @@ class Cache {
 	}
 
 	/**
-	 * Clears Memory
-	 */
-	public function __destruct() {
-		unset($this->pageName);
-		unset($this->fileName);
-		unset($this->cacheDir);
-		unset($this->originScript);
-		unset($this->createdTimeStamp);
-		unset($this->lifeTimeSec);
-		unset($this->extension);
-	}
-
-	/**
 	 * @return null|string
 	 */
-	private function getPageName() {
+	private function getPageName(): ?string {
 		return $this->pageName;
 	}
 
 	/**
-	 * @param null|string $pageName
+	 * @param string|null $pageName
 	 */
-	private function setPageName($pageName) {
+	private function setPageName(?string $pageName): void {
 		$this->pageName = $pageName;
 	}
 
 	/**
 	 * @return string
 	 */
-	private function getFileName() {
+	private function getFileName(): string {
 		return $this->fileName;
 	}
 
 	/**
 	 * @param string $fileName
 	 */
-	private function setFileName($fileName) {
+	private function setFileName(string $fileName): void {
 		$this->fileName = $fileName;
 	}
 
 	/**
 	 * @return string
 	 */
-	private function getCacheDir() {
+	private function getCacheDir(): string {
 		return $this->cacheDir;
 	}
 
 	/**
 	 * @param string $cacheDir
 	 */
-	private function setCacheDir($cacheDir) {
+	private function setCacheDir(string $cacheDir): void {
 		$this->cacheDir = $cacheDir;
 	}
 
 	/**
 	 * @return string
 	 */
-	private function getOriginScript() {
+	private function getOriginScript(): string {
 		return $this->originScript;
 	}
 
 	/**
 	 * @param string $originScript
 	 */
-	private function setOriginScript($originScript) {
+	private function setOriginScript(string $originScript): void {
 		$this->originScript = $originScript;
 	}
 
 	/**
 	 * @return int|null
 	 */
-	private function getCreatedTimeStamp() {
+	private function getCreatedTimeStamp(): ?int {
 		return $this->createdTimeStamp;
 	}
 
 	/**
 	 * @param int|null $createdTimeStamp
 	 */
-	private function setCreatedTimeStamp($createdTimeStamp) {
+	private function setCreatedTimeStamp(?int $createdTimeStamp): void {
 		$this->createdTimeStamp = $createdTimeStamp;
 	}
 
 	/**
 	 * @return int
 	 */
-	private function getLifeTimeSec() {
+	private function getLifeTimeSec(): int {
 		return $this->lifeTimeSec;
 	}
 
 	/**
 	 * @param int $lifeTimeSec
 	 */
-	private function setLifeTimeSec($lifeTimeSec) {
+	private function setLifeTimeSec(int $lifeTimeSec): void {
 		$this->lifeTimeSec = $lifeTimeSec;
 	}
 
 	/**
 	 * @return string
 	 */
-	private function getExtension() {
+	private function getExtension(): string {
 		return $this->extension;
 	}
 
 	/**
 	 * @param string $extension
 	 */
-	private function setExtension($extension) {
+	private function setExtension(string $extension): void {
 		$this->extension = $extension;
 	}
 
 	/**
 	 * Runs the Cache
 	 */
-	private function runCache() {
+	private function runCache(): void {
 		$fileFound = $this->findFile();
 
-		if($fileFound === null)
+		if($fileFound === null) {
 			$this->deleteFile();
-		else if($fileFound && $this->getCreatedTimeStamp() === null)
+		} else if($fileFound && $this->getCreatedTimeStamp() === null) {
 			$this->setCreatedTimeStamp($this->detectFileTime());
+		}
 
 		$cacheDisplayed = $this->displayFile();
 
-		if(! $cacheDisplayed)
+		if(! $cacheDisplayed) {
 			$this->createFile();
+		}
 	}
 
 	/**
@@ -223,16 +217,18 @@ class Cache {
 	 *
 	 * @return bool|null - File Found or null if not readable
 	 */
-	private function findFile() {
-		if(! is_readable($this->getCacheDir()))
+	private function findFile(): ?bool {
+		if(! is_readable($this->getCacheDir())) {
 			return null;
+		}
 
-		$files = array();
+		$files = [];
 		$handle = opendir($this->getCacheDir());
 		if($handle !== false) {
 			while(($file = readdir($handle)) !== false) {
-				if(mb_substr($file, 0, mb_strlen($this->getPageName())) === $this->getPageName())
+				if(mb_substr($file, 0, mb_strlen($this->getPageName())) === $this->getPageName()) {
 					$files[] = $file;
+				}
 			}
 			closedir($handle);
 
@@ -241,8 +237,10 @@ class Cache {
 				$this->setFileName($files[0]);
 
 				return true;
-			} else if(count($files) > 1)
+			}
+			if(count($files) > 1) {
 				return $this->findCorrectFileFromFiles($files);
+			}
 		}
 
 		return false;
@@ -251,17 +249,17 @@ class Cache {
 	/**
 	 * Search the Correct file from the File-Array and assign it; It also assign the Time
 	 *
-	 * @param array $files - File-Array
+	 * @param string[] $files - File-Array
 	 * @return true - File found
 	 */
-	private function findCorrectFileFromFiles($files) {
+	private function findCorrectFileFromFiles(array $files): bool {
 		error_log(__CLASS__ . '->' . __FUNCTION__ . ': There are Multiple Cache-Files for this Page (' . $this->getPageName() . '). Please delete the old ones for faster load time of the Cache...');
 
-		$times = array();
-		foreach($files as &$file)
+		$times = [];
+		foreach($files as $file) {
 			$times[] = $this->detectFileTime($file);
+		}
 
-		unset($file);
 		rsort($times);
 
 		$this->setFileName($this->getPageName() . '_' . $times[0] . '.' . $this->getExtension());
@@ -273,8 +271,9 @@ class Cache {
 
 		error_log(__CLASS__ . '->' . __FUNCTION__ . ': Try to delete ' . ($fileCount - 1) . ' Files for you...');
 		for($i = 1; $i < $fileCount; $i++) {
-			if($this->deleteFile($this->getPageName() . '_' . $times[$i] . '.' . $this->getExtension()))
+			if($this->deleteFile($this->getPageName() . '_' . $times[$i] . '.' . $this->getExtension())) {
 				$success++;
+			}
 		}
 		error_log(__CLASS__ . '->' . __FUNCTION__ . ': Deleted ' . $success . '/' . ($fileCount - 1) . ' old Files for you!');
 
@@ -287,8 +286,8 @@ class Cache {
 	 * @param string|null $filename - Filename to get the Timestamp or null for using class File-Name
 	 * @return int - Time of the File-Name
 	 */
-	private function detectFileTime($filename = null) {
-		$filename = ($filename === null) ? $this->getFileName() : $filename;
+	private function detectFileTime(?string $filename = null): int {
+		$filename = $filename ?? $this->getFileName();
 
 		$separatorPos = mb_stripos($filename, '_', mb_strlen($this->getPageName()));
 
@@ -305,17 +304,19 @@ class Cache {
 	 *
 	 * @return bool - Cache-File has been loaded
 	 */
-	private function displayFile() {
+	private function displayFile(): bool {
 		if(! $this->getFileName())
 			return false;
 
 		$file = $this->getCacheDir() . $this->getFileName();
 		if(file_exists($file)) {
-			if(! is_readable($file) || ! is_file($file))
+			if(! is_readable($file) || ! is_file($file)) {
 				return false;
+			}
 
-			if($this->getCreatedTimeStamp() + $this->getLifeTimeSec() < time())
+			if($this->getCreatedTimeStamp() + $this->getLifeTimeSec() < time()) {
 				return false;
+			}
 
 			require_once($file);
 			return true;
@@ -327,7 +328,7 @@ class Cache {
 	/**
 	 * Creates a new Cache-File with the Origin Script
 	 */
-	private function createFile() {
+	private function createFile(): void {
 		// Delete Old File
 		$this->deleteFile();
 
@@ -342,8 +343,9 @@ class Cache {
 		ob_end_flush();
 
 		// Check if new File-Name is free
-		if(file_exists($this->getCacheDir() . $newFilename))
+		if(file_exists($this->getCacheDir() . $newFilename)) {
 			return;
+		}
 
 		// Save to File
 		file_put_contents($this->getCacheDir() . $newFilename, $htmlContent);
@@ -352,14 +354,15 @@ class Cache {
 	/**
 	 * Safely Deletes a File
 	 *
-	 * @param null|string $filename - Specific file in the Cache to delete or null for class File-Name
+	 * @param string|null $filename - Specific file in the Cache to delete or null for class File-Name
 	 * @return bool|null - False if the File was not deleted else true and null if file does not exists or no name is specified
 	 */
-	private function deleteFile($filename = null) {
-		$filename = ($filename === null) ? $this->getFileName() : $filename;
+	private function deleteFile(?string $filename = null): ?bool {
+		$filename = $filename ?? $this->getFileName();
 
-		if(! $filename)
+		if(! $filename) {
 			return null;
+		}
 
 		$file = $this->getCacheDir() . $filename;
 
@@ -369,8 +372,9 @@ class Cache {
 					error_log(__CLASS__ . '->' . __FUNCTION__ . ': Can\'t delete Cache-File "' . $file . '"...');
 
 					return false;
-				} else
-					return true;
+				}
+
+				return true;
 			}
 		}
 

@@ -20,56 +20,56 @@ class DB extends PDO {
 	/**
 	 * Used for SQL-Statements (Equals-Operator)
 	 */
-	const OPERATOR_EQUALS = '=';
+	public const OPERATOR_EQUALS = '=';
 
 	/**
 	 * Used for SQL-Statements (Greater than-Operator)
 	 */
-	const OPERATOR_GREATER_THAN = '>';
+	public const OPERATOR_GREATER_THAN = '>';
 
 	/**
 	 * Used for SQL-Statements (Greater than or Equal-Operator)
 	 */
-	const OPERATOR_GREATER_EQUAL_THAN = '>=';
+	public const OPERATOR_GREATER_EQUAL_THAN = '>=';
 
 	/**
 	 * Used for SQL-Statements (Less than-Operator)
 	 */
-	const OPERATOR_LESS_THAN = '<';
+	public const OPERATOR_LESS_THAN = '<';
 
 	/**
 	 * Used for SQL-Statements (Less than or Equal-Operator)
 	 */
-	const OPERATOR_LESS_EQUAL_THAN = '<=';
+	public const OPERATOR_LESS_EQUAL_THAN = '<=';
 
 	/**
 	 * Used for SQL-Statements (NOT-Operator)
 	 */
-	const OPERATOR_NOT_EQUALS = ' NOT ';
+	public const OPERATOR_NOT_EQUALS = ' NOT ';
 
 	/**
 	 * Used for SQL-Statements (IS NULL-Operator)
 	 */
-	const OPERATOR_IS_NULL = ' IS NULL';
+	public const OPERATOR_IS_NULL = ' IS NULL';
 
 	/**
 	 * Used for SQL-Statements (IS NOT NULL-Operator)
 	 */
-	const OPERATOR_NOT_NULL = ' IS NOT NULL';
+	public const OPERATOR_NOT_NULL = ' IS NOT NULL';
 
 	/**
 	 * Var that holds all connection Objects
 	 *
-	 * @var array - Connection Objects
+	 * @var self[] - Connection Objects
 	 */
-	private static $connection = array();
+	private static array $connection = [];
 
 	/**
 	 * Name of the DB-Connection
 	 *
 	 * @var string - Name of the Connection
 	 */
-	private $name;
+	private string $name;
 
 	/**
 	 * DB constructor.
@@ -80,7 +80,7 @@ class DB extends PDO {
 	 * @param string $password - Database User Password
 	 * @param array|null $options - PDO Options
 	 */
-	public function __construct($name, $dsn, $username, $password, $options = null) {
+	public function __construct(string $name, string $dsn, string $username, string $password, ?array $options = null) {
 		try {
 			parent::__construct($dsn, $username, $password, $options);
 		} catch(PDOException $e) {
@@ -88,9 +88,9 @@ class DB extends PDO {
 			return;
 		}
 
-		parent::setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-		parent::setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
-		parent::setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$this->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$this->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
+		$this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 		self::setConnection($name, $this);
 		$this->setName($name);
@@ -100,16 +100,17 @@ class DB extends PDO {
 	 * Destruct method
 	 */
 	public function __destruct() {
-		unset($this->name);
+		self::close($this->name);
 	}
 
 	/**
-	 * Closes a DB Connection
+	 * Closes a DB Connection and removes it from the connection array
 	 *
 	 * @param string $name - Name of the connection to close
 	 */
-	public static function close($name) {
+	public static function close(string $name): void {
 		self::setConnection($name, null);
+		unset(self::$connection[$name]);
 	}
 
 	/**
@@ -118,7 +119,7 @@ class DB extends PDO {
 	 * @param string|int $name - Name of the Database Object
 	 * @return DB - Database Object
 	 */
-	public static function getConnection($name) {
+	public static function getConnection($name): DB {
 		return self::$connection[$name];
 	}
 
@@ -128,7 +129,7 @@ class DB extends PDO {
 	 * @param string|int $name - Name of the Database Object
 	 * @param DB $connection - Database Object
 	 */
-	private static function setConnection($name, $connection) {
+	private static function setConnection($name, DB $connection): void {
 		self::$connection[$name] = $connection;
 	}
 
@@ -138,12 +139,14 @@ class DB extends PDO {
 	 * @param string $name - Name of the Database Object
 	 * @return bool - Exists Database Object
 	 */
-	public static function existsConnection($name) {
-		if(! array_key_exists($name, self::$connection))
+	public static function existsConnection(string $name): bool {
+		if(! array_key_exists($name, self::$connection)) {
 			return false;
+		}
 
-		if(self::getConnection($name) === null)
+		if(self::getConnection($name) === null) {
 			return false;
+		}
 
 		return true;
 	}
@@ -154,7 +157,7 @@ class DB extends PDO {
 	 * @param mixed $value - Value to assign a type
 	 * @return int - PDO-Type
 	 */
-	public static function getDataType($value) {
+	public static function getDataType($value): int {
 		switch(true) {
 			case is_null($value):
 				return parent::PARAM_NULL;
@@ -168,13 +171,13 @@ class DB extends PDO {
 	}
 
 	/**
-	 * Some values can't escaped by PDO, so we using regex to remove all chars, that are not in the white list
+	 * Some values can't escaped by PDO, so were using a regex to remove all chars, that are not in the white list
 	 *
 	 * @param string $string - Subject
 	 * @param string $whiteListPattern - White-List-Characters (Regex format)
 	 * @return string - Escaped string
 	 */
-	public static function secureSQLRegEx($string, $whiteListPattern = '/[^0-9a-zA-Z_]/') {
+	public static function secureSQLRegEx(string $string, string $whiteListPattern = '/[^0-9a-zA-Z_]/'): string {
 		return preg_replace($whiteListPattern, '', $string);
 	}
 
@@ -183,7 +186,7 @@ class DB extends PDO {
 	 *
 	 * @return string - Name of the Connection
 	 */
-	public function getName() {
+	public function getName(): string {
 		return $this->name;
 	}
 
@@ -192,7 +195,7 @@ class DB extends PDO {
 	 *
 	 * @param string $name - Name of the Connection
 	 */
-	private function setName($name) {
+	private function setName(string $name): void {
 		$this->name = $name;
 	}
 
@@ -200,19 +203,21 @@ class DB extends PDO {
 	 * Creates a new Table
 	 *
 	 * @param string $tableName - Name of the table
-	 * @param array $columns - Column of the table, use for each column an extra key within the array
+	 * @param string[] $columns - Column of the table, use for each column an extra key within the array
 	 * @param bool $overwrite - Overwrite table if existing? true = yes | false = no
 	 * @return bool - true on success else false
 	 */
-	public function createTable($tableName, $columns = array('id INT(11) AUTO_INCREMENT PRIMARY KEY', 'col2 VARCHAR(20)'), $overwrite = false) {
+	public function createTable(string $tableName, array $columns = ['id INT(11) AUTO_INCREMENT PRIMARY KEY', 'col2 VARCHAR(20)'], bool $overwrite = false): bool {
 		// Secure Columns
-		$tmp = array();
-		foreach($columns as $column)
-			$tmp[] = self::secureSQLRegEx($column, '/[^0-9a-zA-Z _\(\)]/');
+		$tmp = [];
+		foreach($columns as $column) {
+			$tmp[] = self::secureSQLRegEx($column, '/[^0-9a-zA-Z _()]/');
+		}
 
 		// Drop table on overwrite
-		if($overwrite && $this->tableExists($tableName))
+		if($overwrite && $this->tableExists($tableName)) {
 			$this->dropTable($tableName);
+		}
 
 		// create SQL
 		$sql = 'CREATE TABLE ' . self::secureSQLRegEx($tableName) . '(' . PHP_EOL;
@@ -236,7 +241,7 @@ class DB extends PDO {
 	 * @param string $tableName - Name of the Table
 	 * @return bool - true if table exists else false
 	 */
-	public function tableExists($tableName) {
+	public function tableExists(string $tableName): bool {
 		try {
 			$sth = $this->query('SELECT 1 FROM ' . self::secureSQLRegEx($tableName) . ' LIMIT 1;');
 			$sth->closeCursor();
@@ -253,7 +258,7 @@ class DB extends PDO {
 	 * @param string $tableName - Name of the table, that you want delete
 	 * @return bool - true on success else false
 	 */
-	public function dropTable($tableName) {
+	public function dropTable(string $tableName): bool {
 		try {
 			$this->exec('DROP TABLE ' . self::secureSQLRegEx($tableName) . ';');
 		} catch(PDOException $ex) {

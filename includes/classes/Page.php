@@ -18,82 +18,82 @@ class Page {
 	/**
 	 * @var string|null $baseUrl - Base URL of the Website
 	 */
-	private static $baseUrl = null;
+	private static ?string $baseUrl = null;
 
 	/**
 	 * @var bool $prettyUrls - Are pretty urls enabled
 	 */
-	private static $prettyUrls = false;
+	private static bool $prettyUrls = false;
 
 	/**
 	 * @var string $name - Internal Name of this Page
 	 */
-	private static $name;
+	private static string $name;
 
 	/**
 	 * @var string $page - _GET Page-String
 	 */
-	private static $page;
+	private static string $page;
 
 	/**
 	 * @var string $title - Title of this Page
 	 */
-	private static $title;
+	private static string $title;
 
 	/**
 	 * @var string|null $websiteTitle - Global title of the Website
 	 */
-	private static $websiteTitle = null;
+	private static ?string $websiteTitle = null;
 
 	/**
 	 * @var string|null $metaTitle - Meta title of the Page
 	 */
-	private static $metaTitle = null;
+	private static ?string $metaTitle = null;
 
 	/**
 	 * @var string|null $metaDesc - Meta description of the Page
 	 */
-	private static $metaDesc = null;
+	private static ?string $metaDesc = null;
 
 	/**
 	 * @var string|null $metaKeywords - Meta Keywords of the Page
 	 */
-	private static $metaKeywords = null;
+	private static ?string $metaKeywords = null;
 
 	/**
 	 * @var string|null $canonicalLink - Canonical Link of the Page
 	 */
-	private static $canonicalLink = null;
+	private static ?string $canonicalLink = null;
 
 	/**
 	 * @var string $viewFile - View-File of the Page
 	 */
-	private static $viewFile;
+	private static string $viewFile;
 
 	/**
 	 * @var bool $cacheAble
 	 */
-	private static $cacheAble = false;
+	private static bool $cacheAble = false;
 
 	/**
 	 * @var int $cacheTimeSec
 	 */
-	private static $cacheTimeSec = 86400;
+	private static int $cacheTimeSec = 86400;
 
 	/**
 	 * @var null|AjaxResponse
 	 */
-	private static $ajaxResponse = null;
+	private static ?AjaxResponse $ajaxResponse = null;
 
 	/**
-	 * @var array $cssFilesArray - CSS-Files of the Page
+	 * @var array[] $cssFilesArray - CSS-Files of the Page
 	 */
-	private static $cssFilesArray = array();
+	private static array $cssFilesArray = [];
 
 	/**
-	 * @var array $jsFilesArray - JavaScript-Files of the Page
+	 * @var array[] $jsFilesArray - JavaScript-Files of the Page
 	 */
-	private static $jsFilesArray = array();
+	private static array $jsFilesArray = [];
 
 	/**
 	 * Disabled Page constructor.
@@ -113,9 +113,10 @@ class Page {
 	 * @return string
 	 * @throws Exception - Base URL not set
 	 */
-	public static function getBaseUrl() {
-		if(self::$baseUrl === null)
+	public static function getBaseUrl(): ?string {
+		if(self::$baseUrl === null) {
 			throw new Exception('Page-Base URL is not set in the ' . __CLASS__ . ' Class!');
+		}
 
 		return self::$baseUrl;
 	}
@@ -123,212 +124,213 @@ class Page {
 	/**
 	 * @param string $baseUrl
 	 */
-	public static function setBaseUrl($baseUrl) {
+	public static function setBaseUrl(string $baseUrl): void {
 		self::$baseUrl = $baseUrl;
 	}
 
 	/**
 	 * @return bool
 	 */
-	public static function isPrettyUrls() {
+	public static function isPrettyUrls(): bool {
 		return self::$prettyUrls;
 	}
 
 	/**
 	 * @param bool $prettyUrls
 	 */
-	public static function setPrettyUrls($prettyUrls) {
+	public static function setPrettyUrls(bool $prettyUrls): void {
 		self::$prettyUrls = $prettyUrls;
 	}
 
 	/**
 	 * @return string
 	 */
-	public static function getName() {
+	public static function getName(): string {
 		return self::$name;
 	}
 
 	/**
 	 * @param string $name
 	 */
-	public static function setName($name) {
+	public static function setName(string $name): void {
 		self::$name = $name;
 	}
 
 	/**
 	 * @return string
 	 */
-	public static function getPage() {
+	public static function getPage(): string {
 		return self::$page;
 	}
 
 	/**
 	 * @param string $page
 	 */
-	public static function setPage($page) {
+	public static function setPage(string $page): void {
 		self::$page = $page;
 	}
 
 	/**
 	 * @return string
 	 */
-	public static function getTitle() {
+	public static function getTitle(): string {
 		return self::$title;
 	}
 
 	/**
 	 * @param string $title
 	 */
-	public static function setTitle($title) {
+	public static function setTitle(string $title): void {
 		self::$title = $title;
 	}
 
 	/**
 	 * @return null|string
 	 */
-	public static function getWebsiteTitle() {
+	public static function getWebsiteTitle(): ?string {
 		return self::$websiteTitle;
 	}
 
 	/**
-	 * @param null|string $websiteTitle
+	 * @param string|null $websiteTitle
 	 */
-	public static function setWebsiteTitle($websiteTitle) {
+	public static function setWebsiteTitle(?string $websiteTitle): void {
 		self::$websiteTitle = $websiteTitle;
 	}
 
 	/**
 	 * @return null|string
 	 */
-	public static function getMetaTitle() {
+	public static function getMetaTitle(): ?string {
 		return self::$metaTitle;
 	}
 
 	/**
-	 * @param null|string $metaTitle
+	 * @param string|null $metaTitle
 	 */
-	public static function setMetaTitle($metaTitle) {
+	public static function setMetaTitle(?string $metaTitle): void {
 		self::$metaTitle = $metaTitle;
 	}
 
 	/**
 	 * @return null|string
 	 */
-	public static function getMetaDesc() {
+	public static function getMetaDesc(): ?string {
 		return self::$metaDesc;
 	}
 
 	/**
-	 * @param null|string $metaDesc
+	 * @param string|null $metaDesc
 	 */
-	public static function setMetaDesc($metaDesc) {
+	public static function setMetaDesc(?string $metaDesc): void {
 		self::$metaDesc = $metaDesc;
 	}
 
 	/**
 	 * @return null|string
 	 */
-	public static function getMetaKeywords() {
+	public static function getMetaKeywords(): ?string {
 		return self::$metaKeywords;
 	}
 
 	/**
-	 * @param null|string $metaKeywords
+	 * @param string|null $metaKeywords
 	 */
-	public static function setMetaKeywords($metaKeywords) {
+	public static function setMetaKeywords(?string $metaKeywords): void {
 		self::$metaKeywords = $metaKeywords;
 	}
 
 	/**
 	 * @return null|string
 	 */
-	public static function getCanonicalLink() {
+	public static function getCanonicalLink(): ?string {
 		return self::$canonicalLink;
 	}
 
 	/**
-	 * @param null|string $canonicalLink
+	 * @param string|null $canonicalLink
 	 */
-	public static function setCanonicalLink($canonicalLink) {
+	public static function setCanonicalLink(?string $canonicalLink): void {
 		self::$canonicalLink = $canonicalLink;
 	}
 
 	/**
 	 * @return string
 	 */
-	public static function getViewFile() {
+	public static function getViewFile(): string {
 		return self::$viewFile;
 	}
 
 	/**
 	 * @param string $viewFile
 	 */
-	public static function setViewFile($viewFile) {
+	public static function setViewFile(string $viewFile): void {
 		self::$viewFile = $viewFile;
 	}
 
 	/**
 	 * @return bool
 	 */
-	public static function isCacheAble() {
+	public static function isCacheAble(): bool {
 		return self::$cacheAble;
 	}
 
 	/**
 	 * @param bool $cacheAble
 	 */
-	public static function setCacheAble($cacheAble) {
+	public static function setCacheAble(bool $cacheAble): void {
 		self::$cacheAble = $cacheAble;
 	}
 
 	/**
 	 * @return int
 	 */
-	public static function getCacheTimeSec() {
+	public static function getCacheTimeSec(): int {
 		return self::$cacheTimeSec;
 	}
 
 	/**
 	 * @param int $cacheTimeSec
 	 */
-	public static function setCacheTimeSec($cacheTimeSec) {
+	public static function setCacheTimeSec(int $cacheTimeSec): void {
 		self::$cacheTimeSec = $cacheTimeSec;
 	}
 
 	/**
-	 * @return array
+	 * @return array[]
 	 */
-	private static function getCssFilesArray() {
+	private static function getCssFilesArray(): array {
 		return self::$cssFilesArray;
 	}
 
 	/**
-	 * @return array
+	 * @return array[]
 	 */
-	private static function getJsFilesArray() {
+	private static function getJsFilesArray(): array {
 		return self::$jsFilesArray;
 	}
 
 	/**
 	 * @return AjaxResponse|null
 	 */
-	public static function getAjaxResponse() {
+	public static function getAjaxResponse(): ?AjaxResponse {
 		return self::$ajaxResponse;
 	}
 
 	/**
 	 * @param AjaxResponse|null $ajaxResponse
 	 */
-	public static function setAjaxResponse($ajaxResponse) {
+	public static function setAjaxResponse(?AjaxResponse $ajaxResponse): void {
 		self::$ajaxResponse = $ajaxResponse;
 	}
 
 	/**
 	 * Prints the Canonical-Link within HTML
 	 */
-	public static function printHtmlCanonicalLink() {
-		if(! self::getCanonicalLink())
+	public static function printHtmlCanonicalLink(): void {
+		if(! self::getCanonicalLink()) {
 			return;
+		}
 
 		echo '		<link rel="canonical" href="' . self::getCanonicalLink() . '" />' . PHP_EOL;
 	}
@@ -336,9 +338,10 @@ class Page {
 	/**
 	 * Prints the Meta-Title within HTML
 	 */
-	public static function printHtmlMetaTitle() {
-		if(! self::getMetaTitle())
+	public static function printHtmlMetaTitle(): void {
+		if(! self::getMetaTitle()) {
 			return;
+		}
 
 		echo '		<meta name="title" content="' . self::getMetaTitle() . '" />' . PHP_EOL;
 	}
@@ -346,9 +349,10 @@ class Page {
 	/**
 	 * Prints the Meta-Description within HTML
 	 */
-	public static function printHtmlMetaDescription() {
-		if(! self::getMetaDesc())
+	public static function printHtmlMetaDescription(): void {
+		if(! self::getMetaDesc()) {
 			return;
+		}
 
 		echo '		<meta name="description"  content="' . self::getMetaDesc() . '" />' . PHP_EOL;
 	}
@@ -356,9 +360,10 @@ class Page {
 	/**
 	 * Prints the Meta-Keywords within HTML
 	 */
-	public static function printHtmlMetaKeywords() {
-		if(! self::getMetaKeywords())
+	public static function printHtmlMetaKeywords(): void {
+		if(! self::getMetaKeywords()) {
 			return;
+		}
 
 		echo '		<meta name="keywords"  content="' . self::getMetaKeywords() . '" />' . PHP_EOL;
 	}
@@ -366,7 +371,7 @@ class Page {
 	/**
 	 * Prints the Page-Title plus the Website-Title if set
 	 */
-	public static function printWebsiteTitle() {
+	public static function printWebsiteTitle(): void {
 		echo  self::getTitle() . ((self::getWebsiteTitle()) ? ' - ' . self::getWebsiteTitle() : '');
 	}
 
@@ -376,8 +381,8 @@ class Page {
 	 * @param string $file - File to add
 	 * @param bool $addInHead - Add File in Head false add it before </body>
 	 */
-	public static function addCssFile($file, $addInHead = true) {
-		self::$cssFilesArray[] = array($file, $addInHead);
+	public static function addCssFile(string $file, bool $addInHead = true): void {
+		self::$cssFilesArray[] = [$file, $addInHead];
 	}
 
 	/**
@@ -387,8 +392,8 @@ class Page {
 	 * @param bool $addInHead - Add File in Head false add it before </body>
 	 * @param bool $async - Loads the JS-File Async
 	 */
-	public static function addJSFile($file, $addInHead = true, $async = false) {
-		self::$jsFilesArray[] = array($file, $addInHead, $async);
+	public static function addJSFile(string $file, bool $addInHead = true, bool $async = false): void {
+		self::$jsFilesArray[] = [$file, $addInHead, $async];
 	}
 
 	/**
@@ -396,10 +401,11 @@ class Page {
 	 *
 	 * @param bool $headFiles - Print Head-Files
 	 */
-	public static function printCssFiles($headFiles) {
-		foreach(self::getCssFilesArray() as &$cssFile) {
-			if($cssFile[1] === $headFiles)
+	public static function printCssFiles(bool $headFiles): void {
+		foreach(self::getCssFilesArray() as $cssFile) {
+			if($cssFile[1] === $headFiles) {
 				echo '		<link rel="stylesheet" href="' . $cssFile[0] . '" />' . PHP_EOL;
+			}
 		}
 	}
 
@@ -408,10 +414,11 @@ class Page {
 	 *
 	 * @param bool $headFiles - Print Head-Files
 	 */
-	public static function printJsFiles($headFiles) {
-		foreach(self::getJsFilesArray() as &$jsFile) {
-			if($jsFile[1] === $headFiles)
+	public static function printJsFiles(bool $headFiles): void {
+		foreach(self::getJsFilesArray() as $jsFile) {
+			if($jsFile[1] === $headFiles) {
 				echo '		<script ' . (($jsFile[2]) ? 'async ' : '') . 'src="' . $jsFile[0] . '"></script>' . PHP_EOL;
+			}
 		}
 	}
 
@@ -420,9 +427,10 @@ class Page {
 	 *
 	 * @param string $navPage - Nav-Page to check
 	 */
-	public static function navCssCheckPage($navPage) {
-		if(mb_strtolower($navPage) === mb_strtolower(self::getName()))
+	public static function navCssCheckPage(string $navPage): void {
+		if(mb_strtolower($navPage) === mb_strtolower(self::getName())) {
 			echo ' active';
+		}
 	}
 
 	/**
@@ -432,18 +440,20 @@ class Page {
 	 * @param bool $print - Print direct
 	 * @return string - Page-URL
 	 */
-	public static function getFullPageUrl($page, $print = true) {
+	public static function getFullPageUrl(string $page, bool $print = true): ?string {
 		$pageUrl = self::getBaseUrl();
 
 		if($page) {
-			if(self::isPrettyUrls())
+			if(self::isPrettyUrls()) {
 				$pageUrl .= $page . '/';
-			else
+			} else {
 				$pageUrl .= 'index.php?page=' . $page;
+			}
 		}
 
-		if($print)
+		if($print) {
 			echo $pageUrl;
+		}
 
 		return $pageUrl;
 	}
@@ -453,27 +463,30 @@ class Page {
 	 *
 	 * @param int $startYear - Start Year of the Page
 	 */
-	public static function printPageSince($startYear = 2017) {
-		$currentYear = date('Y', time());
+	public static function printPageSince(int $startYear = 2022): void {
+		$currentYear = date('Y');
 
-		if($startYear < $currentYear)
+		if($startYear < $currentYear) {
 			echo $startYear . ' - ' . $currentYear;
-		else
+		} else {
 			echo $startYear;
+		}
 	}
 
 	/**
 	 * Prints the AJAX-URL for the Action
 	 *
 	 * @param string $action - Action for the AJAX-Request
+	 * @throws Exception
 	 */
-	public static function printAjaxURL($action) {
+	public static function printAjaxURL(string $action): void {
 		$ajaxUrl = self::getBaseUrl();
 
-		if(self::isPrettyUrls())
+		if(self::isPrettyUrls()) {
 			$ajaxUrl .= 'ajax/' . urlencode($action) . '/';
-		else
+		} else {
 			$ajaxUrl .= urlencode('index.php?page=ajax&action=' . $action);
+		}
 
 		echo '\'' . $ajaxUrl . '\'';
 	}

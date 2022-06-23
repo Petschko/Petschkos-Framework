@@ -19,6 +19,8 @@ session_start();
  * Class AntiSpam
  */
 class AntiSpam {
+	private const SESSION_NAME = 'anti_spam';
+
 	private const PLUS = 0;
 	private const MINUS = 1;
 	private const MULTIPLE = 2;
@@ -64,12 +66,12 @@ class AntiSpam {
 	public function getOperator(): string {
 		switch($this->rndOperator) {
 			case self::PLUS:
-				return Config::useMathSymbols ? '+' : 'plus';
+				return Config::useMathSymbols ? '+' : Language::out()->getPlusName();
 			case self::MINUS:
-				return Config::useMathSymbols ? '-' : 'minus';
+				return Config::useMathSymbols ? '-' : Language::out()->getMinusName();
 			case self::MULTIPLE:
 			default:
-				return Config::useMathSymbols ? '*' : 'multipliziert mit';
+				return Config::useMathSymbols ? '*' : Language::out()->getMultiplyWithName();
 		}
 	}
 
@@ -77,8 +79,9 @@ class AntiSpam {
 	 * @return string
 	 */
 	public function getRndNumber1(): string {
-		if(Config::numbersAsString)
+		if(Config::numbersAsString) {
 			return $this->getNumberToText($this->rndNumber1);
+		}
 
 		return (string) $this->rndNumber1;
 	}
@@ -87,8 +90,9 @@ class AntiSpam {
 	 * @return string
 	 */
 	public function getRndNumber2(): string {
-		if(Config::numbersAsString)
+		if(Config::numbersAsString) {
 			return $this->getNumberToText($this->rndNumber2);
+		}
 
 		return (string) $this->rndNumber2;
 	}
@@ -102,25 +106,25 @@ class AntiSpam {
 	private function getNumberToText(int $number): string {
 		switch($number) {
 			case 0:
-				return 'Null';
+				return Language::out()->get0Name();
 			case 1:
-				return 'Eins';
+				return Language::out()->get1Name();
 			case 2:
-				return 'Zwei';
+				return Language::out()->get2Name();
 			case 3:
-				return 'Drei';
+				return Language::out()->get3Name();
 			case 4:
-				return 'Vier';
+				return Language::out()->get4Name();
 			case 5:
-				return 'Fünf';
+				return Language::out()->get5Name();
 			case 6:
-				return 'Sechs';
+				return Language::out()->get6Name();
 			case 7:
-				return 'Sieben';
+				return Language::out()->get7Name();
 			case 8:
-				return 'Acht';
+				return Language::out()->get8Name();
 			case 9:
-				return 'Neun';
+				return Language::out()->get9Name();
 			default:
 				return (string) $number;
 		}
@@ -131,7 +135,7 @@ class AntiSpam {
 	 *
 	 * @throws Exception
 	 */
-	public function newMathQuestion() {
+	public function newMathQuestion(): void {
 		$this->rndNumber1 = random_int(1, 10);
 		$this->rndNumber2 = random_int(1, 10);
 		$this->rndOperator = random_int(0, 2);
@@ -141,7 +145,7 @@ class AntiSpam {
 	/**
 	 * Calculates the math question result
 	 */
-	private function calcResult() {
+	private function calcResult(): void {
 		switch($this->rndOperator) {
 			case self::PLUS:
 				$this->result = $this->rndNumber1 + $this->rndNumber2;
@@ -172,10 +176,11 @@ class AntiSpam {
 	 * @param string $type - Type of the field - default: text
 	 * @param string|null $placeholder - Placeholder text or null for none
 	 */
-	public function addHoneypotField(string $formId, string $name, string $class, string $id, string $type = 'text', ?string $placeholder = null) {
+	public function addHoneypotField(string $formId, string $name, string $class, string $id, string $type = 'text', ?string $placeholder = null): void {
 		// Only add once
-		if(in_array($formId, $this->registeredForms))
+		if(in_array($formId, $this->registeredForms)) {
 			return;
+		}
 
 		$this->honeypotFields[] = new HoneypotField($formId, $name, $class, $id, $type, $placeholder);
 	}
@@ -205,11 +210,13 @@ class AntiSpam {
 	 */
 	public function getHoneypotFieldByName(string $name): ?HoneypotField {
 		foreach($this->honeypotFields as $field) {
-			if($this->currentForm !== $field->formId)
+			if($this->currentForm !== $field->formId) {
 				continue;
+			}
 
-			if($name === $field->name)
+			if($name === $field->name) {
 				return $field;
+			}
 		}
 
 		return null;
@@ -222,11 +229,13 @@ class AntiSpam {
 	 */
 	public function checkHoneypotFields(): bool {
 		foreach($this->honeypotFields as $field) {
-			if($this->currentForm !== $field->formId)
+			if($this->currentForm !== $field->formId) {
 				continue;
+			}
 
-			if(! isset($_POST[$field->name]))
+			if(! isset($_POST[$field->name])) {
 				$_POST[$field->name] = '';
+			}
 
 			// ensure null (string) check, because JS acts strangly sometimes...
 			if(! empty($_POST[$field->name]) && $_POST[$field->name] !== 'null') {
@@ -265,8 +274,8 @@ class AntiSpam {
 	 *
 	 * @return string - Output
 	 */
-	public function getInnerMathLabelContent() {
-		return sprintf('Berechne %s %s %s: (Anti-Spam)', $this->getRndNumber1(), $this->getOperator(), $this->getRndNumber2());
+	public function getInnerMathLabelContent(): string {
+		return sprintf(Language::out()->getAntiSpamMsgText(), $this->getRndNumber1(), $this->getOperator(), $this->getRndNumber2());
 	}
 
 	/**
@@ -279,14 +288,16 @@ class AntiSpam {
 	 * @param string|null $placeholder - Placeholder of the input field or null for none
 	 * @return string - Output
 	 */
-	public function outputMathField(string $name, string $id, bool $echo = true, ?string $class = null, ?string $placeholder = null) {
+	public function outputMathField(string $name, string $id, bool $echo = true, ?string $class = null, ?string $placeholder = null): string {
 		$string = '<input type="text" id="' . $id . '" name="' . $name . '"' .
 			($class ? ' class="' . $class . '"' : '') .
 			($placeholder ? ' placeholder="' . $placeholder . '"' : '') .
 			' autocomplete="off" required>' . PHP_EOL;
 
-		if($echo)
+		if($echo) {
 			echo $string;
+		}
+
 		return $string;
 	}
 
@@ -295,7 +306,7 @@ class AntiSpam {
 	 *
 	 * @param string $newFormId - ID of the <form> element
 	 */
-	public function checkForm(string $newFormId) {
+	public function checkForm(string $newFormId): void {
 		if($newFormId !== $this->currentForm) {
 			$this->currentForm = $newFormId;
 
@@ -308,23 +319,24 @@ class AntiSpam {
 	 *
 	 * @param string $formId - ID of the <form> element
 	 */
-	public function registerForm(string $formId) {
-		if(! in_array($formId, $this->registeredForms))
+	public function registerForm(string $formId): void {
+		if(! in_array($formId, $this->registeredForms)) {
 			$this->registeredForms[] = $formId;
+		}
 	}
 
 	/**
 	 * Saves this object to session
 	 */
-	public function saveSession() {
-		$_SESSION['anti_spam'] = $this;
+	public function saveSession(): void {
+		$_SESSION[self::SESSION_NAME] = $this;
 	}
 
 	/**
 	 * Deletes the session of Antispam
 	 */
-	public function deleteSession() {
-		unset($_SESSION['anti_spam']);
+	public function deleteSession(): void {
+		unset($_SESSION[self::SESSION_NAME]);
 	}
 
 	/**
@@ -333,12 +345,12 @@ class AntiSpam {
 	 * @param string $formId - Id of the Form
 	 * @return self - Instance
 	 */
-	public static final function getInstance(string $formId): self {
-		if(! isset($_SESSION['anti_spam']) || ! is_object($_SESSION['anti_spam'])) {
+	final public static function getInstance(string $formId): self {
+		if(! isset($_SESSION[self::SESSION_NAME]) || ! is_object($_SESSION[self::SESSION_NAME])) {
 			self::$instance = new self($formId);
 		}
 		if(is_null(self::$instance)) {
-			self::$instance = $_SESSION['anti_spam'];
+			self::$instance = $_SESSION[self::SESSION_NAME];
 		}
 
 		// Check if form has changed

@@ -25,77 +25,77 @@ class Language {
 	 *
 	 * @var bool $init - Init function ran
 	 */
-	private static $init = false;
+	private static bool $init = false;
 
 	/**
 	 * Contains the File-Name of the current Language
 	 *
 	 * @var null|string $currentLanguageFileName - Current Language File-Name
 	 */
-	private static $currentLanguageFileName = null;
+	private static ?string $currentLanguageFileName = null;
 
 	/**
 	 * Contains the instance of the current lang class
 	 *
 	 * @var null|LangBase $language - Instance of the language or null if none is set
 	 */
-	private static $language = null;
+	private static ?LangBase $language = null;
 
 	/**
 	 * Contains the Directory of the Language PHP Class-Files
 	 *
 	 * @var null|string $languagePhpDir - Directory or null if none is set
 	 */
-	private static $languagePhpDir = null;
+	private static ?string $languagePhpDir = null;
 
 	/**
 	 * Contains the Directory of the Language PHP Class-Files
 	 *
 	 * @var null|string $languageJsDir - Directory or null if none is set
 	 */
-	private static $languageJsDir = null;
+	private static ?string $languageJsDir = null;
 
 	/**
 	 * Contains the allowed Languages-Files/Classes
 	 *
-	 * @var array $availableLanguages - Allowed Language-Files/Classes
+	 * @var string[] $availableLanguages - Allowed Language-Files/Classes
 	 */
-	private static $availableLanguages = array();
+	private static array $availableLanguages = [];
 
 	/**
 	 * Contains the name of the Cookie which is holing the language value
 	 *
 	 * @var string $langCookieName - Name of the Cookie
 	 */
-	private static $langCookieName = 'lang';
+	private static string $langCookieName = 'lang';
 
 	/**
 	 * Contains the name of the GET-Parameter which is holding the language value
 	 *
 	 * @var string $langGetName - Name of the GET-Value
 	 */
-	private static $langGetName = 'lang';
+	private static string $langGetName = 'lang';
 
 	/**
 	 * Contains the default Language
 	 *
 	 * @var string $defaultLang - Default Language
 	 */
-	private static $defaultLang = 'lang.en';
+	private static string $defaultLang = 'lang.en';
 
 	/**
 	 * Contains if cookies are enabled
 	 *
 	 * @var bool $cookiesEnabled - Are cookies enabled
 	 */
-	private static $cookiesEnabled = false;
+	private static bool $cookiesEnabled = false;
 
 	/**
 	 * Contains how long the cookie can life without refresh
 	 *
 	 * @var int $cookieExpTime - Cookie Lifetime from the last refresh in sec
 	 */
-	private static $cookieExpTime = 31104000;
+	private static int $cookieExpTime = 31104000;
 
 	/**
 	 * Disabled Language constructor.
@@ -109,14 +109,18 @@ class Language {
 
 	/**
 	 * Initiates the class and set all important values
+	 *
+	 * @throws Exception
 	 */
-	private static function init() {
+	private static function init(): void {
 		// Only run once
-		if(self::$init)
+		if(self::$init) {
 			return;
+		}
 
 		// Detect the current language from the user
 		$detected = false;
+
 		// Check if lang changed via GET
 		if(isset($_GET[self::getLangGetName()])) {
 			if(self::validateLangValue($_GET[self::getLangGetName()])) {
@@ -125,6 +129,7 @@ class Language {
 				$detected = true;
 			}
 		}
+
 		// Check if language exists in Cookie if not changed via GET
 		if(! $detected) {
 			if(self::validateLangValue(self::getLangCookieValue())) {
@@ -133,6 +138,7 @@ class Language {
 				$detected = true;
 			}
 		}
+
 		// Use default if not in cookie or get
 		if(! $detected) {
 			self::setCurrentLanguageFileName(self::getDefaultLang());
@@ -150,9 +156,10 @@ class Language {
 	 *
 	 * @return LangBase - Language class instance
 	 */
-	public static function out() {
-		if(self::getLanguage() === null)
+	public static function out(): LangBase {
+		if(self::getLanguage() === null) {
 			self::init();
+		}
 
 		return self::getLanguage();
 	}
@@ -162,7 +169,7 @@ class Language {
 	 *
 	 * @return string - JS-Language File URI
 	 */
-	public static function getLangJsFileUri() {
+	public static function getLangJsFileUri(): string {
 		if(self::getLanguage() === null)
 			self::init();
 
@@ -172,74 +179,74 @@ class Language {
 	/**
 	 * @return null|string
 	 */
-	private static function getCurrentLanguageFileName() {
+	private static function getCurrentLanguageFileName(): ?string {
 		return self::$currentLanguageFileName;
 	}
 
 	/**
-	 * @param null|string $currentLanguageFileName
+	 * @param string|null $currentLanguageFileName
 	 */
-	private static function setCurrentLanguageFileName($currentLanguageFileName) {
+	private static function setCurrentLanguageFileName(?string $currentLanguageFileName): void {
 		self::$currentLanguageFileName = $currentLanguageFileName;
 	}
 
 	/**
 	 * @return LangBase|null
 	 */
-	private static function getLanguage() {
+	private static function getLanguage(): ?LangBase {
 		return self::$language;
 	}
 
 	/**
 	 * @param LangBase|null $language
 	 */
-	private static function setLanguage($language) {
+	private static function setLanguage(?LangBase $language): void {
 		self::$language = $language;
 	}
 
 	/**
 	 * @return null|string
 	 */
-	private static function getLanguagePhpDir() {
+	private static function getLanguagePhpDir(): ?string {
 		return self::$languagePhpDir;
 	}
 
 	/**
-	 * @param null|string $languagePhpDir
+	 * @param string|null $languagePhpDir
 	 */
-	public static function setLanguagePhpDir($languagePhpDir) {
+	public static function setLanguagePhpDir(?string $languagePhpDir): void {
 		self::$languagePhpDir = $languagePhpDir;
 	}
 
 	/**
 	 * @return null|string
 	 */
-	private static function getLanguageJsDir() {
+	private static function getLanguageJsDir(): ?string {
 		return self::$languageJsDir;
 	}
 
 	/**
-	 * @param null|string $languageJsDir
+	 * @param string|null $languageJsDir
 	 */
-	public static function setLanguageJsDir($languageJsDir) {
+	public static function setLanguageJsDir(?string $languageJsDir): void {
 		self::$languageJsDir = $languageJsDir;
 	}
 
 	/**
 	 * Set the available Languages
 	 *
-	 * @param array $availableLanguages - Available Languages
+	 * @param string[] $availableLanguages - Available Languages
 	 */
-	public static function setAvailableLanguages($availableLanguages) {
+	public static function setAvailableLanguages(array $availableLanguages): void {
 		self::$availableLanguages = $availableLanguages;
 	}
 
 	/**
 	 * Get the available Languages
 	 *
-	 * @return array - Available Languages
+	 * @return string[] - Available Languages
 	 */
-	private static function getAvailableLanguages() {
+	private static function getAvailableLanguages(): array {
 		return self::$availableLanguages;
 	}
 
@@ -248,7 +255,7 @@ class Language {
 	 *
 	 * @param string $langCookieName - Language Cookie-Name
 	 */
-	public static function setLangCookieName($langCookieName) {
+	public static function setLangCookieName(string $langCookieName): void {
 		self::$langCookieName = $langCookieName;
 	}
 
@@ -257,7 +264,7 @@ class Language {
 	 *
 	 * @return string - Language Cookie-Name
 	 */
-	private static function getLangCookieName() {
+	private static function getLangCookieName(): string {
 		return self::$langCookieName;
 	}
 
@@ -266,7 +273,7 @@ class Language {
 	 *
 	 * @return string - Default Language
 	 */
-	private static function getDefaultLang() {
+	private static function getDefaultLang(): string {
 		return self::$defaultLang;
 	}
 
@@ -275,7 +282,7 @@ class Language {
 	 *
 	 * @param string $defaultLang - Default Language
 	 */
-	public static function setDefaultLang($defaultLang) {
+	public static function setDefaultLang(string $defaultLang): void {
 		self::$defaultLang = $defaultLang;
 	}
 
@@ -284,7 +291,7 @@ class Language {
 	 *
 	 * @return string - Language GET-Name
 	 */
-	private static function getLangGetName() {
+	private static function getLangGetName(): string {
 		return self::$langGetName;
 	}
 
@@ -293,48 +300,49 @@ class Language {
 	 *
 	 * @param string $langGetName - Language GET-Name
 	 */
-	public static function setLangGetName($langGetName) {
+	public static function setLangGetName(string $langGetName): void {
 		self::$langGetName = $langGetName;
 	}
 
 	/**
 	 * Shows if Cookie-check is enabled
 	 *
-	 * @return boolean - Is Cookie-Check enabled
+	 * @return bool - Is Cookie-Check enabled
 	 */
-	private static function isCookiesEnabled() {
+	private static function isCookiesEnabled(): bool {
 		return self::$cookiesEnabled;
 	}
 
 	/**
 	 * Set if Cookie-check is enabled
 	 *
-	 * @param boolean $cookiesEnabled - Is Cookie-Check enabled
+	 * @param bool $cookiesEnabled - Is Cookie-Check enabled
 	 */
-	public static function setCookiesEnabled($cookiesEnabled) {
+	public static function setCookiesEnabled(bool $cookiesEnabled): void {
 		self::$cookiesEnabled = $cookiesEnabled;
 	}
 
 	/**
 	 * @return int
 	 */
-	private static function getCookieExpTime() {
+	private static function getCookieExpTime(): int {
 		return self::$cookieExpTime;
 	}
 
 	/**
 	 * @param int $cookieExpTime
 	 */
-	public static function setCookieExpTime($cookieExpTime) {
+	public static function setCookieExpTime(int $cookieExpTime): void {
 		self::$cookieExpTime = $cookieExpTime;
 	}
 
 	/**
 	 * Set/Refresh the Language Cookie
 	 */
-	private static function setLangCookie() {
-		if(! self::isCookiesEnabled())
+	private static function setLangCookie(): void {
+		if(! self::isCookiesEnabled()) {
 			return;
+		}
 
 		setcookie(self::getLangCookieName(), self::getCurrentLanguageFileName(), time() + self::getCookieExpTime());
 	}
@@ -344,20 +352,21 @@ class Language {
 	 *
 	 * @return null|string - Language Cookie-Value
 	 */
-	private static function getLangCookieValue() {
-		if(! self::isCookiesEnabled())
+	private static function getLangCookieValue(): ?string {
+		if(! self::isCookiesEnabled()) {
 			return null;
+		}
 
-		return (isset($_COOKIE[self::getLangCookieName()])) ? $_COOKIE[self::getLangCookieName()] : null;
+		return $_COOKIE[self::getLangCookieName()] ?? null;
 	}
 
 	/**
 	 * Checks if the Language exists
 	 *
 	 * @param mixed $value - Value to check if exists
-	 * @return string - true if language is valid else false
+	 * @return bool - true if language is valid else false
 	 */
-	private static function validateLangValue($value) {
+	private static function validateLangValue($value): bool {
 		return array_key_exists($value, self::getAvailableLanguages());
 	}
 
@@ -366,12 +375,13 @@ class Language {
 	 *
 	 * @throws Exception - File not Found exception
 	 */
-	private static function requireLangClassFileOnce() {
+	private static function requireLangClassFileOnce(): void {
 		$file = self::getLanguagePhpDir() . DS . basename(self::getCurrentLanguageFileName()) . '.php';
 
-		if(file_exists($file))
+		if(file_exists($file)) {
 			require_once($file);
-		else
+		} else {
 			throw new Exception(__CLASS__ . '-File "' . $file . '" doesn\'t exists... Please fix this error by creating that file!');
+		}
 	}
 }

@@ -63,16 +63,18 @@ class HoneypotField {
 	 * @return string - Output
 	 */
 	public function outputField(bool $echo = true): string {
-		if($this->type === 'textarea')
+		if($this->type === 'textarea') {
 			return $this->outputTextArea($echo);
+		}
 
 		$string = '<input class="' . $this->class .
 			'" autocomplete="off" type="' . $this->type .
 			'" id="' . $this->id . '" name="' . $this->name .
 			'"' . (is_null($this->placeholder) ? '' : ' placeholder="' . $this->placeholder . '"') . '>';
 
-		if($echo)
+		if($echo) {
 			echo $string;
+		}
 		return $string;
 	}
 
@@ -85,8 +87,9 @@ class HoneypotField {
 	private function outputTextArea(bool $echo): string {
 		$string = '<textarea name="' . $this->name . '" id="' . $this->id . '" class="' . $this->class . '" rows="30"></textarea>';
 
-		if($echo)
+		if($echo) {
 			echo $string;
+		}
 		return $string;
 	}
 }

@@ -14,14 +14,14 @@ defined('BASE_DIR') or die('Invalid File-Access');
 require_once(BASE_DIR . DS . 'includes' . DS . 'Config.php');
 
 // Define Constants
-define('CACHE_DIR', BASE_DIR . DS . 'cache');
-define('INCLUDE_DIR', BASE_DIR . DS . 'includes');
-define('CLASS_DIR', INCLUDE_DIR . DS . 'classes');
-define('SQL_MODEL_DIR', INCLUDE_DIR . DS . 'dao' . DS . 'models');
-define('TEMPLATE_DIR', BASE_DIR . DS . 'template');
-define('EMAIL_DIR', TEMPLATE_DIR . DS . 'email');
-define('LANG_DIR', BASE_DIR . DS . 'language');
-define('LANG_DIR_JS', Config::pageBaseURL . 'js/language/');
+const CACHE_DIR = BASE_DIR . DS . 'cache';
+const INCLUDE_DIR = BASE_DIR . DS . 'includes';
+const CLASS_DIR = INCLUDE_DIR . DS . 'classes';
+const SQL_MODEL_DIR = INCLUDE_DIR . DS . 'dao' . DS . 'models';
+const TEMPLATE_DIR = BASE_DIR . DS . 'template';
+const EMAIL_DIR = TEMPLATE_DIR . DS . 'email';
+const LANG_DIR = BASE_DIR . DS . 'language';
+const LANG_DIR_JS = Config::pageBaseURL . 'js/language/';
 
 // Include Base-Files
 require_once(INCLUDE_DIR . DS . 'functions.php');
@@ -44,8 +44,9 @@ require_once(CLASS_DIR . DS . 'Email.php');
 require_once(CLASS_DIR . DS . 'Language.php');
 
 // Antispam enabled?
-if(Config::enableAntiSpam)
+if(Config::enableAntiSpam) {
 	require_once(INCLUDE_DIR . DS . 'AntiSpam.php');
+}
 
 // Setup Cookie stuff
 Cookie::setIgnoreCookiePolice(Config::cookiePoliceSet);
@@ -56,9 +57,7 @@ Language::setAvailableLanguages(Config::$enabledLanguages);
 Language::setDefaultLang(Config::defaultLang);
 Language::setLanguagePhpDir(LANG_DIR);
 Language::setLanguageJsDir(LANG_DIR_JS);
-
-if(Cookie::getIsAllowed())
-	Language::setCookiesEnabled(true);
+Language::setCookiesEnabled(true);
 
 if(Config::dbEnabled) {
 	// Define Database Connection(s)
@@ -68,7 +67,7 @@ if(Config::dbEnabled) {
 		Config::dbType . ':host=' . Config::dbHost . ';port=' . Config::dbPort . ';dbname=' . Config::dbWebsiteDb . ';Charset=' . Config::dbCharset,
 		Config::dbUser,
 		Config::dbPassword,
-		array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . Config::dbCharset)
+		[PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . Config::dbCharset]
 	);
 }
 
@@ -82,7 +81,8 @@ if(Config::cacheEnabled && Page::isCacheAble()) {
 		INCLUDE_DIR . DS . 'layout.php',
 		Page::getCacheTimeSec()
 	);
-} else
+} else {
 	require_once(INCLUDE_DIR . DS . 'layout.php');
+}
 
 closePage();

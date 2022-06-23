@@ -20,24 +20,14 @@ class ExampleTable extends BaseDBTableModel {
 	public $col3;
 
 	/**
-	 * Clears Memory (Optional parent clears keys)
-	 */
-	public function __destruct() {
-		// Destruct fields automatically only extra keys need to be removed
-
-		// Call Parent to destruct
-		parent::__destruct();
-	}
-
-	/**
 	 * Sets the Table-Info
 	 */
-	protected function setTableInfo() {
+	protected function setTableInfo(): void {
 		// Set Table Name (Required)
 		$this->setTableName('exampleTable');
 
 		// Set Fields (Required)
-		$this->setTableFields(array('id', 'col2', 'col3'));
+		$this->setTableFields(['id', 'col2', 'col3']);
 
 		// Set Primary-Key (Optional - If none don't set it)
 		$this->setPrimaryKeyField('id');

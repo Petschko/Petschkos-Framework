@@ -54,7 +54,7 @@ class Config {
 
 	// Locale settings
 	const defaultLang = 'lang.en';							// Default language (Specify the Filename without ext)
-	public static $enabledLanguages = array(
+	public static $enabledLanguages = [
 		/* Enabled languages
 		 * Names are like the Language PHP/JS Files without extension
 		 * (lang.de.php => lang.de, lang.en.php => lang.en and so on)
@@ -66,7 +66,7 @@ class Config {
 		'lang.de'				=> 'LangDe',
 		'lang.de.formal'		=> 'LangDeFormal',
 		'lang.en'				=> 'LangEn'
-	);
+	];
 
 	// Cache Settings
 	const cacheEnabled = true;								// Enable or disables the Cache

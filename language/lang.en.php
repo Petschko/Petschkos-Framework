@@ -1,4 +1,5 @@
 <?php
+/** @noinspection AutoloadingIssuesInspection */
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
@@ -14,87 +15,87 @@ defined('BASE_DIR') or die('Invalid File-Access');
  * Class LangEn
  */
 class LangEn extends LangBase {
-	public function getHTMLLang() {
+	public function getHTMLLang(): string {
 		return 'en';
 	}
 
-	public function getLanguageName() {
+	public function getLanguageName(): string {
 		return 'English';
 	}
 
-	public function getPageTitle() {
+	public function getPageTitle(): string {
 		return 'Title';
 	}
 
-	public function getEmptySelect() {
+	public function getEmptySelect(): string {
 		return 'Select...';
 	}
 
-	public function getPlusName() {
+	public function getPlusName(): string {
 		return 'plus';
 	}
 
-	public function getMinusName() {
+	public function getMinusName(): string {
 		return 'minus';
 	}
 
-	public function getMultiplyWithName() {
+	public function getMultiplyWithName(): string {
 		return 'multiply with';
 	}
 
-	public function get0Name() {
+	public function get0Name(): string {
 		return 'null';
 	}
 
-	public function get1Name() {
+	public function get1Name(): string {
 		return 'one';
 	}
 
-	public function get2Name() {
+	public function get2Name(): string {
 		return 'two';
 	}
 
-	public function get3Name() {
+	public function get3Name(): string {
 		return 'three';
 	}
 
-	public function get4Name() {
+	public function get4Name(): string {
 		return 'four';
 	}
 
-	public function get5Name() {
+	public function get5Name(): string {
 		return 'five';
 	}
 
-	public function get6Name() {
+	public function get6Name(): string {
 		return 'six';
 	}
 
-	public function get7Name() {
+	public function get7Name(): string {
 		return 'seven';
 	}
 
-	public function get8Name() {
+	public function get8Name(): string {
 		return 'eight';
 	}
 
-	public function get9Name() {
+	public function get9Name(): string {
 		return 'nine';
 	}
 
-	public function getAntiSpamMsgText() {
+	public function getAntiSpamMsgText(): string {
 		return 'Calculate %s %s %s: (Anti-Spam)';
 	}
 
-	public function getInvalidAjaxModusText() {
+	public function getInvalidAjaxModusText(): string {
 		return 'Invalid Mode!';
 	}
 
-	public function getAntiSpamDisabledText() {
+	public function getAntiSpamDisabledText(): string {
 		return 'Anti-Spam is disabled!';
 	}
 
-	public function getAntiSpamMissingFormIdText() {
+	public function getAntiSpamMissingFormIdText(): string {
 		return 'You didn\'t set a Form-ID!';
 	}
 }

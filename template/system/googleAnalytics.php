@@ -13,16 +13,15 @@ defined('BASE_DIR') or die('Invalid File-Access');
 
 		<!-- Include GA -->
 		<script>
-			<!--
-
 			var gaProperty = '<?php echo Config::gaProperty; ?>';
 			var anonymizeIP = <?php echo Config::gaAnonymizeIp; ?>;
 			var disableString = 'ga-disable-' + gaProperty;
 			var gaEnable = true;
 
 			// Check if user has disabled GA
-			if(document.cookie.indexOf(disableString + '=true') > -1)
+			if(document.cookie.indexOf(disableString + '=true') > -1) {
 				gaEnable = false;
+			}
 
 			/**
 			 * Disable Google-Analytics for this Page
@@ -57,13 +56,12 @@ defined('BASE_DIR') or die('Invalid File-Access');
 
 				ga('create', gaProperty, 'auto');
 
-				if(anonymizeIP)
+				if(anonymizeIP) {
 					ga('set', 'anonymizeIp', true); // Just send first 3 IP-Blocks
+				}
 
 				ga('send', 'pageview');
 			}
-
-			// -->
 		</script>
 		<!-- END GA -->
 
