@@ -35,6 +35,13 @@ class Config {
 	const cookiePoliceSet = false;							// Set cookie law, false means cookies will only set if the user accept it, after clicking on "allow set cookies", true set normal cookies without asking. in Europe better set this to false
 	const cookiePoliceCountryModeWhiteList = true;			// true = Never ask for cookies in the selected countries | false = Only ask on the selected countries for cookies
 
+	// Anti-Spam
+	const enableAntiSpam = true;							// Uses Anti-spam methods to avoid spam (no captcha needed)
+	const numbersAsString = true;							// Display numbers as words instead of numbers
+	const useMathSymbols = false;							// Uses Symbols instead of words for operators
+	const maxSpamAttempts = 5;								// How often a honeypots need to be filled out before user is blocked
+	const recaptchaAfterMaxAttempts = true;					// Use Re-Captcha (if enabled) if max attempts is reached
+
 	// ReCaptcha Settings - Ignore them if you don't use this
 	const enableCaptcha = false;							// Google-ReCaptcha Enabled (false = no | true = yes)
 	const publicKey = '';									// Google-ReCaptcha Public-Key
@@ -74,7 +81,7 @@ class Config {
 	const pageBaseURL = 'http://localhost/';				// Page Base-URL (Needed for canonical links and many other) end with /
 	const favicon = false;									// Set if you have a Favicon
 	const prettyUrls = false;								// Pretty URLs are enabled (Setup the HTACCESS or Webserver-Config by yourself) index.php?page=$page -> /$page/
-	const pageSince = 2020;									// Set the Year where the page was launched
+	const pageSince = 2022;									// Set the Year where the page was launched
 
 	// -----------------------------------------------------------------------------------------------------------------
 

@@ -12,9 +12,14 @@ defined('BASE_DIR') or die('Invalid File-Access');
 
 $page = 'home';
 
-if(isset($_GET['page']))
-	if($_GET['page'])
+if(isset($_GET['page'])) {
+	if($_GET['page']) {
 		$page = $_GET['page'];
+	}
+}
+
+// Get Requested Page
+$page = mb_strtolower($page);
 
 // Define global Page stuff
 Page::setBaseUrl(Config::pageBaseURL);
@@ -28,9 +33,20 @@ Page::addJSFile(Language::getLangJsFileUri());
 // Add Global Page-Stuff
 if(Config::cacheFileLifeTime)
 	Page::setCacheTimeSec(Config::cacheFileLifeTime);
+Page::setPage($page);
 
-// Get Requested Page
-$page = mb_strtolower($page);
+// Check if AJAX-Function
+if($page === 'ajax') {
+	Page::setCacheAble(false);
+	Page::setPage('ajax');
+
+	require_once(INCLUDE_DIR . DS . 'ajax.php');
+
+	if(Page::getPage() === 'ajax')
+		closePage();
+	else
+		$page = Page::getPage();
+}
 
 // Add CSS/JS-Files Files for every page; Also specify meta stuff title etc
 switch($page) {

@@ -29,3 +29,38 @@ function postAjax(url, data, success) {
 
 	return xhr;
 }
+
+/**
+ * Get the Math-Question via AJAX
+ *
+ * @param {string} ajaxUrl - URL of the AJAX-Method
+ * @param {string} formId - Id of the submit Button
+ * @param {string} mathLabelId - ID of the Entry Container
+ */
+function getMathQuestion(ajaxUrl, formId, mathLabelId) {
+	let data = {
+		formId: formId
+	};
+
+	let mathLabelEl = document.getElementById(mathLabelId);
+
+	postAjax(ajaxUrl, data, function(response) {
+		let responseObj = {
+			success: false,
+			message: null,
+			extraInfo: null
+		};
+
+		try {
+			responseObj = JSON.parse(response);
+		} catch(exception) {
+			responseObj.message = 'Technischer Fehler: ' + exception.toString() + ' -> ' + response.replace('"', '\"');
+		}
+
+		if(responseObj.success) {
+			mathLabelEl.innerHTML = responseObj.extraInfo;
+		} else {
+			mathLabelEl.innerHTML += '<b>Konnte keine neue Anti-Spam Aufgabe laden, drücken Sie F5 um die Seite neu zu laden!</b> <i>(Kopieren Sie vorher zur Sicherheit Ihren Text!)</i>';
+		}
+	});
+}

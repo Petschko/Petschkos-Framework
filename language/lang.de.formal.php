@@ -20,4 +20,8 @@ class LangDeFormal extends LangDe {
 	public function getLanguageName() {
 		return parent::getLanguageName() . ' (Sie)';
 	}
+
+	public function getAntiSpamMsgText() {
+		return 'Berechnen Sie %s %s %s: (Anti-Spam)';
+	}
 }

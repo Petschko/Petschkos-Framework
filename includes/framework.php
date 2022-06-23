@@ -43,6 +43,9 @@ require_once(CLASS_DIR . DS . 'Page.php');
 require_once(CLASS_DIR . DS . 'Email.php');
 require_once(CLASS_DIR . DS . 'Language.php');
 
+// Antispam enabled?
+if(Config::enableAntiSpam)
+	require_once(INCLUDE_DIR . DS . 'AntiSpam.php');
 
 // Setup Cookie stuff
 Cookie::setIgnoreCookiePolice(Config::cookiePoliceSet);

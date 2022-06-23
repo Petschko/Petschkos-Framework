@@ -31,6 +31,11 @@ class Page {
 	private static $name;
 
 	/**
+	 * @var string $page - _GET Page-String
+	 */
+	private static $page;
+
+	/**
 	 * @var string $title - Title of this Page
 	 */
 	private static $title;
@@ -74,6 +79,11 @@ class Page {
 	 * @var int $cacheTimeSec
 	 */
 	private static $cacheTimeSec = 86400;
+
+	/**
+	 * @var null|AjaxResponse
+	 */
+	private static $ajaxResponse = null;
 
 	/**
 	 * @var array $cssFilesArray - CSS-Files of the Page
@@ -143,6 +153,20 @@ class Page {
 	 */
 	public static function setName($name) {
 		self::$name = $name;
+	}
+
+	/**
+	 * @return string
+	 */
+	public static function getPage() {
+		return self::$page;
+	}
+
+	/**
+	 * @param string $page
+	 */
+	public static function setPage($page) {
+		self::$page = $page;
 	}
 
 	/**
@@ -283,6 +307,20 @@ class Page {
 	 */
 	private static function getJsFilesArray() {
 		return self::$jsFilesArray;
+	}
+
+	/**
+	 * @return AjaxResponse|null
+	 */
+	public static function getAjaxResponse() {
+		return self::$ajaxResponse;
+	}
+
+	/**
+	 * @param AjaxResponse|null $ajaxResponse
+	 */
+	public static function setAjaxResponse($ajaxResponse) {
+		self::$ajaxResponse = $ajaxResponse;
 	}
 
 	/**
