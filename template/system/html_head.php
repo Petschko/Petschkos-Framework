@@ -31,6 +31,8 @@ defined('BASE_DIR') or die('Invalid File-Access');
 		?>
 		<script>
 			// Get Language strings
+			var sprintf = (str, ...argv) => !argv.length ? str :
+				sprintf(str = str.replace(sprintf.token||"$", argv.shift()), ...argv);
 			var lang = new Lang();
 		</script>
 

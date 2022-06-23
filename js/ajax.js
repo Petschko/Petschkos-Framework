@@ -54,13 +54,13 @@ function getMathQuestion(ajaxUrl, formId, mathLabelId) {
 		try {
 			responseObj = JSON.parse(response);
 		} catch(exception) {
-			responseObj.message = 'Technischer Fehler: ' + exception.toString() + ' -> ' + response.replace('"', '\"');
+			responseObj.message = sprintf(lang.mathQuestionXHRError, exception.toString(), response.replace('"', '\"'));
 		}
 
 		if(responseObj.success) {
 			mathLabelEl.innerHTML = responseObj.extraInfo;
 		} else {
-			mathLabelEl.innerHTML += '<b>Konnte keine neue Anti-Spam Aufgabe laden, drücken Sie F5 um die Seite neu zu laden!</b> <i>(Kopieren Sie vorher zur Sicherheit Ihren Text!)</i>';
+			mathLabelEl.innerHTML += lang.mathQuestionLoadError;
 		}
 	});
 }
