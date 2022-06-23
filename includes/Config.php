@@ -17,43 +17,43 @@ defined('BASE_DIR') or die('Invalid File-Access');
  */
 class Config {
 	// System-Stuff
-	const version = 'v2.0.1';
+	public const VERSION = 'v3.0.0';
 
 	// Mysql settings
-	const dbEnabled = false;								// Is the DB-Support enabled?
-	const dbType = 'mysql';									// Type of the Database-Server (MySQL, SQLite etc)
-	const dbHost = '127.0.0.1';								// Hostname/IP of the Database-Server
-	const dbPort = 3306;									// Port of the Database-Server
-	const dbUser = 'root';									// Database User
-	const dbPassword = 'root';								// Password of the Database User
-	const dbWebsiteDb = 'website';							// Name of the Database
-	const dbTablePref = '';									// Prefix of the tables and don't forget the _!! (if there is no prefix, let this empty)
-	const dbCharset = 'utf8';								// Database Charset
-	const dbCharsetCollation = 'utf8mb4_unicode_ci';		// Database Collation
+	public const DB_ENABLED = false;								// Is the DB-Support enabled?
+	public const DB_TYPE = 'mysql';									// Type of the Database-Server (MySQL, SQLite etc)
+	public const DB_HOST = '127.0.0.1';								// Hostname/IP of the Database-Server
+	public const DB_PORT = 3306;									// Port of the Database-Server
+	public const DB_USER = 'root';									// Database User
+	public const DB_PASSWORD = 'root';								// Password of the Database User
+	public const DB_NAME = 'website';								// Name of the Database
+	public const DB_TABLE_PREFIX = '';								// Prefix of the tables and don't forget the _!! (if there is no prefix, let this empty)
+	public const DB_CHARSET = 'utf8';								// Database Charset
+	public const DB_CHARSET_COLLATION = 'utf8mb4_unicode_ci';		// Database Collation
 
 	// Cookie Settings
-	const cookiePoliceSet = false;							// Set cookie law, false means cookies will only set if the user accept it, after clicking on "allow set cookies", true set normal cookies without asking. in Europe better set this to false
-	const cookiePoliceCountryModeWhiteList = true;			// true = Never ask for cookies in the selected countries | false = Only ask on the selected countries for cookies
+	public const COOKIE_POLICE_SET = false;							// Set cookie law, false means cookies will only set if the user accept it, after clicking on "allow set cookies", true set normal cookies without asking. in Europe better set this to false
+	public const COOKIE_POLICE_COUNTRY_WHITELIST_MODE = true;		// true = Never ask for cookies in the selected countries | false = Only ask on the selected countries for cookies
 
 	// Anti-Spam
-	const enableAntiSpam = true;							// Uses Anti-spam methods to avoid spam (no captcha needed)
-	const numbersAsString = true;							// Display numbers as words instead of numbers
-	const useMathSymbols = false;							// Uses Symbols instead of words for operators
-	const maxSpamAttempts = 5;								// How often a honeypots need to be filled out before user is blocked
-	const recaptchaAfterMaxAttempts = true;					// Use Re-Captcha (if enabled) if max attempts is reached
+	public const ANTI_SPAM_ENABLED = true;							// Uses Anti-spam methods to avoid spam (no captcha needed)
+	public const ANTI_SPAM_NUMBERS_AS_TEXT = true;					// Display numbers as words instead of numbers
+	public const ANTI_SPAM_USE_MATH_SYMBOLS = false;				// Use Symbols instead of words for operators
+	public const ANTI_SPAM_MAX_ATTEMPTS = 5;						// How often a honeypots need to be filled out before user is blocked
+	public const ANTI_SPAM_RECAPTCHA_AFTER_MAX_ATTEMPTS = true;		// Use Re-Captcha (if enabled) on max attempts is reached - Else user can't post anything
 
 	// ReCaptcha Settings - Ignore them if you don't use this
-	const enableCaptcha = false;							// Google-ReCaptcha Enabled (false = no | true = yes)
-	const publicKey = '';									// Google-ReCaptcha Public-Key
-	const privateKey = '';									// Google-ReCaptcha Private-Key
+	public const RECAPTCHA_ENABLE = false;							// Google-ReCaptcha Enabled (false = off | true = on)
+	public const RECAPTCHA_PUBLIC_KEY = '';							// Google-ReCaptcha Public-Key
+	public const RECAPTCHA_PRIVATE_KEY = '';						// Google-ReCaptcha Private-Key
 
 	// Google-Analytics Settings - Ignore them if you don't use this
-	const enableGoogleAnalytics = false;					// Enable Google-Analytics (false = no | true = yes)
-	const gaProperty = '';									// Add your Google-Analytics Property here
-	const gaAnonymizeIp = true;								// Would you like to anonymize the IP-Address of the user before send it to Google? (true = yes | false = no)
+	public const GOOGLE_ANALYTICS_ENABLE = false;					// Enable Google-Analytics (false = no | true = yes)
+	public const GOOGLE_ANALYTICS_PROPERTY = '';					// Add your Google-Analytics Property here
+	public const GOOGLE_ANALYTICS_ANONYMIZE_IP = true;				// Would you like to anonymize the IP-Address of the user before send it to Google? (true = yes | false = no)
 
 	// Locale settings
-	const defaultLang = 'lang.en';							// Default language (Specify the Filename without ext)
+	public const LANGUAGE_DEFAULT = 'lang.en';						// Default language (Specify the Filename without ext)
 	public static $enabledLanguages = [
 		/* Enabled languages
 		 * Names are like the Language PHP/JS Files without extension
@@ -69,19 +69,20 @@ class Config {
 	];
 
 	// Cache Settings
-	const cacheEnabled = true;								// Enable or disables the Cache
-	const cacheFileLifeTime = null;							// Set how long in Sec a Cache-File can exists (null uses default value of 1 Day)
+	public const CACHE_ENABLED = true;								// Enable or disables the Cache
+	public const CACHE_LIFETIME_SEC = null;							// Set how long in Sec a Cache-File can exists (null uses default value of 1 Day)
 
 	// Misc Settings
-	const sendMailEnabled = false;							// Can this site send E-Mails? (false = no | true = yes)
-	const adminName = 'Admin';								// Set Admin-Name
-	const adminEmail = 'admin@domain.tld';					// Set Admin-Email
-	const websiteTitle = 'Title';							// Set Website-Title
-	const charset = 'UTF-8';								// HTML-Default Charset (UTF-8 recommend)
-	const pageBaseURL = 'http://localhost/';				// Page Base-URL (Needed for canonical links and many other) end with /
-	const favicon = false;									// Set if you have a Favicon
-	const prettyUrls = false;								// Pretty URLs are enabled (Setup the HTACCESS or Webserver-Config by yourself) index.php?page=$page -> /$page/
-	const pageSince = 2022;									// Set the Year where the page was launched
+	public const sendMailEnabled = false;							// Can this site send E-Mails? (false = no | true = yes)
+	public const adminName = 'Admin';								// Set Admin-Name
+	public const adminEmail = 'admin@domain.tld';					// Set Admin-Email
+
+	public const WEBSITE_TITLE = 'Title';							// Set Website-Title
+	public const WEBSITE_CHARSET = 'UTF-8';							// HTML-Default Charset (UTF-8 recommend)
+	public const WEBSITE_BASE_URL = 'http://localhost/';			// Page Base-URL (Needed for canonical links and many other) end with /
+	public const WEBSITE_FAVICON = false;							// Set if you have a Favicon
+	public const WEBSITE_PRETTY_URLS = false;						// Pretty URLs are enabled (Set up the HTACCESS or Webserver-Config by yourself) index.php?page=$page -> /$page/
+	public const WEBSITE_SINCE_YEAR = 2022;							// Set the Year when the page was launched
 
 	// -----------------------------------------------------------------------------------------------------------------
 

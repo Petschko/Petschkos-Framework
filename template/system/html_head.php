@@ -14,7 +14,7 @@ defined('BASE_DIR') or die('Invalid File-Access');
 
 	<!-- Head-File Start -->
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=<?php echo Config::charset; ?>" />
+		<meta http-equiv="Content-Type" content="text/html; charset=<?php echo Config::WEBSITE_CHARSET; ?>" />
 		<title><?php Page::printWebsiteTitle(); ?></title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<?php
@@ -23,8 +23,9 @@ defined('BASE_DIR') or die('Invalid File-Access');
 		Page::printHtmlMetaDescription();
 		Page::printHtmlMetaKeywords();
 
-		if(Config::favicon)
+		if(Config::WEBSITE_FAVICON) {
 			require_once(TEMPLATE_DIR . DS . 'system' . DS . 'favicon.php');
+		}
 
 		echo PHP_EOL;
 
@@ -32,7 +33,7 @@ defined('BASE_DIR') or die('Invalid File-Access');
 		<script>
 			// Get Language strings
 			var sprintf = (str, ...argv) => !argv.length ? str :
-				sprintf(str = str.replace(sprintf.token||"$", argv.shift()), ...argv);
+				sprintf(str.replace(sprintf.token || "$", argv.shift()), ...argv);
 			var lang = new Lang();
 		</script>
 
@@ -42,7 +43,7 @@ defined('BASE_DIR') or die('Invalid File-Access');
 			Page::printJsFiles(true);
 
 			// Add Google-Analytics if enabled
-			if(Config::enableGoogleAnalytics) {
+			if(Config::GOOGLE_ANALYTICS_ENABLE) {
 				require_once(TEMPLATE_DIR . DS . 'system' . DS . 'googleAnalytics.php');
 				echo PHP_EOL;
 			}

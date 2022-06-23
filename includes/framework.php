@@ -21,14 +21,14 @@ const SQL_MODEL_DIR = INCLUDE_DIR . DS . 'dao' . DS . 'models';
 const TEMPLATE_DIR = BASE_DIR . DS . 'template';
 const EMAIL_DIR = TEMPLATE_DIR . DS . 'email';
 const LANG_DIR = BASE_DIR . DS . 'language';
-const LANG_DIR_JS = Config::pageBaseURL . 'js/language/';
+const LANG_DIR_JS = Config::WEBSITE_BASE_URL . 'js/language/';
 
 // Include Base-Files
 require_once(INCLUDE_DIR . DS . 'functions.php');
 require_once(INCLUDE_DIR . DS . 'utf8.php');
 
 // Include DAO
-if(Config::dbEnabled) {
+if(Config::DB_ENABLED) {
 	require_once(SQL_MODEL_DIR . DS . 'BaseDBTableModel.php');
 	require_once(INCLUDE_DIR . DS . 'dao' . DS . 'DB.php');
 	require_once(INCLUDE_DIR . DS . 'dao' . DS . 'SQLError.php');
@@ -44,36 +44,36 @@ require_once(CLASS_DIR . DS . 'Email.php');
 require_once(CLASS_DIR . DS . 'Language.php');
 
 // Antispam enabled?
-if(Config::enableAntiSpam) {
+if(Config::ANTI_SPAM_ENABLED) {
 	require_once(INCLUDE_DIR . DS . 'AntiSpam.php');
 }
 
 // Setup Cookie stuff
-Cookie::setIgnoreCookiePolice(Config::cookiePoliceSet);
-Cookie::setCountryModeWhiteList(Config::cookiePoliceCountryModeWhiteList);
+Cookie::setIgnoreCookiePolice(Config::COOKIE_POLICE_SET);
+Cookie::setCountryModeWhiteList(Config::COOKIE_POLICE_COUNTRY_WHITELIST_MODE);
 
 // Define-Language stuff
 Language::setAvailableLanguages(Config::$enabledLanguages);
-Language::setDefaultLang(Config::defaultLang);
+Language::setDefaultLang(Config::LANGUAGE_DEFAULT);
 Language::setLanguagePhpDir(LANG_DIR);
 Language::setLanguageJsDir(LANG_DIR_JS);
 Language::setCookiesEnabled(true);
 
-if(Config::dbEnabled) {
+if(Config::DB_ENABLED) {
 	// Define Database Connection(s)
 	define('MAIN_DB', 'dbConnection');
 	new DB(
 		MAIN_DB,
-		Config::dbType . ':host=' . Config::dbHost . ';port=' . Config::dbPort . ';dbname=' . Config::dbWebsiteDb . ';Charset=' . Config::dbCharset,
-		Config::dbUser,
-		Config::dbPassword,
-		[PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . Config::dbCharset]
+		Config::DB_TYPE . ':host=' . Config::DB_HOST . ';port=' . Config::DB_PORT . ';dbname=' . Config::DB_NAME . ';Charset=' . Config::DB_CHARSET,
+		Config::DB_USER,
+		Config::DB_PASSWORD,
+		[PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . Config::DB_CHARSET]
 	);
 }
 
 require_once(INCLUDE_DIR . DS . 'router.php');
 
-if(Config::cacheEnabled && Page::isCacheAble()) {
+if(Config::CACHE_ENABLED && Page::isCacheAble()) {
 	require_once(CLASS_DIR . DS . 'Cache.php');
 	new Cache(
 		Page::getName(),

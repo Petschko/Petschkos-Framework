@@ -72,7 +72,7 @@ function getNewMathQuestion(): AjaxResponse {
 		$_POST['formId'] = null;
 	}
 
-	if(Config::enableAntiSpam) {
+	if(Config::ANTI_SPAM_ENABLED) {
 		if(empty($_POST['formId'])) {
 			$response->setMessage(Language::out()->getAntiSpamMissingFormIdText());
 

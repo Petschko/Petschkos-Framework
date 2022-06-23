@@ -22,18 +22,17 @@ if(isset($_GET['page'])) {
 $page = mb_strtolower($page);
 
 // Define global Page stuff
-Page::setBaseUrl(Config::pageBaseURL);
-Page::setPrettyUrls(Config::prettyUrls);
-Page::setWebsiteTitle(Config::websiteTitle);
+Page::setBaseUrl(Config::WEBSITE_BASE_URL);
+Page::setPrettyUrls(Config::WEBSITE_PRETTY_URLS);
+Page::setWebsiteTitle(Config::WEBSITE_TITLE);
+if(Config::CACHE_LIFETIME_SEC) {
+	Page::setCacheTimeSec(Config::CACHE_LIFETIME_SEC);
+}
+Page::setPage($page);
 
 // Add Global JS/CSS Files
-Page::addCssFile(Config::pageBaseURL . 'styles/style.css');
+Page::addCssFile(Config::WEBSITE_BASE_URL . 'styles/style.css');
 Page::addJSFile(Language::getLangJsFileUri());
-
-// Add Global Page-Stuff
-if(Config::cacheFileLifeTime)
-	Page::setCacheTimeSec(Config::cacheFileLifeTime);
-Page::setPage($page);
 
 // Check if AJAX-Function
 if($page === 'ajax') {

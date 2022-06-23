@@ -66,12 +66,12 @@ class AntiSpam {
 	public function getOperator(): string {
 		switch($this->rndOperator) {
 			case self::PLUS:
-				return Config::useMathSymbols ? '+' : Language::out()->getPlusName();
+				return Config::ANTI_SPAM_USE_MATH_SYMBOLS ? '+' : Language::out()->getPlusName();
 			case self::MINUS:
-				return Config::useMathSymbols ? '-' : Language::out()->getMinusName();
+				return Config::ANTI_SPAM_USE_MATH_SYMBOLS ? '-' : Language::out()->getMinusName();
 			case self::MULTIPLE:
 			default:
-				return Config::useMathSymbols ? '*' : Language::out()->getMultiplyWithName();
+				return Config::ANTI_SPAM_USE_MATH_SYMBOLS ? '*' : Language::out()->getMultiplyWithName();
 		}
 	}
 
@@ -79,7 +79,7 @@ class AntiSpam {
 	 * @return string
 	 */
 	public function getRndNumber1(): string {
-		if(Config::numbersAsString) {
+		if(Config::ANTI_SPAM_NUMBERS_AS_TEXT) {
 			return $this->getNumberToText($this->rndNumber1);
 		}
 
@@ -90,7 +90,7 @@ class AntiSpam {
 	 * @return string
 	 */
 	public function getRndNumber2(): string {
-		if(Config::numbersAsString) {
+		if(Config::ANTI_SPAM_NUMBERS_AS_TEXT) {
 			return $this->getNumberToText($this->rndNumber2);
 		}
 

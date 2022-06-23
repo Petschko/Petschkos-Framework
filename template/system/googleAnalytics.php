@@ -13,8 +13,8 @@ defined('BASE_DIR') or die('Invalid File-Access');
 
 		<!-- Include GA -->
 		<script>
-			var gaProperty = '<?php echo Config::gaProperty; ?>';
-			var anonymizeIP = <?php echo Config::gaAnonymizeIp; ?>;
+			var gaProperty = '<?php echo Config::GOOGLE_ANALYTICS_PROPERTY; ?>';
+			var anonymizeIP = <?php echo Config::GOOGLE_ANALYTICS_ANONYMIZE_IP; ?>;
 			var disableString = 'ga-disable-' + gaProperty;
 			var gaEnable = true;
 

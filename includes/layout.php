@@ -36,7 +36,7 @@ defined('BASE_DIR') or die('Invalid File-Access');
 		<!-- Add overall footer -->
 		<?php require_once(TEMPLATE_DIR . DS . 'system' . DS . 'footer.php'); ?>
 
-		<!-- Created with Petschko's Framework <?php echo Config::version; ?> - Mail: peter@petschko.org -->
+		<!-- Created with Petschko's Framework <?php echo Config::VERSION; ?> - Mail: peter@petschko.org -->
 		<?php
 			echo PHP_EOL;
 			Page::printCssFiles(false);
